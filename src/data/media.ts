@@ -73,7 +73,11 @@ export const media = {
   /** Background loop for each service page hero, keyed by service slug. */
   services: {
     "roof-replacement-sacramento": clip("Roof replacement in Sacramento", "Tear-off and new roof installation on a Sacramento home."),
-    "roof-repair-sacramento": clip("Roof repair in Sacramento", "Repairing flashing and damaged roofing on a Sacramento home."),
+    "roof-repair-sacramento": {
+      ...clip("Roof repair in Sacramento", "Repairing flashing and damaged roofing on a Sacramento home.", 1),
+      playbackId: "LOKOVDtclc2NygUIV8m4Si7bPamcFmWqycmr2Bts2o00",
+      uploadDate: "2026-10-04",
+    },
     "tile-roofing-sacramento": clip("Tile roofing in Sacramento", "Concrete tile roof work on a Sacramento Valley home."),
     "roof-inspections-sacramento": clip("Roof inspection in Sacramento", "A GM Roofing inspector checking a roof in the Sacramento Valley."),
     "roof-maintenance-sacramento": clip("Roof maintenance in Sacramento", "Resealing flashing and replacing damaged shingles during a maintenance visit."),
