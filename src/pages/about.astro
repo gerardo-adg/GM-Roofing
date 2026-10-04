@@ -7,6 +7,7 @@ import ServiceGrid from "../components/ServiceGrid.astro";
 import Icon from "../components/Icon.astro";
 import { business } from "../data/business";
 import { story } from "../data/story";
+import { reviews, reviewsUrl } from "../data/reviews";
 import MuxFilm from "../components/MuxFilm.astro";
 import { media, hasClip } from "../data/media";
 
@@ -122,6 +123,14 @@ const values = [
         <p data-reveal style="--d:2">
           That's the job as much as the roofing is. You should never have to wonder where your project stands.
         </p>
+        {
+          reviews[1] && (
+            <figure class="talk__quote" data-reveal style="--d:3">
+              <blockquote><p>“He came the next day to give us his bid, was prepared and able to answer all our questions. His communication was excellent and transparent throughout the process.”</p></blockquote>
+              <figcaption>{reviews[1].name}, on <a href={reviewsUrl} target="_blank" rel="noopener">Yelp</a></figcaption>
+            </figure>
+          )
+        }
         <a class="btn btn--dark" href="/contact/" data-reveal style="--d:3">Request a free estimate <Icon name="arrow" class="arrow" /></a>
       </div>
     </div>
@@ -237,6 +246,10 @@ const values = [
   .talk__body p { color: var(--steel); font-size: var(--fs-lg); max-width: 54ch; }
   .talk__body p + p { margin-top: 1.25rem; }
   .talk__body .btn { margin-top: 2rem; }
+  .talk__quote { margin-top: 2rem; padding: 1.5rem 1.75rem; border-left: 3px solid var(--accent); background: var(--paper); border-radius: 0 var(--radius) var(--radius) 0; }
+  .talk__quote p { font-size: var(--fs-lg); line-height: 1.5; color: var(--ink); }
+  .talk__quote figcaption { margin-top: 0.75rem; font-size: var(--fs-sm); color: var(--steel); }
+  .talk__quote a { text-decoration: underline; text-underline-offset: 3px; }
   @media (min-width: 1024px) { .talk { grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start; } }
 
   /* Values */

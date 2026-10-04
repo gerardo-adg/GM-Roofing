@@ -58,6 +58,8 @@ const visible = (html) =>
     .replace(/<script[\s\S]*?<\/script>/g, " ")
     .replace(/<style[\s\S]*?<\/style>/g, " ")
     .replace(/<!--[\s\S]*?-->/g, " ")
+    // customer quotes are shown word for word, so they are exempt
+    .replace(/<blockquote[\s\S]*?<\/blockquote>/g, " ")
     // keep meta descriptions/titles/alt text, they're read by people and search engines
     .replace(/<(meta|img)[^>]*?(content|alt)="([^"]*)"[^>]*>/g, " $3 ")
     .replace(/<[^>]+>/g, " ")

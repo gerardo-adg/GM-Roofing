@@ -9,6 +9,7 @@ import RoofLines from "../components/RoofLines.astro";
 import MuxBackground from "../components/MuxBackground.astro";
 import MuxFilm from "../components/MuxFilm.astro";
 import Faq from "../components/Faq.astro";
+import Reviews from "../components/Reviews.astro";
 import { business, hasPhone, hoursText } from "../data/business";
 import { reviews } from "../data/reviews";
 import { projects } from "../data/projects";
@@ -344,30 +345,8 @@ const videos = [
     )
   }
 
-  <!-- ============ REVIEWS (once real reviews are added) ============ -->
-  {
-    reviews.length > 0 && (
-      <section class="section">
-        <div class="container">
-          <SectionHead eyebrow="Reviews" title="What homeowners <em>say</em>" />
-          <ul role="list" class="reviews" data-stagger>
-            {reviews.map((r) => (
-              <li data-reveal>
-                <blockquote>
-                  <p>“{r.quote}”</p>
-                  <footer>
-                    <strong>{r.name}</strong>
-                    {r.location && <span> · {r.location}</span>}
-                    {r.source && <span class="reviews__src">{r.source}</span>}
-                  </footer>
-                </blockquote>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    )
-  }
+  <!-- ============ REVIEWS ============ -->
+  {reviews.length > 0 && <Reviews />}
 
   <!-- ============ FAQ ============ -->
   <section class="section section--paper">
@@ -683,13 +662,6 @@ const videos = [
   @media (min-width: 640px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1024px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
 
-  .reviews { display: grid; gap: 1rem; }
-  .reviews blockquote { height: 100%; padding: 2rem; border-radius: var(--radius-lg); background: var(--paper); }
-  .reviews p { font-size: var(--fs-lg); line-height: 1.5; }
-  .reviews footer { margin-top: 1.5rem; font-size: var(--fs-sm); color: var(--steel); }
-  .reviews strong { color: var(--ink); }
-  .reviews__src { display: block; font-size: var(--fs-xs); margin-top: 0.25rem; }
-  @media (min-width: 900px) { .reviews { grid-template-columns: repeat(3, 1fr); } }
 
   /* ---------- FAQ ---------- */
   .faqwrap { display: grid; gap: 2.5rem; }
