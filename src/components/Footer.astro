@@ -1,7 +1,7 @@
 ---
 import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
-import { business, hasPhone, hasEmail, hasLicense } from "../data/business";
+import { business, hasPhone, hasEmail, hasLicense, hoursText } from "../data/business";
 import { services } from "../data/services";
 
 const year = new Date().getFullYear();
@@ -14,7 +14,13 @@ const social = Object.entries(business.social).filter(([, url]) => url);
       <div class="ftr__brand">
         <Logo tone="light" />
         <p>{business.descriptionShort}</p>
-        {hasLicense && <p class="ftr__license">CSLB Lic. #{business.license.number} · {business.license.type}</p>}
+        {
+          hasLicense && (
+            <p class="ftr__license">
+              {business.bondedAndInsured && "Licensed, bonded and insured · "}CA CSLB #{business.license.number} ({business.license.type})
+            </p>
+          )
+        }
       </div>
 
       <div class="ftr__cols">
@@ -38,8 +44,8 @@ const social = Object.entries(business.social).filter(([, url]) => url);
           <ul role="list" class="ftr__contact">
             {hasPhone && <li><a href={`tel:${business.phone.tel}`}><Icon name="phone" size={16} />{business.phone.display}</a></li>}
             {hasEmail && <li><a href={`mailto:${business.email}`}><Icon name="mail" size={16} />{business.email}</a></li>}
-            <li><span><Icon name="pin" size={16} />{business.primaryRegion}, CA</span></li>
-            <li><a href="/contact/"><Icon name="doc" size={16} />Request an estimate</a></li>
+            <li><span><Icon name="pin" size={16} />{business.address.addressLocality}, {business.address.addressRegion} {business.address.postalCode}</span></li>
+            {hoursText.map((h) => <li><span><Icon name="clock" size={16} />{h}</span></li>)}
           </ul>
           {
             social.length > 0 && (

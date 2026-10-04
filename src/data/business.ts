@@ -6,8 +6,8 @@
  * (e.g. no phone = phone buttons fall back to the estimate form), and the
  * build prints a reminder listing anything still missing.
  *
- * Nothing here is invented: values that could not be verified from the
- * client's existing site were left blank on purpose. Fill them in before launch.
+ * Contact details, license, hours and service areas come from the client's
+ * own site. Anything still blank is hidden on the site automatically.
  */
 
 export const business = {
@@ -17,46 +17,46 @@ export const business = {
   descriptionShort:
     "GM Roofing is a family-owned roofing contractor serving Sacramento Valley homeowners and businesses with roof replacement, repair, tile roofing, inspections, and commercial roofing.",
 
-  // TODO before launch: e.g. display: "(916) 555-0123", tel: "+19165550123"
-  phone: { display: "", tel: "" },
-  // TODO before launch
-  email: "",
+  phone: { display: "(916) 923-8519", tel: "+19169238519" },
+  email: "gmroofingca@gmail.com",
 
   address: {
-    streetAddress: "", // TODO: only shown if showOnSite is true
+    streetAddress: "", // only shown if showOnSite is true
     addressLocality: "Sacramento",
     addressRegion: "CA",
-    postalCode: "",
+    postalCode: "95833",
     showOnSite: false,
   },
 
   license: {
-    // TODO: verify at cslb.ca.gov. A CSLB record for "Gm Roofing" (#1144977, C-39)
-    // turned up in research but was NOT confirmed as this business, so it isn't used.
-    number: "",
+    number: "1144977",
     type: "C-39 Roofing Contractor",
   },
+  bondedAndInsured: true,
+
+  /** Days use schema.org names. Times are 24h. */
+  hours: [
+    { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], label: "Mon to Sat", opens: "06:00", closes: "21:00" },
+    { days: ["Sunday"], label: "Sunday", opens: "08:00", closes: "21:00" },
+  ],
 
   familyOwned: true,
   primaryRegion: "Sacramento Valley",
   primaryCity: "Sacramento",
 
-  // Drawn from the project brief: confirm actual coverage before launch.
   cities: [
     "Sacramento",
     "Elk Grove",
-    "Citrus Heights",
     "Roseville",
     "Folsom",
-    "Rancho Cordova",
-    "Fair Oaks",
-    "Carmichael",
-    "Orangevale",
-    "Antelope",
-    "Rocklin",
+    "Davis",
+    "Woodland",
+    "West Sacramento",
+    "Citrus Heights",
   ],
 
-  // Add real profile URLs to show icons in the footer + schema sameAs.
+  // Add full profile URLs to show them in the footer + schema sameAs.
+  // TODO: Instagram handle (the old site links to it, but the URL wasn't provided).
   social: { facebook: "", instagram: "", google: "" },
 
   process: [
@@ -75,6 +75,13 @@ export const hasLicense = Boolean(business.license.number);
 
 /** Href for the main "call" action: falls back to the estimate page when no phone is set. */
 export const callHref = hasPhone ? `tel:${business.phone.tel}` : "/contact/";
+
+/** "6 am" / "6:30 am" style time for display. */
+export const fmtTime = (t: string) => {
+  const [h, m] = t.split(":").map(Number);
+  return `${((h + 11) % 12) + 1}${m ? `:${String(m).padStart(2, "0")}` : ""} ${h < 12 ? "am" : "pm"}`;
+};
+export const hoursText = business.hours.map((h) => `${h.label}: ${fmtTime(h.opens)} to ${fmtTime(h.closes)}`);
 
 /** Values still missing; printed during the build as a pre-launch checklist. */
 export const missingValues = [

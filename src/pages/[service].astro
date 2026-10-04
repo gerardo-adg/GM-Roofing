@@ -59,7 +59,7 @@ const slug = (c: string) => c.toLowerCase().replace(/[^a-z0-9]+/g, "-");
             title="Roofing services for <em>Sacramento homeowners</em>"
             lede="Whatever stage your home's roof is at, it starts with an honest look and a clear explanation of the options."
           />
-          <ServiceGrid exclude={service.slug} />
+          <ServiceGrid exclude={[service.slug]} />
         </div>
       </section>
     )

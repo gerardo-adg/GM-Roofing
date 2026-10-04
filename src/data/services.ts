@@ -8,7 +8,7 @@
  * you'd say it to a homeowner standing in their driveway.
  */
 
-export type IconName = "replacement" | "repair" | "tile" | "inspection" | "residential" | "commercial";
+export type IconName = "replacement" | "repair" | "tile" | "inspection" | "maintenance" | "residential" | "commercial";
 
 export type ServiceSection = {
   heading: string;
@@ -386,6 +386,75 @@ export const services: Service[] = [
       cta: "Schedule a roof inspection",
     },
     related: ["roof-replacement-sacramento", "roof-repair-sacramento"],
+  },
+  {
+    slug: "roof-maintenance-sacramento",
+    name: "Roof Maintenance",
+    shortName: "Maintenance",
+    blurb: "Keep a good roof in good shape",
+    icon: "maintenance",
+    summary:
+      "Periodic checks and small fixes that catch problems early and help a roof last as long as it should.",
+    alternateNames: ["Roof maintenance", "Roof tune-up", "Preventive roof maintenance", "Roof upkeep"],
+    audience: "Homeowners and property owners in the Sacramento Valley",
+    includes: [
+      "Roof condition check",
+      "Resealing and repairing flashing at vents, chimneys and skylights",
+      "Replacing damaged or missing shingles and tiles",
+      "Written notes on anything to watch or plan for",
+    ],
+    seo: {
+      title: "Roof Maintenance Sacramento, CA | GM Roofing",
+      description:
+        "Roof maintenance in Sacramento: condition checks, flashing repair and small fixes that catch problems early. Family-owned, licensed roofer. Free written estimates.",
+    },
+    hero: {
+      eyebrow: "Roof maintenance",
+      title: "Roof maintenance in <em>Sacramento.</em>",
+      lede: "Small problems caught early cost far less than the leaks they turn into. We check the roof, fix what needs fixing and tell you what to keep an eye on.",
+      cta: "Schedule roof maintenance",
+    },
+    answer:
+      "GM Roofing provides roof maintenance for homes and businesses in Sacramento and the Sacramento Valley. A maintenance visit checks the roof's condition, repairs worn flashing and damaged shingles or tiles, and gives you written notes on anything to plan for.",
+    facts: [
+      common.area,
+      { label: "Good for", value: "Roofs in decent shape you want to keep that way" },
+      common.estimate,
+      { label: "Roof types", value: "Asphalt shingle, concrete tile, clay tile" },
+    ],
+    sections: [
+      {
+        heading: "Why maintenance pays off here",
+        body: [
+          "Sacramento summers dry out sealants and shingles, and the first big winter storm finds whatever has cracked. Catching worn flashing or a few lifted shingles before the rain is the cheapest roofing work there is.",
+        ],
+      },
+      {
+        heading: "What a maintenance visit covers",
+        list: [
+          { title: "Condition check", text: "Roofing material, flashing, valleys and penetrations." },
+          { title: "Flashing and sealant", text: "Resealing or repairing where it has dried out or pulled away." },
+          { title: "Shingles and tiles", text: "Replacing the damaged or missing pieces before water gets under them." },
+          { title: "Written notes", text: "What we fixed and anything worth planning for in the next few years." },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "How often should a roof be maintained?",
+        a: "A good rule of thumb is a check once a year, and again after a major storm. Older roofs may need a closer eye. We'll recommend a schedule based on your roof's age and condition.",
+      },
+      {
+        q: "Is maintenance worth it on an older roof?",
+        a: "Often, yes. It can stretch the remaining life of a roof and help you plan a replacement on your schedule instead of after a leak. If we think the roof is past the point where maintenance makes sense, we'll tell you.",
+      },
+    ],
+    sidebar: {
+      title: "Schedule roof maintenance",
+      text: "Tell us about your roof and we'll set up a visit.",
+      cta: "Request a free estimate",
+    },
+    related: ["roof-inspections-sacramento", "roof-repair-sacramento", "roof-replacement-sacramento"],
   },
   {
     slug: "residential-roofing-sacramento",

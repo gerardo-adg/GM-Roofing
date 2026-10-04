@@ -2,7 +2,10 @@
 import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
 import { business, hasPhone } from "../data/business";
-import { services } from "../data/services";
+import { services as allServices } from "../data/services";
+
+// Residential is an umbrella page (linked in the footer); keep the menus to the six core services.
+const services = allServices.filter((s) => s.slug !== "residential-roofing-sacramento");
 
 interface Props {
   /** "overlay" = transparent over a dark hero, turns solid on scroll. */
@@ -11,7 +14,7 @@ interface Props {
 const { mode = "overlay" } = Astro.props;
 const path = Astro.url.pathname;
 const isActive = (href: string) => path === href;
-const servicesActive = services.some((s) => path === `/${s.slug}/`);
+const servicesActive = allServices.some((s) => path === `/${s.slug}/`);
 
 const links = [
   { href: "/about/", label: "About" },

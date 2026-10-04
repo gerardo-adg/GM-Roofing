@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import EstimateForm from "../components/EstimateForm.astro";
 import Icon from "../components/Icon.astro";
-import { business, hasPhone, hasEmail } from "../data/business";
+import { business, hasPhone, hasEmail, hasLicense, hoursText } from "../data/business";
 
 const breadcrumbs = [
   { label: "Home", href: "/" },
@@ -13,8 +13,9 @@ const breadcrumbs = [
 const details = [
   hasPhone && { icon: "phone", label: "Phone", value: business.phone.display, href: `tel:${business.phone.tel}` },
   hasEmail && { icon: "mail", label: "Email", value: business.email, href: `mailto:${business.email}` },
-  { icon: "pin", label: "Service area", value: `${business.primaryRegion}, CA`, href: "/service-areas/" },
-  { icon: "clock", label: "Hours", value: "Send a request any time. We'll follow up to find a time that works for you." },
+  { icon: "pin", label: "Based in", value: `${business.address.addressLocality}, ${business.address.addressRegion} ${business.address.postalCode}`, href: "/service-areas/" },
+  { icon: "clock", label: "Hours", value: hoursText.join(" · ") },
+  hasLicense && { icon: "shield", label: "License", value: `CA CSLB #${business.license.number} (${business.license.type})`, href: `https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/LicenseDetail.aspx?LicNum=${business.license.number}` },
 ].filter(Boolean) as { icon: string; label: string; value: string; href?: string }[];
 
 const next = [

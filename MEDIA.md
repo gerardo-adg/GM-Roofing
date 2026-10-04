@@ -26,6 +26,7 @@ Shoot in 4K at 24 or 30 fps, on a gimbal or drone, with slow and steady moves. A
 | `services["roof-repair-sacramento"]` | 8 to 12 s loop | 16:9 | Close-up of flashing being sealed around a vent or chimney, or a damaged section being replaced. |
 | `services["tile-roofing-sacramento"]` | 8 to 12 s loop | 16:9 | Concrete or clay tile being set, or a slow pan across a finished tile roof. |
 | `services["roof-inspections-sacramento"]` | 8 to 12 s loop | 16:9 | An inspector walking a roof and photographing a valley or vent. |
+| `services["roof-maintenance-sacramento"]` | 8 to 12 s loop | 16:9 | Resealing flashing around a vent, or replacing a few damaged shingles. |
 | `services["residential-roofing-sacramento"]` | 8 to 12 s loop | 16:9 | Wide drone shot of a finished home in a Sacramento neighborhood. |
 | `services["commercial-roofing-sacramento"]` | 8 to 12 s loop | 16:9 | Crew on a commercial or multi-unit roof. |
 | `projects` (gallery, 3 to 9 clips) | 5 to 8 s each | 4:5 vertical-ish | Finished roofs: slow reveal or orbit of each completed project. Note the city for the caption. |

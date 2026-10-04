@@ -56,6 +56,7 @@ export const media = {
     "roof-repair-sacramento": clip("Roof repair in Sacramento", "Repairing flashing and damaged roofing on a Sacramento home."),
     "tile-roofing-sacramento": clip("Tile roofing in Sacramento", "Concrete tile roof work on a Sacramento Valley home."),
     "roof-inspections-sacramento": clip("Roof inspection in Sacramento", "A GM Roofing inspector checking a roof in the Sacramento Valley."),
+    "roof-maintenance-sacramento": clip("Roof maintenance in Sacramento", "Resealing flashing and replacing damaged shingles during a maintenance visit."),
     "residential-roofing-sacramento": clip("Residential roofing in Sacramento", "Residential roofing work in the Sacramento Valley."),
     "commercial-roofing-sacramento": clip("Commercial roofing in Sacramento", "Commercial roofing work in the Sacramento Valley."),
   } as Record<string, MuxClip>,

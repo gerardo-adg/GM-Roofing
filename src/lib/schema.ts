@@ -40,8 +40,9 @@ export function businessNode() {
     address: {
       "@type": "PostalAddress",
       ...(business.address.showOnSite && business.address.streetAddress
-        ? { streetAddress: business.address.streetAddress, postalCode: business.address.postalCode || undefined }
+        ? { streetAddress: business.address.streetAddress }
         : {}),
+      ...(business.address.postalCode ? { postalCode: business.address.postalCode } : {}),
       addressLocality: business.address.addressLocality,
       addressRegion: business.address.addressRegion,
       addressCountry: "US",
@@ -70,7 +71,23 @@ export function businessNode() {
       })),
     },
   };
-  if (hasPhone) node.telephone = business.phone.tel;
+  if (hasPhone) {
+    node.telephone = business.phone.tel;
+    node.contactPoint = {
+      "@type": "ContactPoint",
+      telephone: business.phone.tel,
+      contactType: "customer service",
+      areaServed: "US-CA",
+      availableLanguage: "English",
+    };
+  }
+  node.openingHoursSpecification = business.hours.map((h) => ({
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: h.days,
+    opens: h.opens,
+    closes: h.closes,
+  }));
+  node.slogan = business.tagline;
   if (hasEmail) node.email = business.email;
   if (business.license.number) {
     node.hasCredential = {

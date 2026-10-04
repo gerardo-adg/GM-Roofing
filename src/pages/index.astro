@@ -9,7 +9,7 @@ import RoofAnatomy from "../components/RoofAnatomy.astro";
 import MuxBackground from "../components/MuxBackground.astro";
 import MuxFilm from "../components/MuxFilm.astro";
 import Faq from "../components/Faq.astro";
-import { business, hasPhone } from "../data/business";
+import { business, hasPhone, hoursText } from "../data/business";
 import { reviews } from "../data/reviews";
 import { projects } from "../data/projects";
 import { media, hasClip } from "../data/media";
@@ -20,9 +20,9 @@ const anatomy = ["Ridge vent", "Roof covering", "Underlayment", "Roof decking", 
 
 const trust = [
   { icon: "family", title: "Family-owned", text: "A local family business, not a franchise or a storm-chasing crew." },
-  { icon: "pin", title: "Valley-based", text: "We work on Sacramento Valley roofs and know what this weather does to them." },
+  { icon: "shield", title: "Licensed and insured", text: `CA CSLB #${business.license.number}, C-39 roofing contractor. Bonded and insured.` },
   { icon: "doc", title: "Free written estimates", text: "Scope, materials and price on paper before anything is scheduled." },
-  { icon: "chat", title: "Plain answers", text: "What your roof needs and why, explained without the jargon." },
+  { icon: "clock", title: "Open 7 days", text: hoursText.join(". ") + "." },
 ];
 
 const repairSigns = [
@@ -128,8 +128,8 @@ const videos = [
         </div>
         <ul role="list" class="hero__checks" data-reveal style="--d:6">
           <li><Icon name="check" size={18} /> Free written estimates</li>
-          <li><Icon name="check" size={18} /> Shingle and tile roofs</li>
-          <li><Icon name="check" size={18} /> Family-owned and local</li>
+          <li><Icon name="check" size={18} /> Licensed, bonded and insured</li>
+          <li><Icon name="check" size={18} /> Open 7 days a week</li>
         </ul>
       </div>
 
@@ -182,7 +182,7 @@ const videos = [
         title="Roofing services across the <em>Sacramento Valley</em>"
         lede="One small repair or a full tear-off, every job starts the same way: we look at the roof in person and put our recommendation in writing."
       />
-      <ServiceGrid />
+      <ServiceGrid exclude={["residential-roofing-sacramento"]} />
     </div>
   </section>
 

@@ -3,10 +3,10 @@ import Icon from "./Icon.astro";
 import { services } from "../data/services";
 
 interface Props {
-  exclude?: string;
+  exclude?: string[];
 }
-const { exclude } = Astro.props;
-const list = services.filter((s) => s.slug !== exclude);
+const { exclude = [] } = Astro.props;
+const list = services.filter((s) => !exclude.includes(s.slug));
 ---
 
 <ul role="list" class="sgrid">
