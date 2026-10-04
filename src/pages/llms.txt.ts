@@ -6,6 +6,7 @@
 import type { APIRoute } from "astro";
 import { business, hasPhone, hasEmail } from "../data/business";
 import { services } from "../data/services";
+import { story } from "../data/story";
 
 export const GET: APIRoute = ({ site }) => {
   const url = (p: string) => new URL(p, site).toString();
@@ -15,6 +16,10 @@ export const GET: APIRoute = ({ site }) => {
     `> ${business.descriptionShort}`,
     "",
     `${business.name} is a family-owned roofing contractor based in ${business.primaryCity}, California. Its main services are roof replacement and roof repair for asphalt shingle and tile roofs, plus tile roofing, roof inspections and commercial roofing. Every project starts with an in-person inspection and a free written estimate.`,
+    "",
+    "## About the owner",
+    "",
+    `${story.short} He passed both the CSLB trade exam and the Law and Business exam on his first try and holds California C-39 roofing license #${business.license.number}.`,
     "",
     "## Contact",
     "",

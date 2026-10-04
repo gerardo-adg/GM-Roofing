@@ -14,6 +14,7 @@ import { reviews } from "../data/reviews";
 import { projects } from "../data/projects";
 import { media, hasClip } from "../data/media";
 import { ids } from "../lib/schema";
+import { story } from "../data/story";
 
 const heroVideo = hasClip(media.hero);
 const anatomy = ["Ridge vent", "Roof covering", "Underlayment", "Roof decking", "Flashing and drip edge"];
@@ -41,7 +42,7 @@ const replaceSigns = [
 ];
 
 const values = [
-  { title: "You'll know where things stand", text: "From the estimate to cleanup, you'll know what's happening and what comes next." },
+  { title: "Easy to reach, easy to talk to", text: "From the estimate to cleanup, you'll know what's happening and what comes next, in plain language." },
   { title: "We'll say when a repair is enough", text: "If a repair solves the problem, that's what we recommend. We don't sell roofs people don't need." },
   { title: "We fix what's under the shingles", text: "Soft decking and worn flashing get repaired before the new roof goes on, not covered up." },
   { title: "Your property stays protected", text: "We protect landscaping, driveways and gutters while we work, and clean up before we leave." },
@@ -251,9 +252,9 @@ const videos = [
         <span class="eyebrow" data-reveal>Why {business.name}</span>
         <h2 data-reveal="lines"><span class="l"><span class="l__in">What working</span></span><span class="l"><span class="l__in">with us <em>looks like.</em></span></span></h2>
         <p class="lede" data-reveal style="--d:2">
-          No upselling and no scare tactics. You get straight information so you can make a good call about your roof.
+          {story.short} No upselling and no scare tactics, just straight information so you can make a good call about your roof.
         </p>
-        <a class="text-link" href="/about/" data-reveal style="--d:3">About {business.name} <Icon name="arrow" /></a>
+        <a class="text-link" href="/about/" data-reveal style="--d:3">Read our story <Icon name="arrow" /></a>
       </div>
       <ol role="list" class="why__list" data-stagger>
         {

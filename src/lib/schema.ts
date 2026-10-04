@@ -88,6 +88,7 @@ export function businessNode() {
     closes: h.closes,
   }));
   node.slogan = business.tagline;
+  if (business.owner.name) node.founder = { "@type": "Person", name: business.owner.name, jobTitle: "Owner" };
   if (hasEmail) node.email = business.email;
   if (business.license.number) {
     node.hasCredential = {

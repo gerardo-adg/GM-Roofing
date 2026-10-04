@@ -41,6 +41,13 @@ export const business = {
   ],
 
   familyOwned: true,
+
+  /** Owner. Name and photo are optional: the About page and schema use them once filled in. */
+  owner: {
+    name: "",
+    /** e.g. "/images/owner.webp" in /public, roughly 4:5 portrait. */
+    photo: "",
+  },
   primaryRegion: "Sacramento Valley",
   primaryCity: "Sacramento",
 
