@@ -142,11 +142,11 @@ const links = [
   }
   .hdr.is-open { background: var(--white); }
 
-  /* Logo swaps tone with the header */
-  .hdr.is-scrolled :global(.logo--light),
-  .hdr.is-open :global(.logo--light) { color: var(--ink); }
-  .hdr.is-scrolled :global(.logo--light .logo__tile),
-  .hdr.is-open :global(.logo--light .logo__tile) { fill: var(--ink); }
+  /* Logo swaps to the navy version when the header turns solid */
+  .hdr.is-scrolled :global(.logo--light .logo__img--on-dark),
+  .hdr.is-open :global(.logo--light .logo__img--on-dark) { display: none; }
+  .hdr.is-scrolled :global(.logo--light .logo__img--on-light),
+  .hdr.is-open :global(.logo--light .logo__img--on-light) { display: block; }
 
   .hdr__bar {
     height: var(--header-h);

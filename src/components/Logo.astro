@@ -1,35 +1,27 @@
 ---
+/**
+ * GM Roofing logo. Two versions of the client's mark live in /public/brand:
+ * silver-on-transparent for dark backgrounds and navy for light ones.
+ * The header swaps between them as it changes from transparent to solid.
+ */
 import { business } from "../data/business";
 interface Props {
+  /** "light" = sits on a dark background. */
   tone?: "dark" | "light";
+  size?: "md" | "lg";
 }
-const { tone = "dark" } = Astro.props;
+const { tone = "dark", size = "md" } = Astro.props;
 ---
 
-<a class:list={["logo", `logo--${tone}`]} href="/" aria-label={`${business.name} home`}>
-  <svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true">
-    <rect width="40" height="40" rx="10" class="logo__tile" />
-    <path d="M9 23.5 20 13l11 10.5" class="logo__roof" />
-    <path d="M13 22v7h14v-7" class="logo__wall" />
-  </svg>
-  <span class="logo__word">GM<span>Roofing</span></span>
+<a class:list={["logo", `logo--${tone}`, `logo--${size}`]} href="/" aria-label={`${business.name} home`}>
+  <img class="logo__img logo__img--on-dark" src="/brand/logo-on-dark.webp" alt="" width="235" height="160" decoding="async" />
+  <img class="logo__img logo__img--on-light" src="/brand/logo-on-light.webp" alt="" width="235" height="160" decoding="async" />
 </a>
 
 <style>
-  .logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.7rem;
-    font-weight: 650;
-    letter-spacing: -0.03em;
-    font-size: 1.15rem;
-    line-height: 1;
-  }
-  .logo__mark { width: 36px; height: 36px; flex: none; }
-  .logo__tile { fill: var(--ink); transition: fill 0.3s var(--ease); }
-  .logo__roof { fill: none; stroke: var(--accent-soft); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-  .logo__wall { fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-  .logo__word span { font-weight: 400; margin-left: 0.3em; opacity: 0.7; }
-  .logo--light { color: var(--white); }
-  .logo--light .logo__tile { fill: rgb(255 255 255 / 0.1); }
+  .logo { display: inline-flex; align-items: center; flex: none; }
+  .logo__img { height: 50px; width: auto; }
+  .logo--lg .logo__img { height: 64px; }
+  .logo--light .logo__img--on-light { display: none; }
+  .logo--dark .logo__img--on-dark { display: none; }
 </style>

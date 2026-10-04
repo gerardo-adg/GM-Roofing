@@ -56,8 +56,7 @@ export const business = {
   ],
 
   // Add full profile URLs to show them in the footer + schema sameAs.
-  // TODO: Instagram handle (the old site links to it, but the URL wasn't provided).
-  social: { facebook: "", instagram: "", google: "" },
+  social: { facebook: "", instagram: "https://www.instagram.com/gmroofing_sac/", google: "" },
 
   process: [
     { step: "Request an inspection", text: "Tell us what's going on or ask for a general roof check. We'll find a time that works." },

@@ -20,6 +20,7 @@ npm run build    # outputs to dist/
 | Homepage | `src/pages/index.astro` |
 | About / Service areas / Contact | `src/pages/*.astro` |
 | Colors, fonts, spacing | `src/styles/global.css` (`:root` variables) |
+| Logo files | `public/brand/logo-on-dark.webp` (silver, for dark backgrounds) and `logo-on-light.webp` (navy, for light). Favicons and `logo.png` are in `public/` |
 | Header, footer, CTA band, form | `src/components/` |
 
 **Add a service:** add an object to `services.ts`. The page, the menu entry, the footer link, the form option and the schema markup all update automatically.

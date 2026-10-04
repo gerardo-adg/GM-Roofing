@@ -20,9 +20,9 @@
   --line: rgb(10 26 43 / 0.1);
   --line-dark: rgb(255 255 255 / 0.12);
 
-  --accent: #b65d20;       /* copper: primary CTA (AA with white text) */
-  --accent-hover: #9c4e19;
-  --accent-soft: #e9a26a;  /* copper on dark backgrounds, decorative */
+  --accent: #0b78be;       /* brand blue, deepened for buttons (AA with white text) */
+  --accent-hover: #09649e;
+  --accent-soft: #33bdf9;  /* logo blue, for details on dark backgrounds */
 
   /* ---- Type ---- */
   --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
