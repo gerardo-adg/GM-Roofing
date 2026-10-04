@@ -7,6 +7,8 @@ import ServiceGrid from "../components/ServiceGrid.astro";
 import Icon from "../components/Icon.astro";
 import { business } from "../data/business";
 import { story } from "../data/story";
+import MuxFilm from "../components/MuxFilm.astro";
+import { media, hasClip } from "../data/media";
 
 const breadcrumbs = [
   { label: "Home", href: "/" },
@@ -29,6 +31,7 @@ const values = [
   description="GM Roofing's owner started roofing with his dad at nine years old. Today he runs a licensed, family-owned roofing company serving Sacramento and the Sacramento Valley."
   breadcrumbs={breadcrumbs}
   pageType="AboutPage"
+  videos={hasClip(media.owner) ? [{ key: "owner", clip: media.owner }] : []}
 >
   <PageHero
     eyebrow="Our story"
@@ -36,6 +39,17 @@ const values = [
     lede={`${owner} grew up on job sites with his dad. Today he runs his own licensed roofing company across the ${business.primaryRegion}.`}
     breadcrumbs={breadcrumbs}
   />
+
+  <!-- ============ OWNER FILM (once media.owner has a Mux ID) ============ -->
+  {
+    hasClip(media.owner) && (
+      <section class="ownerfilm">
+        <div class="container">
+          <div data-reveal="media"><MuxFilm clip={media.owner} /></div>
+        </div>
+      </section>
+    )
+  }
 
   <!-- ============ STORY ============ -->
   <section class="section">
@@ -146,6 +160,10 @@ const values = [
 </BaseLayout>
 
 <style>
+  /* Owner film overlaps the hero */
+  .ownerfilm { position: relative; z-index: 2; margin-top: clamp(-3rem, -6vw, -2rem); }
+  :global(.phero):has(+ .ownerfilm) { padding-bottom: clamp(5rem, 10vw, 8rem); }
+
   /* Story */
   .story { display: grid; gap: 3.5rem; }
   .story__photo { overflow: hidden; border-radius: var(--radius-lg); margin-bottom: 2.5rem; max-width: 420px; }

@@ -1,6 +1,13 @@
 ---
+/**
+ * Service cards. When a service has a Mux clip (media.services[slug]),
+ * the card gets a still from it, and on hover-capable devices the clip
+ * plays while the pointer is over the card.
+ */
 import Icon from "./Icon.astro";
+import MuxImage from "./MuxImage.astro";
 import { services } from "../data/services";
+import { media, hasClip, muxStream } from "../data/media";
 
 interface Props {
   exclude?: string[];
@@ -13,7 +20,18 @@ const list = services.filter((s) => !exclude.includes(s.slug));
   {
     list.map((s, i) => (
       <li data-reveal style={`--d:${i % 3}`}>
-        <a href={`/${s.slug}/`} class="scard">
+        <a href={`/${s.slug}/`} class:list={["scard", { "scard--media": hasClip(media.services[s.slug]) }]}>
+          {hasClip(media.services[s.slug]) && (
+            <div class="scard__media" data-hover-video={muxStream(media.services[s.slug].playbackId)}>
+              <MuxImage
+                playbackId={media.services[s.slug].playbackId}
+                time={media.services[s.slug].posterTime}
+                alt=""
+                ratio={[4, 3]}
+                sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+              />
+            </div>
+          )}
           <div class="scard__top">
             <span class="scard__icon"><Icon name={s.icon} size={26} /></span>
             <span class="scard__num">{String(i + 1).padStart(2, "0")}</span>
@@ -32,6 +50,28 @@ const list = services.filter((s) => !exclude.includes(s.slug));
 
 <style>
   .sgrid { display: grid; gap: 1rem; }
+  .scard__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    margin: calc(-1 * clamp(1.5rem, 3vw, 2.25rem)) calc(-1 * clamp(1.5rem, 3vw, 2.25rem)) 1.5rem;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--ink);
+  }
+  .scard__media :global(img), .scard__media :global(mux-background-video) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease), opacity 0.6s var(--ease);
+  }
+  .scard__media :global(mux-background-video) { opacity: 0; }
+  .scard__media :global(mux-background-video.is-playing) { opacity: 1; }
+  .scard:hover .scard__media :global(img) { transform: scale(1.04); }
+  .scard--media .scard__top { position: absolute; top: 1rem; left: 1rem; right: 1rem; margin: 0; }
+  .scard--media .scard__icon { width: 44px; height: 44px; border-radius: 10px; background: rgb(255 255 255 / 0.92); }
+  .scard--media .scard__num { color: rgb(255 255 255 / 0.85); }
   .scard {
     position: relative;
     display: flex;
@@ -87,3 +127,33 @@ const list = services.filter((s) => !exclude.includes(s.slug));
   @media (min-width: 640px) { .sgrid { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1024px) { .sgrid { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; } }
 </style>
+
+<script>
+  // Hover-to-play on devices with a real pointer. The engine loads on first hover.
+  type BgEl = HTMLElement & { video?: HTMLVideoElement };
+  const boxes = document.querySelectorAll<HTMLElement>("[data-hover-video]");
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (boxes.length && canHover && !reduce) {
+    boxes.forEach((box) => {
+      const card = box.closest("a");
+      let el: BgEl | null = null;
+      card?.addEventListener("mouseenter", async () => {
+        if (!el) {
+          await import("@mux/mux-background-video/html");
+          el = document.createElement("mux-background-video") as BgEl;
+          el.setAttribute("max-resolution", "720p");
+          el.setAttribute("src", box.dataset.hoverVideo ?? "");
+          box.append(el);
+          requestAnimationFrame(() => el?.video?.addEventListener("playing", () => el?.classList.add("is-playing")));
+        } else {
+          el.video?.play().catch(() => {});
+        }
+      });
+      card?.addEventListener("mouseleave", () => {
+        el?.video?.pause();
+        el?.classList.remove("is-playing");
+      });
+    });
+  }
+</script>

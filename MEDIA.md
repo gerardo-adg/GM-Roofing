@@ -19,9 +19,12 @@ Shoot in 4K at 24 or 30 fps, on a gimbal or drone, with slow and steady moves. A
 
 | Slot (`media.ts`) | Length | Framing | What to film |
 |---|---|---|---|
-| `hero` | 8 to 15 s loop | 16:9 | Slow drone push-in or orbit over a crew installing shingles or tile on a Sacramento home, late afternoon light. The left third of the frame should be quieter, because the headline sits there. |
-| `heroMobile` | 8 to 15 s loop | **9:16** | Vertical cut of the same moment, so phones don't get a cropped landscape shot. |
-| `projectFilm` | 60 to 120 s, with sound | 16:9 | One full replacement: walking the roof at inspection, tear-off, decking repair, underlayment, new roof going on, cleanup, a homeowner at the final walkthrough. Light music plus a short voiceover from the owner. |
+| `hero` | 10 to 20 s loop | 16:9, 4K | The biggest piece of media on the site: it fills a full-width frame under the headline, up to 82% of the screen height. A slow drone push-in or orbit over a crew installing shingles or tile on a Sacramento home, late afternoon light. Keep the bottom-left corner fairly calm, because three small trust badges sit there. |
+| `heroMobile` | 10 to 20 s loop | **4:5 or 9:16** | Vertical cut of the same moment. Phones show it in a 4:5 frame, so keep the action in the center. |
+| `projectFilm` | 60 to 120 s, with sound | 16:9 | Opens from a **Watch the film** button on the hero and also gets its own section further down the homepage. |
+| `owner` | 60 to 120 s, with sound | 16:9 | About page, right under the headline. The owner on camera: starting out with his dad at nine, the big-truck dream, what customers say about him. Film him on a roof or by his truck, then cut to b-roll. |
+| `projectFilm` (shot notes) | | | One full replacement: walking the roof at inspection, tear-off, decking repair, underlayment, new roof going on, cleanup, a homeowner at the final walkthrough. Light music plus a short voiceover from the owner. |
+| Service loops (below) | | | Each one plays behind its service page headline, and a still from it becomes the photo on that service's homepage card (the clip plays when someone hovers over the card on desktop). |
 | `services["roof-replacement-sacramento"]` | 8 to 12 s loop | 16:9 | Tear-off, or new shingles being nailed in a row. |
 | `services["roof-repair-sacramento"]` | 8 to 12 s loop | 16:9 | Close-up of flashing being sealed around a vent or chimney, or a damaged section being replaced. |
 | `services["tile-roofing-sacramento"]` | 8 to 12 s loop | 16:9 | Concrete or clay tile being set, or a slow pan across a finished tile roof. |

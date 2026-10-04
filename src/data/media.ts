@@ -50,6 +50,13 @@ export const media = {
     6
   ),
 
+  /** About page: the owner telling his story on camera (60 to 120 seconds, with sound). */
+  owner: clip(
+    "Meet the owner of GM Roofing",
+    "GM Roofing's owner on how he started roofing with his dad at nine years old and what he cares about on every job.",
+    4
+  ),
+
   /** Background loop for each service page hero, keyed by service slug. */
   services: {
     "roof-replacement-sacramento": clip("Roof replacement in Sacramento", "Tear-off and new roof installation on a Sacramento home."),
