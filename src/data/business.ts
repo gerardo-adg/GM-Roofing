@@ -63,7 +63,12 @@ export const business = {
   ],
 
   // Add full profile URLs to show them in the footer + schema sameAs.
-  social: { facebook: "", instagram: "https://www.instagram.com/gmroofing_sac/", google: "" },
+  social: {
+    facebook: "",
+    instagram: "https://www.instagram.com/gmroofing_sac/",
+    yelp: "https://www.yelp.com/biz/gm-roofing-sacramento",
+    google: "",
+  },
 
   process: [
     { step: "Request an inspection", text: "Tell us what's going on or ask for a general roof check. We'll find a time that works." },
