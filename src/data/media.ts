@@ -63,7 +63,7 @@ export const media = {
     "roof-repair-sacramento": {
       ...clip("Roof repair in Sacramento", "Repairing flashing and damaged roofing on a Sacramento home.", 1),
       playbackId: "IPzJ00UkP8RUlfo9Rug31H86ZE7hXUtzVxrXORIqK8HA",
-      uploadDate: "", // TODO: add the upload date (YYYY-MM-DD) so the video schema is emitted
+      uploadDate: "2026-10-04",
     },
     "tile-roofing-sacramento": clip("Tile roofing in Sacramento", "Concrete tile roof work on a Sacramento Valley home."),
     "roof-inspections-sacramento": clip("Roof inspection in Sacramento", "A GM Roofing inspector checking a roof in the Sacramento Valley."),

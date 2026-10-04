@@ -84,6 +84,10 @@ const faqs = [
 const videos = [
   ...(heroVideo ? [{ key: "hero", clip: media.hero }] : []),
   ...(hasClip(media.projectFilm) ? [{ key: "film", clip: media.projectFilm }] : []),
+  // Service clips shown in the homepage showcase
+  ...Object.entries(media.services)
+    .filter(([slug, c]) => slug !== "residential-roofing-sacramento" && hasClip(c))
+    .map(([slug, clip]) => ({ key: slug, clip })),
 ];
 ---
 
