@@ -57,14 +57,23 @@ export const media = {
     4
   ),
 
-  /** Background loop for each service page hero, keyed by service slug. */
-  services: {
-    "roof-replacement-sacramento": clip("Roof replacement in Sacramento", "Tear-off and new roof installation on a Sacramento home."),
+  /**
+   * Homepage service showcase clips (the big panel that switches as you
+   * hover or scroll the service list), keyed by service slug. If a service
+   * has no showcase clip, its service page clip is used instead.
+   */
+  showcase: {
     "roof-repair-sacramento": {
-      ...clip("Roof repair in Sacramento", "Repairing flashing and damaged roofing on a Sacramento home.", 1),
+      ...clip("Roof repair in Sacramento", "GM Roofing repairing a roof in the Sacramento Valley.", 1),
       playbackId: "IPzJ00UkP8RUlfo9Rug31H86ZE7hXUtzVxrXORIqK8HA",
       uploadDate: "2026-10-04",
     },
+  } as Record<string, MuxClip>,
+
+  /** Background loop for each service page hero, keyed by service slug. */
+  services: {
+    "roof-replacement-sacramento": clip("Roof replacement in Sacramento", "Tear-off and new roof installation on a Sacramento home."),
+    "roof-repair-sacramento": clip("Roof repair in Sacramento", "Repairing flashing and damaged roofing on a Sacramento home."),
     "tile-roofing-sacramento": clip("Tile roofing in Sacramento", "Concrete tile roof work on a Sacramento Valley home."),
     "roof-inspections-sacramento": clip("Roof inspection in Sacramento", "A GM Roofing inspector checking a roof in the Sacramento Valley."),
     "roof-maintenance-sacramento": clip("Roof maintenance in Sacramento", "Resealing flashing and replacing damaged shingles during a maintenance visit."),
@@ -74,6 +83,10 @@ export const media = {
 };
 
 export const hasClip = (c?: MuxClip) => Boolean(c?.playbackId);
+
+/** Clip for a service in the homepage showcase: its own showcase clip, else the service page clip. */
+export const showcaseClip = (slug: string): MuxClip | undefined =>
+  hasClip(media.showcase[slug]) ? media.showcase[slug] : media.services[slug];
 
 export const muxStream = (id: string) => `https://stream.mux.com/${id}.m3u8`;
 export const muxImage = (id: string, opts: { time?: number; width?: number; height?: number; format?: "webp" | "jpg" } = {}) => {

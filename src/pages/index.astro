@@ -13,7 +13,8 @@ import Reviews from "../components/Reviews.astro";
 import { business, hasPhone, hoursText } from "../data/business";
 import { reviews } from "../data/reviews";
 import { projects } from "../data/projects";
-import { media, hasClip } from "../data/media";
+import { media, hasClip, showcaseClip } from "../data/media";
+import { services } from "../data/services";
 import { ids } from "../lib/schema";
 import { story } from "../data/story";
 
@@ -85,9 +86,9 @@ const videos = [
   ...(heroVideo ? [{ key: "hero", clip: media.hero }] : []),
   ...(hasClip(media.projectFilm) ? [{ key: "film", clip: media.projectFilm }] : []),
   // Service clips shown in the homepage showcase
-  ...Object.entries(media.services)
-    .filter(([slug, c]) => slug !== "residential-roofing-sacramento" && hasClip(c))
-    .map(([slug, clip]) => ({ key: slug, clip })),
+  ...services
+    .filter((s) => s.slug !== "residential-roofing-sacramento" && hasClip(showcaseClip(s.slug)))
+    .map((s) => ({ key: s.slug, clip: showcaseClip(s.slug)! })),
 ];
 ---
 

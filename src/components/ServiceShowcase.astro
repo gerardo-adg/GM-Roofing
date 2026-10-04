@@ -16,7 +16,7 @@ import MuxImage from "./MuxImage.astro";
 import MuxBackground from "./MuxBackground.astro";
 import RoofLines from "./RoofLines.astro";
 import { services } from "../data/services";
-import { media, hasClip, muxStream } from "../data/media";
+import { hasClip, muxStream, showcaseClip } from "../data/media";
 
 interface Props {
   exclude?: string[];
@@ -30,7 +30,7 @@ const num = (i: number) => String(i + 1).padStart(2, "0");
   <ol role="list" class="show__list">
     {
       list.map((s, i) => {
-        const clip = media.services[s.slug];
+        const clip = showcaseClip(s.slug)!;
         const video = hasClip(clip);
         return (
           <li class:list={["show__item", { "is-active": i === 0 }]} data-show-item={i}>
@@ -72,7 +72,7 @@ const num = (i: number) => String(i + 1).padStart(2, "0");
     <div class="show__frame">
       {
         list.map((s, i) => {
-          const clip = media.services[s.slug];
+          const clip = showcaseClip(s.slug)!;
           const video = hasClip(clip);
           return (
             <div class:list={["show__layer", { "is-active": i === 0 }]} data-show-layer={i} data-video={video ? muxStream(clip.playbackId) : undefined}>

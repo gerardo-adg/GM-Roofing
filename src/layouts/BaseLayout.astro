@@ -74,7 +74,7 @@ const graph = noindex
     ];
 
 const usesMux =
-  hasClip(media.hero) || hasClip(media.projectFilm) || Object.values(media.services).some(hasClip) || projects.length > 0;
+  hasClip(media.hero) || hasClip(media.projectFilm) || Object.values(media.services).some(hasClip) || Object.values(media.showcase).some(hasClip) || projects.length > 0;
 ---
 
 <!doctype html>
