@@ -65,6 +65,8 @@ export async function mountBgVideo(host: HTMLElement, rawSrc: string, maxResolut
     v.addEventListener("playing", () => markPlaying(v));
     if (v.canPlayType("application/vnd.apple.mpegurl")) {
       v.src = src;
+      // If Mux rejects the quality modifiers, retry the plain stream once.
+      v.addEventListener("error", () => { if (v.src !== rawSrc) { v.src = rawSrc; if (wantPlay) v.play().catch(() => {}); } }, { once: true });
     } else {
       const { default: Hls } = await import("hls.js/light");
       if (!Hls.isSupported()) return;
@@ -78,6 +80,18 @@ export async function mountBgVideo(host: HTMLElement, rawSrc: string, maxResolut
       });
       hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
         hls.startLevel = data.levels.length - 1; // levels are sorted low to high
+        if (wantPlay) v.play().catch(() => {});
+      });
+      // If Mux rejects the quality modifiers, fall back to the plain stream.
+      let retried = false;
+      hls.on(Hls.Events.ERROR, (_e, data) => {
+        if (!data.fatal) return;
+        if (!retried) {
+          retried = true;
+          hls.loadSource(rawSrc);
+        } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+          hls.recoverMediaError();
+        }
       });
       hls.loadSource(src);
       hls.attachMedia(v);
@@ -91,7 +105,7 @@ export async function mountBgVideo(host: HTMLElement, rawSrc: string, maxResolut
     const el = document.createElement("mux-background-video") as MuxEl;
     el.className = "bgv";
     el.setAttribute("max-resolution", maxResolution);
-    el.setAttribute("src", src);
+    el.setAttribute("src", rawSrc); // the Mux engine picks the sharpest rendition itself
     host.append(el);
     await nextFrame();
     video = el.video;
