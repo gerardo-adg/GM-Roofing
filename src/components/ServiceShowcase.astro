@@ -231,15 +231,15 @@ const num = (i: number) => String(i + 1).padStart(2, "0");
       transition: opacity 0.7s var(--ease), transform 1.2s var(--ease);
     }
     .show__layer.is-active { opacity: 1; transform: none; }
-    .show__layer :global(img), .show__layer :global(mux-background-video) {
+    .show__layer :global(img), .show__layer :global(.bgv) {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-    .show__layer :global(mux-background-video) { opacity: 0; transition: opacity 0.8s var(--ease); }
-    .show__layer :global(mux-background-video.is-playing) { opacity: 1; }
+    .show__layer :global(.bgv) { opacity: 0; transition: opacity 0.8s var(--ease); }
+    .show__layer :global(.bgv.is-playing) { opacity: 1; }
 
     .show__caption {
       position: absolute;
@@ -274,7 +274,8 @@ const num = (i: number) => String(i + 1).padStart(2, "0");
 </style>
 
 <script>
-  type BgEl = HTMLElement & { video?: HTMLVideoElement };
+  import { mountBgVideo, preloadEngine, type BgVideo } from "../scripts/bgvideo";
+
   const root = document.querySelector<HTMLElement>("[data-show]");
   const desktop = window.matchMedia("(min-width: 1024px)");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -283,26 +284,17 @@ const num = (i: number) => String(i + 1).padStart(2, "0");
     const items = [...root.querySelectorAll<HTMLElement>("[data-show-item]")];
     const layers = [...root.querySelectorAll<HTMLElement>("[data-show-layer]")];
     const dots = [...root.querySelectorAll<HTMLElement>("[data-show-dot]")];
-    const players = new Map<number, BgEl>();
+    const players = new Map<number, Promise<BgVideo>>();
     let current = 0;
 
-    const playLayer = async (i: number) => {
-      players.forEach((p, k) => k !== i && p.video?.pause());
+    const playLayer = (i: number) => {
+      players.forEach((p, k) => k !== i && p.then((v) => v.pause()));
       const layer = layers[i];
       const src = layer?.dataset.video;
       if (!src || reduce || !desktop.matches) return;
-      let el = players.get(i);
-      if (!el) {
-        await import("@mux/mux-background-video/html");
-        el = document.createElement("mux-background-video") as BgEl;
-        el.setAttribute("max-resolution", "1080p");
-        el.setAttribute("src", src);
-        layer.append(el);
-        players.set(i, el);
-        requestAnimationFrame(() => el?.video?.addEventListener("playing", () => el?.classList.add("is-playing")));
-      } else {
-        el.video?.play().catch(() => {});
-      }
+      const existing = players.get(i);
+      if (existing) existing.then((v) => v.play());
+      else players.set(i, mountBgVideo(layer, src, "1080p"));
     };
 
     const setActive = (i: number) => {
@@ -333,11 +325,12 @@ const num = (i: number) => String(i + 1).padStart(2, "0");
     // Start the first clip once the panel is near the screen
     const panelIo = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) {
+        preloadEngine();
         playLayer(current);
       } else {
-        players.forEach((p) => p.video?.pause());
+        players.forEach((p) => p.then((v) => v.pause()));
       }
-    }, { rootMargin: "100px 0px" });
+    }, { rootMargin: "400px 0px" });
     const panel = root.querySelector(".show__panel");
     if (panel) panelIo.observe(panel);
   }

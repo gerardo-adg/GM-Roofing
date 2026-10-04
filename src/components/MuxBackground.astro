@@ -51,50 +51,35 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
 
 <style>
   .mbg { position: absolute; inset: 0; overflow: hidden; background: var(--ink); }
-  .mbg__poster, .mbg :global(img), .mbg :global(mux-background-video) {
+  .mbg__poster, .mbg :global(img), .mbg :global(.bgv) {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  .mbg :global(mux-background-video) {
+  .mbg :global(.bgv) {
     display: block;
     opacity: 0;
     transition: opacity 1.2s var(--ease);
   }
-  .mbg :global(mux-background-video.is-playing) { opacity: 1; }
+  .mbg :global(.bgv.is-playing) { opacity: 1; }
 </style>
 
 <script>
-  type BgEl = HTMLElement & { video?: HTMLVideoElement };
+  import { mountBgVideo, preloadEngine, type BgVideo } from "../scripts/bgvideo";
 
   const blocks = document.querySelectorAll<HTMLElement>("[data-mux-bg]");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
 
   if (blocks.length && !reduce && !saveData) {
-    let engine: Promise<unknown> | null = null;
-    const loadEngine = () => (engine ??= import("@mux/mux-background-video/html"));
-
     const mount = async (block: HTMLElement) => {
-      await loadEngine();
       const mobile = window.matchMedia("(max-width: 767px)").matches;
-      const el = document.createElement("mux-background-video") as BgEl;
-      el.setAttribute("max-resolution", mobile ? "720p" : block.dataset.max ?? "1080p");
-      el.setAttribute("src", (mobile ? block.dataset.srcMobile : block.dataset.src) ?? "");
-      block.append(el);
-      requestAnimationFrame(() => {
-        el.video?.addEventListener("playing", () => el.classList.add("is-playing"), { once: true });
-      });
-
+      const src = (mobile ? block.dataset.srcMobile : block.dataset.src) ?? "";
+      const player: BgVideo = await mountBgVideo(block, src, mobile ? "720p" : block.dataset.max ?? "1080p");
       // Pause when off screen to save battery and bandwidth.
-      new IntersectionObserver(([e]) => {
-        const v = el.video;
-        if (!v) return;
-        if (e.isIntersecting) v.play().catch(() => {});
-        else v.pause();
-      }).observe(block);
+      new IntersectionObserver(([e]) => (e.isIntersecting ? player.play() : player.pause())).observe(block);
     };
 
     const io = new IntersectionObserver(
@@ -108,8 +93,11 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
       { rootMargin: "200px 0px" }
     );
 
-    // Wait for the page (and its poster images) to finish loading first.
-    const start = () => blocks.forEach((b) => io.observe(b));
+    // Let the page and poster images load first, then start watching.
+    const start = () => {
+      preloadEngine();
+      blocks.forEach((b) => io.observe(b));
+    };
     if (document.readyState === "complete") start();
     else window.addEventListener("load", start, { once: true });
   }

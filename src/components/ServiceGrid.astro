@@ -58,7 +58,7 @@ const list = services.filter((s) => !exclude.includes(s.slug));
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     background: var(--ink);
   }
-  .scard__media :global(img), .scard__media :global(mux-background-video) {
+  .scard__media :global(img), .scard__media :global(.bgv) {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -66,8 +66,8 @@ const list = services.filter((s) => !exclude.includes(s.slug));
     object-fit: cover;
     transition: transform 1.2s var(--ease), opacity 0.6s var(--ease);
   }
-  .scard__media :global(mux-background-video) { opacity: 0; }
-  .scard__media :global(mux-background-video.is-playing) { opacity: 1; }
+  .scard__media :global(.bgv) { opacity: 0; }
+  .scard__media :global(.bgv.is-playing) { opacity: 1; }
   .scard:hover .scard__media :global(img) { transform: scale(1.04); }
   .scard--media .scard__top { position: absolute; top: 1rem; left: 1rem; right: 1rem; margin: 0; }
   .scard--media .scard__icon { width: 44px; height: 44px; border-radius: 10px; background: rgb(255 255 255 / 0.92); }
@@ -129,31 +129,22 @@ const list = services.filter((s) => !exclude.includes(s.slug));
 </style>
 
 <script>
-  // Hover-to-play on devices with a real pointer. The engine loads on first hover.
-  type BgEl = HTMLElement & { video?: HTMLVideoElement };
+  // Hover-to-play on devices with a real pointer.
+  import { mountBgVideo, preloadEngine, type BgVideo } from "../scripts/bgvideo";
+
   const boxes = document.querySelectorAll<HTMLElement>("[data-hover-video]");
   const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (boxes.length && canHover && !reduce) {
+    window.addEventListener("load", () => preloadEngine(), { once: true });
     boxes.forEach((box) => {
       const card = box.closest("a");
-      let el: BgEl | null = null;
-      card?.addEventListener("mouseenter", async () => {
-        if (!el) {
-          await import("@mux/mux-background-video/html");
-          el = document.createElement("mux-background-video") as BgEl;
-          el.setAttribute("max-resolution", "720p");
-          el.setAttribute("src", box.dataset.hoverVideo ?? "");
-          box.append(el);
-          requestAnimationFrame(() => el?.video?.addEventListener("playing", () => el?.classList.add("is-playing")));
-        } else {
-          el.video?.play().catch(() => {});
-        }
+      let player: Promise<BgVideo> | null = null;
+      card?.addEventListener("mouseenter", () => {
+        if (!player) player = mountBgVideo(box, box.dataset.hoverVideo ?? "", "720p");
+        else player.then((v) => v.play());
       });
-      card?.addEventListener("mouseleave", () => {
-        el?.video?.pause();
-        el?.classList.remove("is-playing");
-      });
+      card?.addEventListener("mouseleave", () => player?.then((v) => v.pause()));
     });
   }
 </script>
