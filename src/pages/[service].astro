@@ -191,7 +191,7 @@ const slug = (c: string) => c.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
   .includes { display: grid; gap: 0; margin-top: 1.5rem; border-top: 1px solid var(--line); counter-reset: inc; }
   .includes li { display: flex; gap: 1.25rem; align-items: baseline; padding-block: 1rem; border-bottom: 1px solid var(--line); font-weight: 500; }
-  .includes span { font-family: var(--font-serif); font-style: italic; font-size: 1.35rem; color: var(--accent); min-width: 2ch; }
+  .includes span { font-weight: 600; letter-spacing: -0.03em; font-size: 1rem; font-variant-numeric: tabular-nums; color: var(--accent); min-width: 2ch; }
 
   .cities { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
   .cities a { display: inline-block; padding: 0.45rem 0.85rem; border: 1px solid var(--line); border-radius: 8px; font-size: var(--fs-sm); transition: border-color 0.2s, background-color 0.2s; }

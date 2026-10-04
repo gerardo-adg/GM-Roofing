@@ -176,7 +176,7 @@ const values = [
     max-width: 24ch;
     text-wrap: balance;
   }
-  .story__lead em { font-family: var(--font-serif); font-weight: 400; color: var(--accent); }
+  .story__lead em { font-style: normal; color: var(--accent); }
   .story__body { margin-top: 2rem; }
   .story__body p { color: #3a4a5b; font-size: var(--fs-lg); max-width: 58ch; }
   .story__body p + p { margin-top: 1.25rem; }
@@ -205,7 +205,7 @@ const values = [
     border: 2px solid var(--accent);
   }
   .timeline li:last-child::before { background: var(--accent); }
-  .timeline__when { font-family: var(--font-serif); font-style: italic; font-size: 1.6rem; line-height: 1; color: var(--accent); }
+  .timeline__when { font-weight: 600; letter-spacing: -0.03em; font-size: 1.35rem; line-height: 1; color: var(--accent); }
   .timeline p { margin-top: 0.5rem; color: var(--steel); font-size: var(--fs-sm); max-width: 36ch; }
 
   @media (min-width: 1024px) {
@@ -229,7 +229,7 @@ const values = [
     border-top: 1px solid var(--line-dark);
     max-width: 60ch;
   }
-  .quote__advice p { margin-top: 1rem; font-family: var(--font-serif); font-style: italic; font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.75rem); line-height: 1.35; color: rgb(255 255 255 / 0.85); }
+  .quote__advice p { margin-top: 1rem; font-weight: 400; letter-spacing: -0.015em; font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.75rem); line-height: 1.35; color: rgb(255 255 255 / 0.85); }
 
   /* Communication */
   .talk { display: grid; gap: 2rem; }
@@ -242,7 +242,7 @@ const values = [
   /* Values */
   .values { display: grid; gap: 1rem; }
   .values li { padding: 2rem; border-radius: var(--radius-lg); background: var(--white); border: 1px solid var(--line); }
-  .values__num { font-family: var(--font-serif); font-style: italic; font-size: 2.25rem; line-height: 1; color: var(--accent); }
+  .values__num { font-weight: 600; letter-spacing: -0.03em; font-size: 1.5rem; line-height: 1; color: var(--accent); }
   .values h3 { margin-top: 2rem; }
   .values p { margin-top: 0.6rem; color: var(--steel); font-size: var(--fs-sm); }
   @media (min-width: 640px) { .values { grid-template-columns: 1fr 1fr; } }
