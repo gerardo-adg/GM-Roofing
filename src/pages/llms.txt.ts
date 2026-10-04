@@ -19,7 +19,7 @@ export const GET: APIRoute = ({ site }) => {
     "",
     "## About the owner",
     "",
-    `${story.short} He passed both the CSLB trade exam and the Law and Business exam on his first try and holds California C-39 roofing license #${business.license.number}.`,
+    `${story.short} The GM in the name stands for Giovanni Mondragon. He passed both the CSLB trade exam and the Law and Business exam on his first try and holds California C-39 roofing license #${business.license.number}.`,
     "",
     "## Contact",
     "",
