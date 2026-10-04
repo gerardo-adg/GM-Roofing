@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import EstimateForm from "../components/EstimateForm.astro";
+import Icon from "../components/Icon.astro";
+import { business, hasPhone, hasEmail } from "../data/business";
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Contact", href: "/contact/" },
+];
+
+const details = [
+  hasPhone && { icon: "phone", label: "Phone", value: business.phone.display, href: `tel:${business.phone.tel}` },
+  hasEmail && { icon: "mail", label: "Email", value: business.email, href: `mailto:${business.email}` },
+  { icon: "pin", label: "Service area", value: `${business.primaryRegion}, CA`, href: "/service-areas/" },
+  { icon: "clock", label: "Hours", value: "Reach out any time — we'll follow up to schedule a time that works for you." },
+].filter(Boolean) as { icon: string; label: string; value: string; href?: string }[];
+
+const next = [
+  "We review your request and follow up to schedule a visit.",
+  "We inspect your roof in person and document its condition.",
+  "You get a clear, written estimate — no pressure to decide.",
+];
+---
+
+<BaseLayout
+  title="Contact GM Roofing | Free Roofing Estimate in Sacramento"
+  description="Request a free roofing estimate or schedule a roof inspection with GM Roofing, serving the Sacramento Valley."
+  breadcrumbs={breadcrumbs}
+  finalCta={false}
+>
+  <PageHero
+    eyebrow="Free estimate"
+    title="Let's take a look <em>at your roof.</em>"
+    lede="Tell us about your roof and we'll follow up to schedule an inspection or estimate — no pressure, no obligation."
+    breadcrumbs={breadcrumbs}
+  />
+
+  <section class="section contact">
+    <div class="container contact__grid">
+      <div class="contact__form" data-reveal>
+        <h2>Request your free estimate</h2>
+        <p>It takes about a minute. Fields are required unless marked optional.</p>
+        <EstimateForm />
+      </div>
+
+      <aside class="contact__side">
+        <ul role="list" class="info">
+          {
+            details.map((d) => (
+              <li>
+                <span class="info__icon"><Icon name={d.icon} size={20} /></span>
+                <div>
+                  <span class="info__label">{d.label}</span>
+                  {d.href ? <a href={d.href}>{d.value}</a> : <p>{d.value}</p>}
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="next on-dark">
+          <span class="eyebrow">What happens next</span>
+          <ol role="list">
+            {next.map((n, i) => <li><span>{i + 1}</span>{n}</li>)}
+          </ol>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact { padding-top: 0; }
+  .contact__grid { display: grid; gap: 2rem; }
+  .contact__form {
+    position: relative;
+    z-index: 2;
+    margin-top: clamp(-3rem, -5vw, -2rem);
+    padding: clamp(1.5rem, 5vw, 3rem);
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    box-shadow: var(--shadow-lg), 0 0 0 1px var(--line);
+  }
+  .contact__form > h2 { font-size: var(--fs-xl); }
+  .contact__form > p { margin-top: 0.5rem; margin-bottom: 2rem; color: var(--steel); font-size: var(--fs-sm); }
+
+  .contact__side { display: grid; gap: 1rem; align-content: start; }
+  .info { border-top: 1px solid var(--line); }
+  .info li { display: flex; gap: 1rem; padding-block: 1.25rem; border-bottom: 1px solid var(--line); }
+  .info__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--accent);
+  }
+  .info__label { display: block; font-size: var(--fs-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); }
+  .info a, .info p { display: block; margin-top: 0.2rem; font-weight: 550; line-height: 1.45; }
+  .info p { font-weight: 400; color: #3a4a5b; font-size: var(--fs-sm); }
+  .info a:hover { color: var(--accent); }
+
+  .next { margin-top: 1rem; padding: 2rem; border-radius: var(--radius-lg); background: var(--ink); color: var(--white); }
+  .next ol { display: grid; gap: 1.1rem; margin-top: 1.5rem; }
+  .next li { display: flex; gap: 0.9rem; font-size: var(--fs-sm); color: rgb(255 255 255 / 0.8); }
+  .next li span {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 1px solid rgb(255 255 255 / 0.25);
+    font-size: var(--fs-xs);
+    color: var(--accent-soft);
+  }
+
+  @media (min-width: 1024px) {
+    .contact__grid { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 4rem; }
+    .contact__side { padding-top: 2.5rem; }
+  }
+</style>

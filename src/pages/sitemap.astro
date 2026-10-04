@@ -1,0 +1,63 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import { services } from "../data/services";
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Sitemap", href: "/sitemap/" },
+];
+const groups = [
+  { title: "Services", links: services.map((s) => ({ href: `/${s.slug}/`, label: `${s.name} Sacramento` })) },
+  {
+    title: "Company",
+    links: [
+      { href: "/", label: "Home" },
+      { href: "/about/", label: "About" },
+      { href: "/service-areas/", label: "Service Areas" },
+      { href: "/contact/", label: "Contact" },
+      { href: "/privacy-policy/", label: "Privacy Policy" },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Sitemap | GM Roofing" description="A full list of pages on the GM Roofing website." breadcrumbs={breadcrumbs} finalCta={false}>
+  <PageHero eyebrow="Sitemap" title="Every page, <em>in one place.</em>" breadcrumbs={breadcrumbs} />
+  <section class="section">
+    <div class="container groups">
+      {
+        groups.map((g) => (
+          <div>
+            <h2>{g.title}</h2>
+            <ul role="list">
+              {g.links.map((l) => (
+                <li>
+                  <a href={l.href}>{l.label} <Icon name="arrow" size={18} /></a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .groups { display: grid; gap: 3rem; }
+  .groups h2 { font-size: var(--fs-xl); margin-bottom: 1rem; }
+  .groups ul { border-top: 1px solid var(--line); }
+  .groups a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--line);
+    font-weight: 550;
+    transition: color 0.2s, padding 0.3s var(--ease);
+  }
+  .groups a:hover { color: var(--accent); padding-left: 0.5rem; }
+  @media (min-width: 900px) { .groups { grid-template-columns: 1fr 1fr; gap: 5rem; } }
+</style>

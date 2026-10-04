@@ -1,0 +1,200 @@
+---
+/** Every service page is generated from src/data/services.ts. */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHead from "../components/SectionHead.astro";
+import ServiceGrid from "../components/ServiceGrid.astro";
+import ProcessSteps from "../components/ProcessSteps.astro";
+import EstimateCard from "../components/EstimateCard.astro";
+import Faq from "../components/Faq.astro";
+import Icon from "../components/Icon.astro";
+import { business } from "../data/business";
+import { services, getService, type Service } from "../data/services";
+
+export function getStaticPaths() {
+  return services.map((s) => ({ params: { service: s.slug }, props: { service: s } }));
+}
+
+const { service } = Astro.props as { service: Service };
+const path = `/${service.slug}/`;
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: service.name, href: path },
+];
+const related = service.related.map(getService).filter((s): s is Service => Boolean(s));
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: service.name,
+  name: `${service.name} in ${business.primaryCity}`,
+  description: service.summary,
+  areaServed: business.cities.map((c) => ({ "@type": "City", name: c })),
+  provider: { "@type": "RoofingContractor", name: business.name, url: business.siteUrl },
+};
+---
+
+<BaseLayout title={service.seo.title} description={service.seo.description} breadcrumbs={breadcrumbs} schema={[schema]}>
+  <PageHero
+    eyebrow={service.hero.eyebrow}
+    title={service.hero.title}
+    lede={service.hero.lede}
+    cta={service.hero.cta}
+    breadcrumbs={breadcrumbs}
+  />
+
+  {
+    service.showServiceGrid && (
+      <section class="section section--paper">
+        <div class="container">
+          <SectionHead
+            align="split"
+            eyebrow="For homeowners"
+            title="Roofing services for <em>Sacramento homeowners</em>"
+            lede="Whatever stage your home's roof is at, it starts with an honest look and a clear explanation of the options."
+          />
+          <ServiceGrid exclude={service.slug} />
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section">
+    <div class="container split">
+      <article class="body">
+        {
+          service.sections.map((sec) => (
+            <section class="block" data-reveal>
+              <h2>{sec.heading}</h2>
+              {sec.body?.map((p) => <p>{p}</p>)}
+              {sec.list && (
+                <ul role="list" class:list={["checks", { "checks--titled": sec.list.some((l) => l.title) }]}>
+                  {sec.list.map((item) => (
+                    <li>
+                      <span class="checks__icon"><Icon name="check" size={16} /></span>
+                      <span>
+                        {item.title && <strong>{item.title}</strong>}
+                        {item.text}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          ))
+        }
+
+        {
+          service.faqs && (
+            <section class="block" data-reveal>
+              <h2>Common questions</h2>
+              <Faq items={service.faqs} />
+            </section>
+          )
+        }
+      </article>
+
+      <EstimateCard title={service.sidebar.title} text={service.sidebar.text} cta={service.sidebar.cta}>
+        {
+          related.length > 0 && (
+            <nav class="related" aria-label="Related services">
+              <p class="related__label">Related services</p>
+              <ul role="list">
+                {related.map((r) => (
+                  <li>
+                    <a href={`/${r.slug}/`}>
+                      <span class="related__icon"><Icon name={r.icon} size={20} /></span>
+                      <span>
+                        <strong>{r.name}</strong>
+                        <small>{r.blurb}</small>
+                      </span>
+                      <Icon name="arrow" size={18} class="related__arrow" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
+      </EstimateCard>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container">
+      <SectionHead
+        align="split"
+        eyebrow="Our process"
+        title="What to expect <em>from start to finish.</em>"
+        lede="Every project follows the same straightforward path — so you're never guessing what happens next."
+      />
+      <ProcessSteps />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .split { display: grid; gap: 3.5rem; }
+  @media (min-width: 1024px) {
+    .split { grid-template-columns: minmax(0, 1fr) 380px; gap: 5rem; }
+  }
+  .block + .block { margin-top: clamp(3rem, 6vw, 4.5rem); }
+  .block h2 { font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.6rem); max-width: 22ch; }
+  .block p { margin-top: 1.1rem; color: #3a4a5b; max-width: 66ch; }
+  .block p:first-of-type { margin-top: 1.25rem; }
+
+  .checks { display: grid; gap: 0.6rem; margin-top: 1.5rem; }
+  .checks li {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+    padding: 1rem 1.15rem;
+    border-radius: 14px;
+    background: var(--paper);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .checks__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--accent-soft);
+  }
+  .checks--titled strong { display: block; font-size: var(--fs-base); font-weight: 600; margin-bottom: 0.15rem; letter-spacing: -0.01em; }
+  @media (min-width: 640px) {
+    .checks:not(.checks--titled) { grid-template-columns: 1fr 1fr; }
+    .checks--titled { grid-template-columns: 1fr 1fr; }
+  }
+  .block :global(.faq) { margin-top: 1.5rem; }
+
+  .related { padding: 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--line); }
+  .related__label { font-size: var(--fs-xs); letter-spacing: 0.14em; text-transform: uppercase; color: var(--steel); margin-bottom: 0.5rem; }
+  .related a {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 0.5rem;
+    margin-inline: -0.5rem;
+    border-radius: 12px;
+    transition: background-color 0.2s;
+  }
+  .related a:hover { background: var(--paper); }
+  .related__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--paper);
+    color: var(--accent);
+  }
+  .related strong { display: block; font-size: var(--fs-sm); font-weight: 600; }
+  .related small { display: block; font-size: var(--fs-xs); color: var(--steel); }
+  .related :global(.related__arrow) { margin-left: auto; color: var(--steel); transition: transform 0.3s var(--ease); }
+  .related a:hover :global(.related__arrow) { transform: translateX(3px); color: var(--ink); }
+</style>

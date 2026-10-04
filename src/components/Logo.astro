@@ -1,0 +1,35 @@
+---
+import { business } from "../data/business";
+interface Props {
+  tone?: "dark" | "light";
+}
+const { tone = "dark" } = Astro.props;
+---
+
+<a class:list={["logo", `logo--${tone}`]} href="/" aria-label={`${business.name} — home`}>
+  <svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true">
+    <rect width="40" height="40" rx="10" class="logo__tile" />
+    <path d="M9 23.5 20 13l11 10.5" class="logo__roof" />
+    <path d="M13 22v7h14v-7" class="logo__wall" />
+  </svg>
+  <span class="logo__word">GM<span>Roofing</span></span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-weight: 650;
+    letter-spacing: -0.03em;
+    font-size: 1.15rem;
+    line-height: 1;
+  }
+  .logo__mark { width: 36px; height: 36px; flex: none; }
+  .logo__tile { fill: var(--ink); transition: fill 0.3s var(--ease); }
+  .logo__roof { fill: none; stroke: var(--accent-soft); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .logo__wall { fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .logo__word span { font-weight: 400; margin-left: 0.3em; opacity: 0.7; }
+  .logo--light { color: var(--white); }
+  .logo--light .logo__tile { fill: rgb(255 255 255 / 0.1); }
+</style>

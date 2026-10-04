@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHead from "../components/SectionHead.astro";
+import AreaList from "../components/AreaList.astro";
+import Icon from "../components/Icon.astro";
+import { business } from "../data/business";
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Service Areas", href: "/service-areas/" },
+];
+---
+
+<BaseLayout
+  title="Sacramento Valley Service Areas | GM Roofing"
+  description="GM Roofing serves homeowners and businesses across the Sacramento Valley, including Elk Grove, Roseville, Folsom, Citrus Heights, and Rocklin."
+  breadcrumbs={breadcrumbs}
+>
+  <PageHero
+    eyebrow="Service areas"
+    title="Where <em>we work.</em>"
+    lede={`${business.name} serves homeowners and businesses across the ${business.primaryRegion}.`}
+    cta="Request a free estimate"
+    breadcrumbs={breadcrumbs}
+  />
+
+  <section class="section">
+    <div class="container">
+      <SectionHead
+        align="split"
+        eyebrow={`${business.cities.length} communities`}
+        title="Sacramento Valley communities <em>we serve</em>"
+        lede="Don't see your city below? Reach out anyway — we cover a broader area than any list can fully capture."
+      />
+      <AreaList />
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container climate">
+      <div>
+        <span class="eyebrow" data-reveal>Local knowledge</span>
+        <h2 data-reveal style="--d:1">Roofing built around the <em>local climate.</em></h2>
+      </div>
+      <div>
+        <p data-reveal style="--d:2">
+          Every community in the Sacramento Valley deals with the same basic conditions — long, hot summers and the occasional heavy winter storm — but housing stock and roof age vary block to block.
+        </p>
+        <p data-reveal style="--d:3">
+          Whether you're in an established Sacramento neighborhood or a newer development in Elk Grove or Rocklin, we bring the same standard of inspection, repair, and replacement work.
+        </p>
+        <a class="btn btn--dark" href="/contact/" data-reveal style="--d:4">Request a free estimate <Icon name="arrow" class="arrow" /></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .climate { display: grid; gap: 2rem; }
+  .climate h2 { margin-top: 1.1rem; max-width: 14ch; }
+  .climate p { color: var(--steel); font-size: var(--fs-lg); max-width: 54ch; }
+  .climate p + p { margin-top: 1.25rem; }
+  .climate .btn { margin-top: 2rem; }
+  @media (min-width: 1024px) { .climate { grid-template-columns: 1fr 1fr; gap: 5rem; } }
+</style>

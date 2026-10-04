@@ -1,0 +1,53 @@
+---
+/** Inline line icons (1.5px stroke, 24px grid). Usage: <Icon name="phone" /> */
+interface Props {
+  name: string;
+  size?: number;
+  class?: string;
+}
+const { name, size = 24, class: className } = Astro.props;
+
+const paths: Record<string, string> = {
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  "arrow-up-right": '<path d="M7 17 17 7M8 7h9v9"/>',
+  phone:
+    '<path d="M5 4h3.5l1.7 4.3-2.2 1.4a11 11 0 0 0 6.3 6.3l1.4-2.2L20 15.5V19a1 1 0 0 1-1 1C11 20 4 13 4 5a1 1 0 0 1 1-1Z"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/>',
+  pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  check: '<path d="m4.5 12.5 5 5L19.5 7"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  menu: '<path d="M4 8h16M4 16h16"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  shield: '<path d="M12 3 5 6v5c0 4.6 3 8.6 7 10 4-1.4 7-5.4 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/>',
+  home: '<path d="M3.5 11 12 4l8.5 7"/><path d="M6 9.5V20h12V9.5"/>',
+  doc: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
+  chat: '<path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  rain: '<path d="M7 15a4 4 0 1 1 1.2-7.8A5.5 5.5 0 0 1 18.5 9 3.5 3.5 0 0 1 18 16H7"/><path d="m9 19-1 2M13 19l-1 2M17 19l-1 2"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  family: '<circle cx="8" cy="7" r="2.5"/><circle cx="16" cy="7" r="2.5"/><path d="M3.5 20v-3a4.5 4.5 0 0 1 9 0v3M11.5 20v-3a4.5 4.5 0 0 1 9 0v3"/>',
+  // Service icons
+  replacement: '<path d="M2.5 12 12 4.5l9.5 7.5"/><path d="M5 10.5V20h14v-9.5"/><path d="M8.5 14.5h7M8.5 17h7"/>',
+  repair: '<path d="M14.5 6.5a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.5-7.5"/><path d="M14.5 6.5 17 4l3 3-2.5 2.5"/>',
+  tile: '<path d="M3 9c1.5-2 3-2 4.5 0S10.5 11 12 9s3-2 4.5 0 3 2 4.5 0"/><path d="M3 14c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 19c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/>',
+  inspection: '<circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5.5 5.5"/><path d="m7.5 11 2 2 3.5-4"/>',
+  residential: '<path d="M3 11 12 3.5 21 11"/><path d="M5.5 9v11h13V9"/><path d="M10 20v-5.5h4V20"/>',
+  commercial: '<path d="M4 20V6l8-3v17M12 9h8v11"/><path d="M7 8.5h2M7 12h2M7 15.5h2M15 12.5h2M15 16h2M2.5 20h19"/>',
+};
+const body = paths[name] ?? paths.arrow;
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  set:html={body}
+/>

@@ -1,0 +1,63 @@
+---
+/** Sticky sidebar card used on service + about pages. */
+import Icon from "./Icon.astro";
+import { business, hasPhone } from "../data/business";
+
+interface Props {
+  title: string;
+  text: string;
+  cta: string;
+}
+const { title, text, cta } = Astro.props;
+---
+
+<aside class="ecard">
+  <div class="ecard__main on-dark">
+    <span class="eyebrow">Free estimate</span>
+    <h2 class="ecard__title">{title}</h2>
+    <p>{text}</p>
+    <div class="ecard__actions">
+      <a class="btn btn--accent btn--block" href="/contact/">{cta} <Icon name="arrow" class="arrow" /></a>
+      {
+        hasPhone && (
+          <a class="btn btn--ghost btn--block" href={`tel:${business.phone.tel}`}>
+            <Icon name="phone" /> {business.phone.display}
+          </a>
+        )
+      }
+    </div>
+    <ul role="list" class="ecard__list">
+      <li><Icon name="check" size={18} /> Written estimate before any work</li>
+      <li><Icon name="check" size={18} /> No pressure, no obligation</li>
+      <li><Icon name="check" size={18} /> Family-owned &amp; local</li>
+    </ul>
+  </div>
+  <slot />
+</aside>
+
+<style>
+  .ecard { display: grid; gap: 1rem; align-self: start; }
+  @media (min-width: 1024px) { .ecard { position: sticky; top: calc(var(--header-h) + 1.5rem); } }
+  .ecard__main {
+    padding: clamp(1.75rem, 3vw, 2.25rem);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgb(182 93 32 / 0.25), transparent 55%),
+      var(--ink);
+    color: var(--white);
+  }
+  .ecard__title { margin-top: 1rem; font-size: var(--fs-xl); line-height: 1.15; letter-spacing: -0.025em; }
+  .ecard p { margin-top: 0.75rem; color: rgb(255 255 255 / 0.7); font-size: var(--fs-sm); }
+  .ecard__actions { display: grid; gap: 0.6rem; margin-top: 1.75rem; }
+  .ecard__list {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line-dark);
+    font-size: var(--fs-sm);
+    color: rgb(255 255 255 / 0.8);
+  }
+  .ecard__list li { display: flex; gap: 0.6rem; align-items: center; }
+  .ecard__list :global(svg) { color: var(--accent-soft); flex: none; }
+</style>

@@ -1,0 +1,87 @@
+---
+import Icon from "./Icon.astro";
+import RoofLines from "./RoofLines.astro";
+import type { Crumb } from "../layouts/BaseLayout.astro";
+import { business, hasPhone } from "../data/business";
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  breadcrumbs?: Crumb[];
+  cta?: string;
+  showPhone?: boolean;
+}
+const { eyebrow, title, lede, breadcrumbs = [], cta, showPhone = true } = Astro.props;
+---
+
+<section class="phero on-dark">
+  <RoofLines class="phero__lines" />
+  <div class="container phero__inner">
+    {
+      breadcrumbs.length > 1 && (
+        <nav aria-label="Breadcrumb" class="crumbs">
+          <ol role="list">
+            {breadcrumbs.map((b, i) =>
+              i === breadcrumbs.length - 1 ? (
+                <li aria-current="page">{b.label}</li>
+              ) : (
+                <li><a href={b.href}>{b.label}</a></li>
+              )
+            )}
+          </ol>
+        </nav>
+      )
+    }
+    {eyebrow && <span class="eyebrow" data-reveal>{eyebrow}</span>}
+    <h1 data-reveal style="--d:1"><Fragment set:html={title} /></h1>
+    {lede && <p class="lede" data-reveal style="--d:2">{lede}</p>}
+    {
+      cta && (
+        <div class="btn-row" data-reveal style="--d:3">
+          <a class="btn btn--accent" href="/contact/">{cta} <Icon name="arrow" class="arrow" /></a>
+          {showPhone && hasPhone && (
+            <a class="btn btn--ghost" href={`tel:${business.phone.tel}`}>
+              <Icon name="phone" /> {business.phone.display}
+            </a>
+          )}
+        </div>
+      )
+    }
+    <slot />
+  </div>
+</section>
+
+<style>
+  .phero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(90% 120% at 85% -10%, rgb(23 59 96 / 0.9), transparent 60%),
+      radial-gradient(60% 80% at 100% 100%, rgb(182 93 32 / 0.16), transparent 60%),
+      var(--ink);
+    color: var(--white);
+    padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 6.5rem));
+    padding-bottom: clamp(3.5rem, 8vw, 6.5rem);
+  }
+  .phero :global(.phero__lines) {
+    position: absolute;
+    z-index: -1;
+    right: -4%;
+    bottom: -2px;
+    width: min(760px, 95%);
+    color: rgb(255 255 255 / 0.07);
+  }
+  .phero__inner { display: grid; justify-items: start; }
+  .phero h1 { margin-top: 1.25rem; max-width: 16ch; }
+  .phero .lede { margin-top: 1.5rem; }
+  .phero .btn-row { margin-top: 2.25rem; }
+  .phero .btn-row { width: 100%; }
+
+  .crumbs { margin-bottom: 2rem; font-size: var(--fs-xs); }
+  .crumbs ol { display: flex; flex-wrap: wrap; gap: 0.5rem; color: rgb(255 255 255 / 0.55); }
+  .crumbs li + li::before { content: "/"; margin-right: 0.5rem; opacity: 0.5; }
+  .crumbs a:hover { color: var(--white); }
+  .crumbs [aria-current] { color: rgb(255 255 255 / 0.9); }
+</style>

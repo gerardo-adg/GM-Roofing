@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import { business, hasEmail } from "../data/business";
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Privacy Policy", href: "/privacy-policy/" },
+];
+---
+
+<BaseLayout
+  title="Privacy Policy | GM Roofing"
+  description="Privacy policy for the GM Roofing website."
+  breadcrumbs={breadcrumbs}
+  finalCta={false}
+>
+  <PageHero eyebrow="Legal" title="Privacy policy" breadcrumbs={breadcrumbs} />
+  <section class="section">
+    <div class="container prose">
+      <!-- TODO: replace with the finalized privacy policy (ideally reviewed by legal counsel) before launch. -->
+      <p>This page describes how {business.name} handles information submitted through this website.</p>
+
+      <h2>Information we collect</h2>
+      <p>When you submit the estimate request form, we collect the information you provide: name, phone number, email address, property address or ZIP code, the service you're requesting, and any message you include.</p>
+
+      <h2>How we use it</h2>
+      <p>We use this information to respond to your request, schedule an estimate or inspection, and follow up about your project. We do not sell your information to third parties.</p>
+
+      <h2>Contact</h2>
+      {
+        hasEmail ? (
+          <p>Questions about this policy can be sent to <a href={`mailto:${business.email}`}>{business.email}</a>.</p>
+        ) : (
+          <p>Questions about this policy can be sent to us through the <a href="/contact/">contact page</a>.</p>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

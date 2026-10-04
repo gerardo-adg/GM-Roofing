@@ -1,0 +1,131 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import { business, hasPhone, hasEmail, hasLicense } from "../data/business";
+import { services } from "../data/services";
+
+const year = new Date().getFullYear();
+const social = Object.entries(business.social).filter(([, url]) => url);
+---
+
+<footer class="ftr">
+  <div class="container">
+    <div class="ftr__top">
+      <div class="ftr__brand">
+        <Logo tone="light" />
+        <p>{business.descriptionShort}</p>
+        {hasLicense && <p class="ftr__license">CSLB Lic. #{business.license.number} · {business.license.type}</p>}
+      </div>
+
+      <div class="ftr__cols">
+        <div>
+          <h2 class="ftr__h">Services</h2>
+          <ul role="list">
+            {services.map((s) => <li><a href={`/${s.slug}/`}>{s.name}</a></li>)}
+          </ul>
+        </div>
+        <div>
+          <h2 class="ftr__h">Company</h2>
+          <ul role="list">
+            <li><a href="/about/">About</a></li>
+            <li><a href="/service-areas/">Service areas</a></li>
+            <li><a href="/contact/">Free estimate</a></li>
+            <li><a href="/sitemap/">Sitemap</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="ftr__h">Get in touch</h2>
+          <ul role="list" class="ftr__contact">
+            {hasPhone && <li><a href={`tel:${business.phone.tel}`}><Icon name="phone" size={16} />{business.phone.display}</a></li>}
+            {hasEmail && <li><a href={`mailto:${business.email}`}><Icon name="mail" size={16} />{business.email}</a></li>}
+            <li><span><Icon name="pin" size={16} />{business.primaryRegion}, CA</span></li>
+            <li><a href="/contact/"><Icon name="doc" size={16} />Request an estimate</a></li>
+          </ul>
+          {
+            social.length > 0 && (
+              <ul role="list" class="ftr__social">
+                {social.map(([name, url]) => (
+                  <li><a href={url} rel="noopener" target="_blank">{name}</a></li>
+                ))}
+              </ul>
+            )
+          }
+        </div>
+      </div>
+    </div>
+
+    <p class="ftr__mega" aria-hidden="true">GM Roofing</p>
+
+    <div class="ftr__bottom">
+      <span>&copy; {year} {business.legalName}. All rights reserved.</span>
+      <span class="ftr__legal">
+        <a href="/privacy-policy/">Privacy policy</a>
+        <a href="/sitemap/">Sitemap</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    background: var(--ink);
+    color: rgb(255 255 255 / 0.7);
+    padding-top: clamp(4rem, 8vw, 6rem);
+    font-size: var(--fs-sm);
+    overflow: hidden;
+  }
+  .ftr__top { display: grid; gap: 3rem; }
+  .ftr__brand p { max-width: 36ch; margin-top: 1.25rem; line-height: 1.6; }
+  .ftr__license { font-size: var(--fs-xs); letter-spacing: 0.02em; color: rgb(255 255 255 / 0.5); }
+  .ftr__cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem 2rem; }
+  .ftr__cols > div:last-child { grid-column: 1 / -1; }
+  .ftr__h {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+    margin-bottom: 1.1rem;
+  }
+  .ftr ul { display: grid; gap: 0.7rem; }
+  .ftr a { transition: color 0.2s; }
+  .ftr a:hover { color: var(--white); }
+  .ftr__contact a, .ftr__contact span { display: inline-flex; align-items: center; gap: 0.6rem; }
+  .ftr__contact :global(svg) { opacity: 0.6; }
+  .ftr__social { display: flex !important; gap: 1rem !important; margin-top: 1.25rem; text-transform: capitalize; }
+
+  .ftr__mega {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    font-size: clamp(3.5rem, 17vw, 14.5rem);
+    font-weight: 650;
+    letter-spacing: -0.06em;
+    line-height: 0.78;
+    white-space: nowrap;
+    color: transparent;
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.13), rgb(255 255 255 / 0.02) 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    user-select: none;
+    margin-left: -0.04em;
+  }
+
+  .ftr__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    padding-block: 1.5rem calc(1.5rem + var(--mbar-h, 0px));
+    border-top: 1px solid var(--line-dark);
+    font-size: var(--fs-xs);
+    color: rgb(255 255 255 / 0.5);
+  }
+  .ftr__legal { display: inline-flex; gap: 1.5rem; }
+
+  @media (min-width: 768px) {
+    .ftr__cols { grid-template-columns: repeat(3, 1fr); }
+    .ftr__cols > div:last-child { grid-column: auto; }
+  }
+  @media (min-width: 1024px) {
+    .ftr__top { grid-template-columns: 1.1fr 1.6fr; gap: 4rem; }
+  }
+</style>

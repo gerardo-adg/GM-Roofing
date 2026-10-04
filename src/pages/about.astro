@@ -1,0 +1,107 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHead from "../components/SectionHead.astro";
+import ProcessSteps from "../components/ProcessSteps.astro";
+import ServiceGrid from "../components/ServiceGrid.astro";
+import { business } from "../data/business";
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about/" },
+];
+
+const values = [
+  { title: "Clear communication", text: "You'll always know what stage your project is at and what to expect next." },
+  { title: "Honest recommendations", text: "If a repair is the right call instead of a replacement, that's what we'll recommend." },
+  { title: "Quality workmanship", text: "Roofing done right the first time, from tear-off to final cleanup." },
+  { title: "Respect for your property", text: "Job sites are kept clean and your home or business is protected throughout the work." },
+];
+---
+
+<BaseLayout
+  title="About GM Roofing | Sacramento Valley Roofing Contractor"
+  description="GM Roofing is a family-owned roofing contractor serving the Sacramento Valley. Learn about our approach to roof replacement, repair, and inspections."
+  breadcrumbs={breadcrumbs}
+>
+  <PageHero
+    eyebrow="About us"
+    title="Local, family-owned <em>roofing.</em>"
+    lede="A family-owned roofing contractor serving homeowners and businesses across the Sacramento Valley."
+    breadcrumbs={breadcrumbs}
+  />
+
+  <section class="section">
+    <div class="container story">
+      <p class="story__lead" data-reveal>
+        We approach every job the same way: look at the roof honestly, explain what it actually needs, and put it in
+        <em>writing</em> before any work starts.
+      </p>
+      <div class="story__body">
+        <p data-reveal>
+          {business.name} is a family-owned roofing contractor working with homeowners and businesses across the {business.primaryRegion} — handling roof replacement, repair, tile roofing, inspections, and commercial roofing.
+        </p>
+        <p data-reveal style="--d:1">
+          That's the whole philosophy — no upsell, no scare tactics, just straight information so you can make a good decision about your roof.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <SectionHead align="split" eyebrow="Our approach" title="What you can <em>count on.</em>" />
+      <ol role="list" class="values">
+        {
+          values.map((v, i) => (
+            <li data-reveal style={`--d:${i}`}>
+              <span class="values__num">{String(i + 1).padStart(2, "0")}</span>
+              <h3>{v.title}</h3>
+              <p>{v.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container">
+      <SectionHead align="split" eyebrow="How we work" title="A simple, <em>transparent</em> process." />
+      <ProcessSteps />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHead align="split" eyebrow="Services" title="What we <em>do.</em>" />
+      <ServiceGrid />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .story { display: grid; gap: 2.5rem; }
+  .story__lead {
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    font-weight: 550;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  .story__lead em { font-family: var(--font-serif); font-weight: 400; color: var(--accent); }
+  .story__body p { color: var(--steel); font-size: var(--fs-lg); max-width: 52ch; }
+  .story__body p + p { margin-top: 1.25rem; }
+  @media (min-width: 1024px) {
+    .story { grid-template-columns: 1.3fr 1fr; gap: 5rem; align-items: end; }
+  }
+
+  .values { display: grid; gap: 1rem; }
+  .values li { padding: 2rem; border-radius: var(--radius-lg); background: var(--white); border: 1px solid var(--line); }
+  .values__num { font-family: var(--font-serif); font-style: italic; font-size: 2.25rem; line-height: 1; color: var(--accent); }
+  .values h3 { margin-top: 2rem; }
+  .values p { margin-top: 0.6rem; color: var(--steel); font-size: var(--fs-sm); }
+  @media (min-width: 640px) { .values { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .values { grid-template-columns: repeat(4, 1fr); } }
+</style>

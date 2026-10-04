@@ -1,0 +1,22 @@
+---
+import StatusPage from "../components/StatusPage.astro";
+import Icon from "../components/Icon.astro";
+import { business, hasPhone } from "../data/business";
+---
+
+<StatusPage
+  title="Thank You | GM Roofing"
+  description="Thanks for reaching out to GM Roofing. We'll be in touch shortly to schedule your estimate or inspection."
+  eyebrow="Request received"
+  heading="Thanks — we've got <em>your request.</em>"
+  lede={`Someone from ${business.name} will follow up shortly to schedule your estimate or inspection.${hasPhone ? " If it's urgent, call us directly." : ""}`}
+>
+  {
+    hasPhone && (
+      <a class="btn btn--accent" href={`tel:${business.phone.tel}`}>
+        <Icon name="phone" /> Call {business.phone.display}
+      </a>
+    )
+  }
+  <a class="btn btn--ghost" href="/">Back to home</a>
+</StatusPage>

@@ -1,0 +1,89 @@
+---
+import Icon from "./Icon.astro";
+import { services } from "../data/services";
+
+interface Props {
+  exclude?: string;
+}
+const { exclude } = Astro.props;
+const list = services.filter((s) => s.slug !== exclude);
+---
+
+<ul role="list" class="sgrid">
+  {
+    list.map((s, i) => (
+      <li data-reveal style={`--d:${i % 3}`}>
+        <a href={`/${s.slug}/`} class="scard">
+          <div class="scard__top">
+            <span class="scard__icon"><Icon name={s.icon} size={26} /></span>
+            <span class="scard__num">{String(i + 1).padStart(2, "0")}</span>
+          </div>
+          <h3>{s.name}</h3>
+          <p>{s.summary}</p>
+          <span class="scard__more">
+            Learn more
+            <span class="scard__arrow"><Icon name="arrow-up-right" size={18} /></span>
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .sgrid { display: grid; gap: 1rem; }
+  .scard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    border: 1px solid var(--line);
+    transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.5s var(--ease);
+  }
+  .scard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: transparent;
+  }
+  .scard__top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: clamp(2rem, 5vw, 3.5rem); }
+  .scard__icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: var(--paper);
+    color: var(--accent);
+    transition: background-color 0.4s var(--ease), color 0.4s var(--ease);
+  }
+  .scard:hover .scard__icon { background: var(--ink); color: var(--accent-soft); }
+  .scard__num { font-size: var(--fs-xs); color: var(--steel); font-variant-numeric: tabular-nums; letter-spacing: 0.06em; }
+  .scard h3 { font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.75rem); }
+  .scard p { margin-top: 0.75rem; color: var(--steel); font-size: var(--fs-sm); line-height: 1.6; flex: 1; }
+  .scard__more {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-sm);
+    font-weight: 550;
+  }
+  .scard__arrow {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    transition: background-color 0.4s var(--ease), color 0.4s var(--ease), transform 0.4s var(--ease), border-color 0.4s;
+  }
+  .scard:hover .scard__arrow { background: var(--accent); border-color: var(--accent); color: var(--white); transform: rotate(45deg); }
+
+  @media (min-width: 640px) { .sgrid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .sgrid { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; } }
+</style>
