@@ -42,8 +42,7 @@ const { title, text, cta } = Astro.props;
     padding: clamp(1.75rem, 3vw, 2.25rem);
     border-radius: var(--radius-lg);
     background:
-      radial-gradient(120% 90% at 100% 0%, rgb(182 93 32 / 0.25), transparent 55%),
-      var(--ink);
+      linear-gradient(180deg, var(--navy) 0%, var(--ink) 100%);
     color: var(--white);
   }
   .ecard__title { margin-top: 1rem; font-size: var(--fs-xl); line-height: 1.15; letter-spacing: -0.025em; }

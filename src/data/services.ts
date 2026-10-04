@@ -1,9 +1,11 @@
 /**
  * Service pages. Each entry here becomes a page at /<slug>/ (see
- * src/pages/[service].astro), a card in the service grid, a footer link,
- * an option in the estimate form and a schema.org Service entry.
+ * src/pages/[service].astro), a card in the service grid, a menu + footer
+ * link, an option in the estimate form and a schema.org Service node.
  *
- * To add a service: add an object below. That's it.
+ * Copy rules (enforced by scripts/check-copy.mjs on every build):
+ * no em or en dashes, and no stock contractor phrases. Write it the way
+ * you'd say it to a homeowner standing in their driveway.
  */
 
 export type IconName = "replacement" | "repair" | "tile" | "inspection" | "residential" | "commercial";
@@ -22,8 +24,16 @@ export type Service = {
   blurb: string;
   icon: IconName;
   summary: string;
+  /** Other names people search for. Used in schema. */
+  alternateNames: string[];
+  audience: string;
+  /** What the service covers. Shown in "At a glance" and schema. */
+  includes?: string[];
   seo: { title: string; description: string };
   hero: { eyebrow: string; title: string; lede: string; cta: string };
+  /** One-paragraph direct answer at the top of the page. Written for search snippets and AI answers. */
+  answer: string;
+  facts: { label: string; value: string }[];
   sections: ServiceSection[];
   faqs?: { q: string; a: string }[];
   sidebar: { title: string; text: string; cta: string };
@@ -31,71 +41,106 @@ export type Service = {
   showServiceGrid?: boolean;
 };
 
+const common = {
+  area: { label: "Service area", value: "Sacramento and surrounding Sacramento Valley cities" },
+  estimate: { label: "Estimates", value: "Free and in writing, after an on-site look" },
+};
+
 export const services: Service[] = [
   {
     slug: "roof-replacement-sacramento",
     name: "Roof Replacement",
     shortName: "Roof Replacement",
-    blurb: "Full tear-off & new roof systems",
+    blurb: "Tear-off and new roof systems",
     icon: "replacement",
     summary:
-      "A full tear-off and new roof system when repairs no longer make sense — installed with clear communication from estimate to final walkthrough.",
+      "A full tear-off and new roof when repairs stop making sense. You get a written scope, materials and price before anything is scheduled.",
+    alternateNames: ["Re-roofing", "Reroof", "New roof installation", "Roof tear-off and replacement"],
+    audience: "Homeowners and property owners in the Sacramento Valley",
+    includes: [
+      "Tear-off and disposal of the old roof",
+      "Decking inspection and repair",
+      "New underlayment",
+      "New flashing at walls, vents and valleys",
+      "Asphalt shingle or tile roof installation",
+      "Site cleanup and final walkthrough",
+    ],
     seo: {
       title: "Roof Replacement Sacramento, CA | GM Roofing",
       description:
-        "Sacramento roof replacement from a family-owned local contractor. Free written estimates, honest recommendations, and quality workmanship. Get started today.",
+        "Roof replacement in Sacramento from a family-owned local roofer. Shingle and tile re-roofs with a free written estimate. Serving Elk Grove, Roseville, Folsom and nearby.",
     },
     hero: {
-      eyebrow: "Roof Replacement",
-      title: "Sacramento roof replacement",
-      lede: "A full roof replacement, done with clear communication from the first inspection to the final walkthrough — for homeowners across the Sacramento Valley.",
+      eyebrow: "Roof replacement",
+      title: "Roof replacement in <em>Sacramento.</em>",
+      lede: "When patching no longer makes sense, we tear off the old roof, fix what's underneath and install a new one. You'll have the scope, materials and price in writing first.",
       cta: "Get a replacement estimate",
     },
+    answer:
+      "GM Roofing replaces asphalt shingle and tile roofs for homeowners in Sacramento and nearby Sacramento Valley cities. A replacement includes tear-off, decking repair where needed, new underlayment and flashing, the new roof and cleanup. Every job starts with an on-site inspection and a free written estimate.",
+    facts: [
+      common.area,
+      { label: "Roof types", value: "Asphalt shingle, concrete tile, clay tile" },
+      common.estimate,
+      { label: "Starts with", value: "An in-person roof inspection" },
+    ],
     sections: [
       {
-        heading: "When a roof needs to be replaced, not repaired",
+        heading: "Signs it's time to replace, not repair",
         body: [
-          "Roof replacement is a bigger investment than a repair, so we only recommend it when it's genuinely the right call. Common signs include:",
+          "A replacement costs more than a repair, so we only recommend one when the roof has reached that point. These are the signs we look for:",
         ],
         list: [
-          { text: "The roof is old enough that repairs are becoming frequent and costly" },
-          { text: "Shingles are curling, cracking, or missing across large sections" },
-          { text: "Decking underneath shows soft spots or visible sagging" },
-          { text: "Storm or wind damage covers most of the roof rather than one area" },
-          { text: "Leaks keep showing up in new spots after previous repairs" },
+          { text: "Repairs are coming more often and costing more each time" },
+          { text: "Shingles are curling, cracking or missing across large areas" },
+          { text: "The decking has soft spots or the roofline sags" },
+          { text: "Storm or wind damage covers most of the roof, not one section" },
+          { text: "New leaks keep showing up after earlier repairs" },
         ],
       },
       {
-        heading: "What's included in a roof replacement",
+        heading: "What a roof replacement includes",
         body: [
-          "A full replacement typically involves a tear-off of the existing roofing material, an inspection and repair of the decking underneath, new underlayment, flashing, and the new roof covering — whether that's shingle or tile — followed by a final cleanup and walkthrough.",
-          "Before anything starts, you'll get a written estimate that spells out the scope of work, materials, and cost, so there's no ambiguity about what you're paying for.",
+          "We remove the existing roofing down to the deck and check the decking underneath. Damaged boards get replaced. Then new underlayment, new flashing and the new shingle or tile roof go on, followed by cleanup and a walkthrough with you.",
+          "Your written estimate lists the scope, materials and cost before anything is scheduled, so you know exactly what you're paying for.",
         ],
       },
       {
-        heading: "Roof replacement across the Sacramento Valley",
+        heading: "Why Sacramento roofs wear out",
         body: [
-          "Sacramento Valley roofs take a beating from long, hot summers and periodic heavy winter storms. That combination shortens the life of shingle roofs in particular, which is why roof replacement is one of the most common projects we handle for homeowners in Sacramento, Elk Grove, Roseville, and the surrounding area.",
+          "Long stretches of 100 degree summer days dry out shingles and bake the underlayment beneath tile. Winter storms then find every weak spot. That combination is why roof replacement is one of the most common projects we do in Sacramento, Elk Grove, Roseville and the surrounding area.",
         ],
       },
     ],
     faqs: [
       {
+        q: "How much does a roof replacement cost in Sacramento?",
+        a: "It depends on the size and pitch of the roof, the material you choose, how many layers come off, how much decking needs replacing and permit requirements. We don't quote from the street or over the phone. We inspect the roof and give you a free written estimate with the full scope and price.",
+      },
+      {
         q: "How long does a roof replacement take?",
-        a: "Timelines vary with roof size, material, and weather, and we'll give you a specific estimate for your project before work begins.",
+        a: "Many single-family shingle replacements take a few days on site. Tile roofs, larger homes, decking repairs and weather can add time. Your estimate includes a timeline for your specific roof.",
+      },
+      {
+        q: "Do I need a permit to replace my roof in Sacramento?",
+        a: "In California, reroofing generally requires a building permit from your city or county, and the work is inspected. We'll go over what applies to your property when we walk you through the estimate.",
+      },
+      {
+        q: "Does a new roof in Sacramento have to be a cool roof?",
+        a: "California's Title 24 energy code can require cool roof rated materials when a roof is replaced in the Sacramento area, depending on the building and the scope of work. We'll confirm what applies to your home and show you compliant options.",
       },
       {
         q: "Do I need to be home during the replacement?",
-        a: "Not typically, though we'll coordinate with you on scheduling and keep you updated as the work progresses.",
+        a: "Usually not. We'll coordinate the schedule with you and keep you posted as the work moves along.",
       },
       {
-        q: "Will you handle the old roofing material?",
-        a: "Yes — tear-off and disposal of the old roofing material is part of a full replacement, and the job site is cleaned up when the work is done.",
+        q: "Will you haul away the old roof?",
+        a: "Yes. Tear-off and disposal are part of every replacement, and we clean up the site when the work is done.",
       },
     ],
     sidebar: {
-      title: "Request a roof replacement estimate",
-      text: "A free, written estimate — no pressure, no obligation.",
+      title: "Get a roof replacement estimate",
+      text: "Free, in writing, and no obligation.",
       cta: "Request a free estimate",
     },
     related: ["roof-repair-sacramento", "roof-inspections-sacramento", "tile-roofing-sacramento"],
@@ -104,62 +149,89 @@ export const services: Service[] = [
     slug: "roof-repair-sacramento",
     name: "Roof Repair",
     shortName: "Roof Repair",
-    blurb: "Leaks, storm damage & flashing",
+    blurb: "Leaks, storm damage and flashing",
     icon: "repair",
     summary:
-      "Leak repair, storm damage, and targeted fixes for shingle, tile, and flashing problems before they turn into a full replacement.",
+      "Leak repair, storm damage and targeted fixes for shingle, tile and flashing problems, caught before they turn into a replacement.",
+    alternateNames: ["Roof leak repair", "Storm damage roof repair", "Shingle repair", "Flashing repair", "Emergency roof repair"],
+    audience: "Homeowners and businesses in the Sacramento Valley",
+    includes: [
+      "Roof leak tracing and repair",
+      "Missing or damaged shingle replacement",
+      "Cracked or slipped tile repair",
+      "Flashing repair at chimneys, vents and skylights",
+      "Storm and wind damage repair",
+    ],
     seo: {
-      title: "Roof Repair Sacramento, CA | GM Roofing",
+      title: "Roof Repair Sacramento, CA | Leaks & Storm Damage | GM Roofing",
       description:
-        "Sacramento roof repair for leaks, storm damage, and flashing issues. Family-owned, honest estimates, and quality workmanship. Schedule an inspection today.",
+        "Roof repair in Sacramento for leaks, storm damage, missing shingles, cracked tile and failed flashing. Family-owned, free written estimates. Call or request an inspection.",
     },
     hero: {
-      eyebrow: "Roof Repair",
-      title: "Sacramento roof repair",
-      lede: "Leaks, storm damage, and flashing problems handled before they turn into something bigger — for homes and businesses across the Sacramento Valley.",
+      eyebrow: "Roof repair",
+      title: "Roof repair in <em>Sacramento.</em>",
+      lede: "Leaks, storm damage and failed flashing, fixed before the water reaches your decking, insulation and ceilings.",
       cta: "Schedule a roof inspection",
     },
+    answer:
+      "GM Roofing repairs roof leaks, storm and wind damage, missing shingles, cracked or slipped tile and failed flashing for homes and businesses in Sacramento and the surrounding Sacramento Valley. We find the source on site, explain the fix and give you a written estimate before any work starts.",
+    facts: [
+      common.area,
+      { label: "Common repairs", value: "Leaks, storm damage, shingles, tile, flashing" },
+      common.estimate,
+      { label: "Roof types", value: "Asphalt shingle, concrete tile, clay tile" },
+    ],
     sections: [
       {
-        heading: "Common roof repair issues we handle",
+        heading: "Roof problems we fix",
         list: [
-          { title: "Roof leaks", text: "Water stains, drips, or damp spots in the attic or ceiling." },
-          { title: "Missing or damaged shingles", text: "From age, wind, or debris." },
+          { title: "Roof leaks", text: "Water stains, drips or damp spots in the attic or on a ceiling." },
+          { title: "Missing or damaged shingles", text: "Lost to age, wind or falling branches." },
           { title: "Storm damage", text: "Wind and heavy rain damage after a Sacramento Valley storm." },
-          { title: "Flashing problems", text: "Failed seals around chimneys, vents, and skylights." },
-          { title: "Aging roofs", text: "General wear that's starting to show as recurring small issues." },
+          { title: "Flashing failures", text: "Seals that have let go around chimneys, vents and skylights." },
+          { title: "Cracked or slipped tile", text: "Broken tiles that expose the underlayment below." },
+          { title: "Aging roofs", text: "Small problems that keep coming back as the roof gets older." },
         ],
       },
       {
-        heading: "How we approach a repair",
+        heading: "How we handle a repair",
         body: [
-          "We start with an on-site look at the actual problem rather than guessing from a photo or a description over the phone. Once we know what's going on, we'll explain the repair that's needed and give you a written estimate before doing any work. If the roof is closer to the end of its life and repair isn't the right long-term move, we'll tell you that too, plainly.",
+          "We go up and look at the actual problem instead of guessing from a photo. Leaks often travel before they show up inside, so we trace the water back to where it's getting in.",
+          "Then we explain what needs fixing and put it in writing before we start. If the roof is near the end of its life and a repair would only buy a few months, we'll tell you that too.",
         ],
       },
       {
-        heading: "Don't wait on a small leak",
+        heading: "Small leaks get expensive",
         body: [
-          "A small, contained leak is usually a straightforward repair. Left alone, water finds its way into decking, insulation, and drywall, turning a simple fix into a much larger project. If you've noticed a stain on a ceiling or a shingle out of place after a storm, it's worth having it looked at.",
+          "A contained leak is usually a straightforward fix. Left alone, the water soaks into decking, insulation and drywall, and a small repair becomes a much bigger project. If you've noticed a ceiling stain or a shingle out of place after a storm, have it looked at.",
         ],
       },
     ],
     faqs: [
       {
-        q: "How fast can you get to a leak?",
-        a: "Reach out with what you're seeing and we'll work with you to get a time on the calendar as quickly as we can.",
+        q: "How fast can you get out to a roof leak?",
+        a: "Tell us what you're seeing and we'll get you on the schedule as quickly as we can. If water is coming in, mention it when you call or fill out the form so we know it's urgent.",
       },
       {
-        q: "Will a repair void my roof's remaining life?",
-        a: "No — a properly done repair is meant to extend the useful life of the roof, not shorten it.",
+        q: "Should I repair or replace my roof?",
+        a: "Repair usually makes sense when the damage is limited to one area and the rest of the roof is in good shape. Replacement starts to make sense when repairs are frequent, the damage is widespread or the decking is failing. We'll show you what we find and give you our recommendation in writing.",
       },
       {
-        q: "What if the repair reveals a bigger problem?",
-        a: "We'll show you what we find and explain the options before doing any additional work — you decide how to proceed.",
+        q: "How much does roof repair cost in Sacramento?",
+        a: "It depends on what's damaged, how much and the roofing material. We look at the roof first and give you a free written estimate before doing any work.",
+      },
+      {
+        q: "Do you repair tile roofs?",
+        a: "Yes. We replace cracked and slipped concrete and clay tiles, and we can replace the underlayment beneath existing tile when that's where the leak is coming from.",
+      },
+      {
+        q: "What if the repair uncovers a bigger problem?",
+        a: "We stop, show you what we found and explain your options before doing anything extra. You decide how to proceed.",
       },
     ],
     sidebar: {
       title: "Schedule a roof inspection",
-      text: "We'll take a look and tell you honestly what your roof needs.",
+      text: "We'll find the problem and tell you what it takes to fix it.",
       cta: "Request an inspection",
     },
     related: ["roof-replacement-sacramento", "roof-inspections-sacramento", "tile-roofing-sacramento"],
@@ -168,44 +240,70 @@ export const services: Service[] = [
     slug: "tile-roofing-sacramento",
     name: "Tile Roofing",
     shortName: "Tile Roofing",
-    blurb: "Concrete & clay tile roofs",
+    blurb: "Concrete and clay tile roofs",
     icon: "tile",
     summary:
-      "Installation, repair, and restoration for concrete and clay tile roofs — a common roof type across older and custom Sacramento Valley homes.",
+      "Installation, repair and underlayment replacement for concrete and clay tile roofs, common on older and custom homes across the valley.",
+    alternateNames: ["Tile roof repair", "Tile roof installation", "Concrete tile roofing", "Clay tile roofing", "Tile roof underlayment replacement"],
+    audience: "Homeowners with tile roofs in the Sacramento Valley",
+    includes: [
+      "Cracked, slipped and missing tile repair",
+      "Underlayment replacement under existing tile",
+      "Flashing repair at vents, chimneys and valleys",
+      "New tile roof installation",
+    ],
     seo: {
-      title: "Tile Roofing Sacramento, CA | GM Roofing",
+      title: "Tile Roofing Sacramento, CA | Tile Roof Repair | GM Roofing",
       description:
-        "Tile roof installation, repair, and restoration in Sacramento. GM Roofing works concrete and clay tile roofs across the Sacramento Valley.",
+        "Concrete and clay tile roof repair, underlayment replacement and installation in Sacramento. Family-owned roofer with free written estimates.",
     },
     hero: {
-      eyebrow: "Tile Roofing",
-      title: "Sacramento tile roofing",
-      lede: "Installation, repair, and restoration for concrete and clay tile roofs, common across older and custom homes throughout the Sacramento Valley.",
+      eyebrow: "Tile roofing",
+      title: "Tile roof repair and installation in <em>Sacramento.</em>",
+      lede: "Concrete and clay tile roofs last a long time, but the layer underneath doesn't. We repair tile, replace underlayment and install new tile roofs.",
       cta: "Request a free estimate",
     },
+    answer:
+      "GM Roofing repairs and installs concrete and clay tile roofs in Sacramento and the Sacramento Valley. Common tile work includes replacing cracked or slipped tiles, replacing the underlayment beneath existing tile, repairing flashing and installing new tile roofs.",
+    facts: [
+      common.area,
+      { label: "Tile types", value: "Concrete and clay" },
+      common.estimate,
+      { label: "Common work", value: "Tile repair, underlayment replacement, new installs" },
+    ],
     sections: [
       {
-        heading: "Tile roofing services",
+        heading: "Tile roof services",
         body: [
-          "Tile roofs are durable but not maintenance-free — individual tiles crack or slip, the underlayment beneath them ages separately from the tile itself, and flashing around penetrations can fail well before the tile does. We handle:",
+          "The tiles themselves often outlast everything else on the roof. Individual tiles crack or slip, the underlayment beneath them ages on its own schedule, and flashing around penetrations can fail long before the tile does. We handle:",
         ],
         list: [
-          { text: "Cracked, slipped, or missing tile repair" },
+          { text: "Cracked, slipped or missing tile repair" },
           { text: "Underlayment replacement beneath existing tile" },
-          { text: "Flashing repair around vents, chimneys, and valleys" },
-          { text: "Full tile roof installation and restoration" },
+          { text: "Flashing repair around vents, chimneys and valleys" },
+          { text: "New tile roof installation" },
         ],
       },
       {
-        heading: "Why tile roofs need a specific approach",
+        heading: "Tile takes a different technique",
         body: [
-          "Walking and repairing a tile roof takes a different technique than a shingle roof — done carelessly, it's easy to crack tiles that were otherwise fine. We approach tile work with that in mind, so a repair doesn't create new problems on the way out.",
+          "Walking a tile roof the wrong way cracks tiles that were fine. We work tile roofs with that in mind, so fixing one problem doesn't create three new ones.",
         ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Can you reuse my existing tiles?",
+        a: "Often, yes. When the tiles are in good shape and the problem is the underlayment, we can lift the tile, replace the underlayment and reset the original tile. We'll tell you after the inspection whether that's an option for your roof.",
+      },
+      {
+        q: "Why is my tile roof leaking if the tiles look fine?",
+        a: "Tile sheds most of the water, but the underlayment underneath is what keeps it out of the house. After years of Sacramento heat, that layer can dry out and crack even when the tile on top looks perfect.",
       },
     ],
     sidebar: {
       title: "Get a tile roofing estimate",
-      text: "Repair, restoration, or full installation — tell us what you're dealing with.",
+      text: "Repair, underlayment or a new tile roof. Tell us what you're dealing with.",
       cta: "Request a free estimate",
     },
     related: ["roof-repair-sacramento", "roof-replacement-sacramento", "roof-inspections-sacramento"],
@@ -214,62 +312,77 @@ export const services: Service[] = [
     slug: "roof-inspections-sacramento",
     name: "Roof Inspections",
     shortName: "Inspections",
-    blurb: "Honest on-site evaluations",
+    blurb: "On-site roof evaluations",
     icon: "inspection",
     summary:
-      "A straightforward, on-site evaluation of your roof's condition, with honest findings before you're asked to make any decision.",
+      "An in-person look at your roof's condition with written findings, before you're asked to decide anything.",
+    alternateNames: ["Roof inspection", "Roof condition assessment", "Roof evaluation", "Pre-sale roof inspection"],
+    audience: "Homeowners, buyers, sellers and property owners in the Sacramento Valley",
+    includes: ["Roofing material condition", "Flashing check", "Visible decking check", "Chimneys, vents and valleys", "Written summary of findings"],
     seo: {
-      title: "Roof Inspections Sacramento, CA | GM Roofing",
+      title: "Roof Inspection Sacramento, CA | GM Roofing",
       description:
-        "Professional roof inspections in Sacramento. A straightforward, honest evaluation of your roof's condition before you're asked to make any decision.",
+        "Roof inspections in Sacramento with written findings. Before buying or selling, after a storm or when you see a leak. Family-owned, local and no pressure.",
     },
     hero: {
-      eyebrow: "Roof Inspections",
-      title: "Sacramento roof inspections",
-      lede: "A clear, on-site look at your roof's actual condition — the right first step whether you're seeing a leak, planning ahead, or just want peace of mind.",
+      eyebrow: "Roof inspections",
+      title: "Roof inspections in <em>Sacramento.</em>",
+      lede: "An in-person look at your roof's actual condition. The right first step whether you've spotted a leak, you're buying a home or you just want to know where things stand.",
       cta: "Schedule an inspection",
     },
+    answer:
+      "A GM Roofing inspection is an in-person check of your roofing material, flashing, visible decking and common trouble spots like chimneys, vents and valleys. You get a written summary of what we found and, if work is needed, a free written estimate.",
+    facts: [
+      common.area,
+      { label: "Typical length", value: "Under an hour for most homes" },
+      { label: "You receive", value: "Written findings, plus an estimate if work is needed" },
+      { label: "Good for", value: "Leaks, storms, buying or selling, aging roofs" },
+    ],
     sections: [
       {
-        heading: "What a roof inspection covers",
+        heading: "What we check",
         body: [
-          "We walk the roof in person and check the condition of the roofing material, flashing, and visible decking, along with common trouble spots like chimneys, vents, and valleys. You'll get an honest read on what we find — whether that's “you're fine for now,” a repair recommendation, or a conversation about replacement.",
+          "We walk the roof and check the roofing material, flashing and visible decking, plus the usual trouble spots: chimneys, vents, skylights and valleys. You'll get a straight answer on what we find, whether that's “you're fine for now,” a repair or a conversation about replacement.",
         ],
       },
       {
         heading: "When to get a roof inspected",
         list: [
           { text: "Before buying or selling a home" },
-          { text: "After a significant storm" },
-          { text: "If you've noticed a leak or water stain" },
-          { text: "As routine maintenance for an aging roof" },
-          { text: "Before deciding between a repair and a replacement" },
+          { text: "After a major storm" },
+          { text: "When you notice a leak or water stain" },
+          { text: "As routine maintenance on an older roof" },
+          { text: "Before choosing between a repair and a replacement" },
         ],
       },
       {
-        heading: "No pressure, just information",
+        heading: "Information, not a sales pitch",
         body: [
-          "An inspection isn't a sales pitch. If your roof checks out, we'll say so. If it needs work, we'll explain what and why, and you can decide how — or whether — to move forward.",
+          "If your roof checks out, we'll say so. If it needs work, we'll explain what and why, and the decision on whether and when to move forward is yours.",
         ],
       },
     ],
     faqs: [
       {
-        q: "Is the inspection free?",
-        a: "Estimates for roofing work are always free. Reach out and we'll confirm the details for your specific request.",
+        q: "Is the roof inspection free?",
+        a: "Estimates for roofing work are always free. Reach out and we'll confirm the details for your request.",
       },
       {
-        q: "How long does an inspection take?",
-        a: "Most inspections take under an hour, depending on the size and accessibility of the roof.",
+        q: "How long does a roof inspection take?",
+        a: "Most take under an hour, depending on the size of the roof and how easy it is to access.",
       },
       {
-        q: "Will I get something in writing?",
-        a: "Yes — you'll receive a written summary of what was found and, if work is recommended, a written estimate.",
+        q: "Will I get the results in writing?",
+        a: "Yes. You'll get a written summary of what we found and, if work is recommended, a written estimate.",
+      },
+      {
+        q: "Should I get a roof inspection before buying a house in Sacramento?",
+        a: "It's a good idea, especially on older homes. A general home inspector usually looks at the roof from the ground or a ladder. A roofer walks it and can tell you how much life it has left and what any needed work would cost.",
       },
     ],
     sidebar: {
       title: "Request an inspection",
-      text: "Get a straightforward read on your roof's condition.",
+      text: "Find out where your roof actually stands.",
       cta: "Schedule a roof inspection",
     },
     related: ["roof-replacement-sacramento", "roof-repair-sacramento"],
@@ -281,30 +394,40 @@ export const services: Service[] = [
     blurb: "Roofing for valley homes",
     icon: "residential",
     summary:
-      "Roofing for Sacramento Valley homes — replacement, repair, and maintenance handled by a team that treats your property like it matters.",
+      "Replacement, repair, tile work and inspections for Sacramento Valley homes, handled by a local family-owned crew.",
+    alternateNames: ["Home roofing", "Residential roofer", "House roof replacement", "House roof repair"],
+    audience: "Homeowners in the Sacramento Valley",
     seo: {
       title: "Residential Roofing Sacramento, CA | GM Roofing",
       description:
-        "Residential roofing for Sacramento Valley homes — replacement, repair, tile roofing, and inspections from a family-owned local contractor.",
+        "Residential roofing in Sacramento: roof replacement, roof repair, tile roofing and inspections from a family-owned local roofer. Free written estimates.",
     },
     hero: {
-      eyebrow: "Residential Roofing",
-      title: "Residential roofing in Sacramento",
-      lede: "Roofing for Sacramento Valley homes, handled by a team that treats your property the way they'd want their own treated.",
+      eyebrow: "Residential roofing",
+      title: "Residential roofing in <em>Sacramento.</em>",
+      lede: "Replacement, repair, tile work and inspections for homes across the Sacramento Valley, from a local family-owned roofer.",
       cta: "Request a free estimate",
     },
+    answer:
+      "GM Roofing is a family-owned residential roofer serving Sacramento, Elk Grove, Roseville, Folsom and nearby Sacramento Valley cities. We handle roof replacement, roof repair, tile roofing and roof inspections, and every project starts with a free written estimate.",
+    facts: [
+      common.area,
+      { label: "Services", value: "Replacement, repair, tile, inspections" },
+      common.estimate,
+      { label: "Ownership", value: "Family-owned and local" },
+    ],
     sections: [
       {
-        heading: "Built for the Sacramento Valley climate",
+        heading: "Roofs built for this climate",
         body: [
-          "Homes across Sacramento, Elk Grove, Roseville, Folsom, and the surrounding valley face long, intense summer heat and occasional heavy winter storms — a combination that wears differently on shingle and tile roofs than milder climates.",
-          "We work residential roofs across this region regularly, which means the recommendations you get are based on how roofs actually hold up here, not generic advice.",
+          "Homes in Sacramento, Elk Grove, Roseville, Folsom and the rest of the valley deal with long, hot summers and occasional heavy winter storms. That wears on shingle and tile roofs differently than milder climates do.",
+          "We work on roofs in this region every week, so our recommendations come from how roofs actually hold up here.",
         ],
       },
     ],
     sidebar: {
       title: "Get a free estimate",
-      text: "Whatever stage your home's roof is at, it starts with an honest look and a clear explanation of the options.",
+      text: "Wherever your roof is in its life, it starts with a look and a clear explanation of your options.",
       cta: "Request a free estimate",
     },
     related: ["roof-replacement-sacramento", "roof-repair-sacramento", "tile-roofing-sacramento"],
@@ -314,44 +437,55 @@ export const services: Service[] = [
     slug: "commercial-roofing-sacramento",
     name: "Commercial Roofing",
     shortName: "Commercial",
-    blurb: "For businesses & property owners",
+    blurb: "For businesses and property owners",
     icon: "commercial",
     summary:
-      "Roofing for businesses and property owners across the Sacramento Valley, scheduled around how your operation actually runs.",
+      "Roof repair, replacement and inspections for businesses and property owners, scheduled around how your operation runs.",
+    alternateNames: ["Commercial roofer", "Commercial roof repair", "Commercial roof replacement", "Commercial re-roofing"],
+    audience: "Businesses and commercial property owners in the Sacramento Valley",
+    includes: ["Commercial roof repair and leak resolution", "Commercial roof replacement", "Roof inspections and condition assessments"],
     seo: {
       title: "Commercial Roofing Sacramento, CA | GM Roofing",
       description:
-        "Commercial roofing for Sacramento Valley businesses and property owners. Roof repair, replacement, and inspections scheduled around your operation.",
+        "Commercial roof repair, replacement and inspections in Sacramento, scheduled around your business. Written scope and estimate before work begins.",
     },
     hero: {
-      eyebrow: "Commercial Roofing",
-      title: "Sacramento commercial roofing",
-      lede: "Roofing for businesses and property owners across the Sacramento Valley, scheduled around how your operation actually runs.",
+      eyebrow: "Commercial roofing",
+      title: "Commercial roofing in <em>Sacramento.</em>",
+      lede: "Repairs, replacements and inspections for businesses and property owners, scheduled around how your operation runs.",
       cta: "Request a commercial estimate",
     },
+    answer:
+      "GM Roofing provides commercial roof repair, replacement and inspections for businesses and property owners in Sacramento and the Sacramento Valley. Every commercial project starts with an on-site evaluation and a written scope and estimate.",
+    facts: [
+      common.area,
+      { label: "Services", value: "Repair, replacement, inspections" },
+      common.estimate,
+      { label: "Scheduling", value: "Planned around your hours and tenants" },
+    ],
     sections: [
       {
         heading: "Commercial roofing services",
         body: [
-          "Commercial roofing comes with its own set of priorities: minimizing disruption, working around tenant or business hours, and giving a property owner a clear scope before committing to a project. We work with businesses and property owners on:",
+          "Commercial work has its own priorities: keeping disruption low, working around business or tenant hours and giving the owner a clear scope before committing. We work with businesses and property owners on:",
         ],
         list: [
           { text: "Roof repair and leak resolution" },
           { text: "Roof replacement and re-roofing" },
-          { text: "Roof inspections and condition assessments" },
-          { text: "Ongoing maintenance conversations for multi-property owners" },
+          { text: "Inspections and condition assessments" },
+          { text: "Ongoing maintenance planning for owners with multiple properties" },
         ],
       },
       {
-        heading: "A clear scope before anything is scheduled",
+        heading: "Scope in writing before anything is scheduled",
         body: [
-          "Every commercial project starts with an on-site evaluation and a written estimate, so you know the scope and cost before work is scheduled.",
+          "Every commercial project starts with an on-site evaluation and a written estimate, so you know the scope and cost before work goes on the calendar.",
         ],
       },
     ],
     sidebar: {
       title: "Talk to us about your property",
-      text: "Tell us about the property and what you're seeing.",
+      text: "Tell us about the building and what you're seeing.",
       cta: "Request an estimate",
     },
     related: ["roof-repair-sacramento", "roof-replacement-sacramento", "roof-inspections-sacramento"],

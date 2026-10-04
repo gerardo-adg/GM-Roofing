@@ -12,7 +12,7 @@ const { eyebrow, title, lede, align = "left", id } = Astro.props;
 <header class:list={["shead", `shead--${align}`]}>
   <div>
     {eyebrow && <span class="eyebrow" data-reveal>{eyebrow}</span>}
-    <h2 id={id} data-reveal style="--d:1"><Fragment set:html={title} /></h2>
+    <h2 id={id} data-reveal="lines" style="--d:1"><span class="l"><span class="l__in" set:html={title} /></span></h2>
   </div>
   {lede && <p class="lede" data-reveal style="--d:2">{lede}</p>}
 </header>

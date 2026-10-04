@@ -1,0 +1,116 @@
+---
+/**
+ * Silent looping background video from Mux.
+ *
+ * Loading strategy (keeps pages fast):
+ *  1. The poster still renders immediately as a normal responsive <img>,
+ *     so it's what the browser paints first (good LCP).
+ *  2. The ~4 KB video engine is only downloaded once the block is near the
+ *     viewport, and never for visitors with reduced motion or data saver on.
+ *  3. Phones get a 720p cap (and the vertical cut if one is provided);
+ *     larger screens get 1080p, or 1440p for the hero.
+ *  4. The video fades in over the poster once it's actually playing, and
+ *     pauses whenever it scrolls off screen.
+ */
+import MuxImage from "./MuxImage.astro";
+import { muxStream, type MuxClip } from "../data/media";
+
+interface Props {
+  clip: MuxClip;
+  mobileClip?: MuxClip;
+  eager?: boolean;
+  /** Max resolution on large screens. */
+  maxResolution?: "1080p" | "1440p" | "2160p";
+  class?: string;
+}
+const { clip, mobileClip, eager = false, maxResolution = "1080p", class: className } = Astro.props;
+const mobileId = mobileClip?.playbackId || clip.playbackId;
+---
+
+<div
+  class:list={["mbg", className]}
+  data-mux-bg
+  data-src={muxStream(clip.playbackId)}
+  data-src-mobile={muxStream(mobileId)}
+  data-max={maxResolution}
+>
+  <picture class="mbg__poster">
+    {
+      mobileClip?.playbackId && (
+        <source
+          media="(max-width: 767px)"
+          type="image/webp"
+          srcset={`https://image.mux.com/${mobileId}/thumbnail.webp?time=${mobileClip.posterTime ?? 1}&width=480 480w, https://image.mux.com/${mobileId}/thumbnail.webp?time=${mobileClip.posterTime ?? 1}&width=900 900w`}
+          sizes="100vw"
+        />
+      )
+    }
+    <MuxImage playbackId={clip.playbackId} time={clip.posterTime} alt="" eager={eager} />
+  </picture>
+</div>
+
+<style>
+  .mbg { position: absolute; inset: 0; overflow: hidden; background: var(--ink); }
+  .mbg__poster, .mbg :global(img), .mbg :global(mux-background-video) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .mbg :global(mux-background-video) {
+    display: block;
+    opacity: 0;
+    transition: opacity 1.2s var(--ease);
+  }
+  .mbg :global(mux-background-video.is-playing) { opacity: 1; }
+</style>
+
+<script>
+  type BgEl = HTMLElement & { video?: HTMLVideoElement };
+
+  const blocks = document.querySelectorAll<HTMLElement>("[data-mux-bg]");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+
+  if (blocks.length && !reduce && !saveData) {
+    let engine: Promise<unknown> | null = null;
+    const loadEngine = () => (engine ??= import("@mux/mux-background-video/html"));
+
+    const mount = async (block: HTMLElement) => {
+      await loadEngine();
+      const mobile = window.matchMedia("(max-width: 767px)").matches;
+      const el = document.createElement("mux-background-video") as BgEl;
+      el.setAttribute("max-resolution", mobile ? "720p" : block.dataset.max ?? "1080p");
+      el.setAttribute("src", (mobile ? block.dataset.srcMobile : block.dataset.src) ?? "");
+      block.append(el);
+      requestAnimationFrame(() => {
+        el.video?.addEventListener("playing", () => el.classList.add("is-playing"), { once: true });
+      });
+
+      // Pause when off screen to save battery and bandwidth.
+      new IntersectionObserver(([e]) => {
+        const v = el.video;
+        if (!v) return;
+        if (e.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      }).observe(block);
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          io.unobserve(e.target);
+          mount(e.target as HTMLElement);
+        }
+      },
+      { rootMargin: "200px 0px" }
+    );
+
+    // Wait for the page (and its poster images) to finish loading first.
+    const start = () => blocks.forEach((b) => io.observe(b));
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+  }
+</script>

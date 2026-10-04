@@ -1,0 +1,39 @@
+---
+/**
+ * Responsive still pulled from a Mux video (WebP, sized per device).
+ * Mux resizes on its CDN, so phones download a small file and retina
+ * desktops get a sharp one.
+ */
+import { muxImage } from "../data/media";
+
+interface Props {
+  playbackId: string;
+  alt: string;
+  time?: number;
+  /** Rendered width hint, e.g. "100vw" or "(min-width: 1024px) 33vw, 100vw". */
+  sizes?: string;
+  /** Aspect ratio for smart cropping, e.g. [4, 3]. Omit to keep the video's own ratio. */
+  ratio?: [number, number];
+  eager?: boolean;
+  class?: string;
+}
+
+const { playbackId, alt, time = 1, sizes = "100vw", ratio, eager = false, class: className } = Astro.props;
+const widths = [480, 768, 1080, 1440, 1920, 2560];
+const h = (w: number) => (ratio ? Math.round((w * ratio[1]) / ratio[0]) : undefined);
+const srcset = widths.map((w) => `${muxImage(playbackId, { time, width: w, height: h(w) })} ${w}w`).join(", ");
+const src = muxImage(playbackId, { time, width: 1440, height: h(1440), format: "jpg" });
+---
+
+<img
+  class={className}
+  src={src}
+  srcset={srcset}
+  sizes={sizes}
+  alt={alt}
+  width={1440}
+  height={h(1440) ?? 810}
+  loading={eager ? "eager" : "lazy"}
+  fetchpriority={eager ? "high" : "auto"}
+  decoding="async"
+/>

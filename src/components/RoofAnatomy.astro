@@ -2,7 +2,8 @@
 /**
  * Hero illustration: a labelled cross-section of a pitched roof.
  * Pure SVG, generated from a few numbers so it stays crisp at any size.
- * Shown in the homepage hero until a real project photo is added (see src/pages/index.astro).
+ * Shown in the homepage hero until a Mux hero video is added (see src/data/media.ts).
+ * Strokes draw themselves in when wrapped in [data-reveal="draw"].
  */
 const L = { x: 40, y: 360 }; // left eave
 const R = { x: 520, y: 360 }; // right eave
@@ -48,25 +49,26 @@ const markers = [
 <svg viewBox="0 0 560 470" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
   <!-- structure -->
   <g stroke="rgb(255 255 255 / .28)" stroke-width="1.25">
-    <path d="M90 360V450M470 360V450M90 360H470M60 450h440" />
-    <path d={`M${P.x} ${P.y}V360`} stroke-dasharray="3 6" />
-    <path d="M150 360 210 300M410 360 350 300" />
+    <path d="M60 450h440" pathLength="1" style="--s:0" />
+    <path d="M90 360V450M470 360V450M90 360H470" pathLength="1" style="--s:1" />
+    <path d={`M${P.x} ${P.y}V360`} stroke-dasharray="3 6" class="pop" style="--s:2" />
+    <path d="M150 360 210 300M410 360 350 300" pathLength="1" style="--s:2" />
   </g>
   <!-- decking -->
-  <path d={layer(0)} stroke="rgb(255 255 255 / .9)" stroke-width="2.25" />
+  <path d={layer(0)} stroke="rgb(255 255 255 / .9)" stroke-width="2.25" pathLength="1" style="--s:3" />
   <!-- underlayment -->
-  <path d={layer(7)} stroke="rgb(255 255 255 / .45)" stroke-width="1.25" stroke-dasharray="6 5" />
+  <path d={layer(7)} stroke="rgb(255 255 255 / .45)" stroke-width="1.25" stroke-dasharray="6 5" class="pop" style="--s:2" />
   <!-- roof covering -->
-  <path d={layer(17)} stroke="#e9a26a" stroke-width="2.5" />
-  <path d={courses.join("")} stroke="#e9a26a" stroke-width="1.25" opacity=".55" />
+  <path d={layer(17)} stroke="#e9a26a" stroke-width="2.5" pathLength="1" style="--s:5" />
+  <path d={courses.join("")} stroke="#e9a26a" stroke-width="1.25" opacity=".55" class="pop" style="--s:4" />
   <!-- ridge vent -->
-  <path d={`M${P.x - 20} ${P.y - 22}h40l-6 -12h-28z`} stroke="#fff" stroke-width="1.5" />
+  <path d={`M${P.x - 20} ${P.y - 22}h40l-6 -12h-28z`} stroke="#fff" stroke-width="1.5" pathLength="1" style="--s:6" />
   <!-- drip edge -->
-  <path d="M28 351l-6 10M532 351l6 10" stroke="#fff" stroke-width="1.5" />
+  <path d="M28 351l-6 10M532 351l6 10" stroke="#fff" stroke-width="1.5" pathLength="1" style="--s:6" />
 
   {
-    markers.map((m) => (
-      <g>
+    markers.map((m, i) => (
+      <g class="pop" style={`--s:${4 + i}`}>
         <circle cx={m.x} cy={m.y} r="12" fill="#0a1a2b" stroke="rgb(255 255 255 / .5)" />
         <text x={m.x} y={m.y + 4} text-anchor="middle" fill="#fff" font-size="11" font-family="Geist Variable, sans-serif" font-weight="600" stroke="none">
           {m.n}

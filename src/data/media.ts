@@ -1,0 +1,76 @@
+/**
+ * Video + imagery hosted on Mux. Paste a playback ID to switch a slot on;
+ * anything left blank falls back to the built-in design, so the site never
+ * shows an empty placeholder. See MEDIA.md for the shot list and specs.
+ *
+ * Mux settings to use when uploading:
+ *   - Video quality: "basic" or "premium" (required by the background video engine)
+ *   - Playback policy: public
+ *   - max_resolution_tier: "2160p" for the hero, "1080p" for everything else
+ *
+ * Stills are pulled from the videos through Mux's image API
+ * (image.mux.com/<id>/thumbnail.webp?time=<seconds>), resized per device.
+ */
+
+export type MuxClip = {
+  playbackId: string;
+  /** Used in VideoObject schema and as accessible text. */
+  title: string;
+  description: string;
+  /** ISO date the video was published, e.g. "2026-11-02". Required for video schema. */
+  uploadDate: string;
+  /** ISO 8601 duration, e.g. "PT0M12S". Optional. */
+  duration?: string;
+  /** Second of the video to use as the poster / still. */
+  posterTime?: number;
+};
+
+const clip = (title: string, description: string, posterTime = 1): MuxClip => ({
+  playbackId: "",
+  title,
+  description,
+  uploadDate: "",
+  posterTime,
+});
+
+export const media = {
+  /** Homepage hero loop, landscape 16:9 (silent, 8 to 15 seconds). */
+  hero: clip(
+    "Roof replacement in progress in Sacramento",
+    "A GM Roofing crew installing a new roof on a Sacramento Valley home.",
+    2
+  ),
+  /** Optional vertical 9:16 cut of the hero for phones. Falls back to `hero`. */
+  heroMobile: clip("Roof replacement in progress in Sacramento", "Vertical cut of the homepage hero video.", 2),
+
+  /** Featured project film with sound (60 to 120 seconds), played on click. */
+  projectFilm: clip(
+    "A Sacramento roof replacement, from inspection to final walkthrough",
+    "Follow a GM Roofing roof replacement in the Sacramento Valley: inspection, tear-off, decking repair, underlayment, new roof and cleanup.",
+    6
+  ),
+
+  /** Background loop for each service page hero, keyed by service slug. */
+  services: {
+    "roof-replacement-sacramento": clip("Roof replacement in Sacramento", "Tear-off and new roof installation on a Sacramento home."),
+    "roof-repair-sacramento": clip("Roof repair in Sacramento", "Repairing flashing and damaged roofing on a Sacramento home."),
+    "tile-roofing-sacramento": clip("Tile roofing in Sacramento", "Concrete tile roof work on a Sacramento Valley home."),
+    "roof-inspections-sacramento": clip("Roof inspection in Sacramento", "A GM Roofing inspector checking a roof in the Sacramento Valley."),
+    "residential-roofing-sacramento": clip("Residential roofing in Sacramento", "Residential roofing work in the Sacramento Valley."),
+    "commercial-roofing-sacramento": clip("Commercial roofing in Sacramento", "Commercial roofing work in the Sacramento Valley."),
+  } as Record<string, MuxClip>,
+};
+
+export const hasClip = (c?: MuxClip) => Boolean(c?.playbackId);
+
+export const muxStream = (id: string) => `https://stream.mux.com/${id}.m3u8`;
+export const muxImage = (id: string, opts: { time?: number; width?: number; height?: number; format?: "webp" | "jpg" } = {}) => {
+  const p = new URLSearchParams();
+  if (opts.time !== undefined) p.set("time", String(opts.time));
+  if (opts.width) p.set("width", String(opts.width));
+  if (opts.height) {
+    p.set("height", String(opts.height));
+    p.set("fit_mode", "smartcrop");
+  }
+  return `https://image.mux.com/${id}/thumbnail.${opts.format ?? "webp"}?${p}`;
+};

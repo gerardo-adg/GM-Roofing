@@ -1,11 +1,23 @@
 /**
- * Project photos for the homepage "Recent work" section.
- * Drop images in /public/images/projects/ and list them here.
- * The section stays hidden until at least one project is added.
+ * Project clips for the homepage "Recent work" section, hosted on Mux.
+ * Each tile shows a still pulled from the clip and plays the clip silently
+ * while it's on screen. The section stays hidden until a project is added.
  *
  * Example:
- * { src: "/images/projects/elk-grove-tile.jpg", alt: "Concrete tile re-roof in Elk Grove", title: "Tile re-roof", location: "Elk Grove" }
+ * {
+ *   playbackId: "abc123…",
+ *   title: "Concrete tile re-roof",
+ *   location: "Elk Grove",
+ *   alt: "New concrete tile roof on a two-story home in Elk Grove",
+ *   posterTime: 3,
+ * }
  */
-export type Project = { src: string; alt: string; title: string; location?: string };
+export type Project = {
+  playbackId: string;
+  title: string;
+  location?: string;
+  alt: string;
+  posterTime?: number;
+};
 
 export const projects: Project[] = [];

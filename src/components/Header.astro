@@ -123,8 +123,10 @@ const links = [
     inset: 0 0 auto;
     z-index: 50;
     color: var(--ink);
-    transition: background-color 0.35s var(--ease), box-shadow 0.35s var(--ease), color 0.35s var(--ease);
+    transition: background-color 0.35s var(--ease), box-shadow 0.35s var(--ease), color 0.35s var(--ease),
+      transform 0.45s var(--ease);
   }
+  .hdr.is-hidden { transform: translateY(-100%); }
   .hdr[data-mode="overlay"] { color: var(--white); }
   .hdr[data-mode="solid"],
   .hdr.is-scrolled,
@@ -156,7 +158,7 @@ const links = [
     align-items: center;
     gap: 0.4rem;
     padding: 0.55rem 0.9rem;
-    border-radius: 999px;
+    border-radius: 8px;
     font-size: var(--fs-sm);
     font-weight: 500;
     opacity: 0.82;
@@ -229,7 +231,7 @@ const links = [
     position: relative;
     width: 44px;
     height: 44px;
-    border-radius: 999px;
+    border-radius: 8px;
     border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
   }
   .hdr__toggle span {
@@ -298,7 +300,16 @@ const links = [
 <script>
   const header = document.querySelector<HTMLElement>("[data-header]");
   if (header) {
-    const onScroll = () => header.classList.toggle("is-scrolled", window.scrollY > 12);
+    // Solid once scrolled; slides away when scrolling down, returns when scrolling up.
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      header.classList.toggle("is-scrolled", y > 12);
+      const open = header.classList.contains("is-open") || header.querySelector(".hdr__dd.is-open");
+      if (!open && y > 320 && y > lastY + 4) header.classList.add("is-hidden");
+      else if (y < lastY - 4 || y <= 320) header.classList.remove("is-hidden");
+      lastY = y;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 

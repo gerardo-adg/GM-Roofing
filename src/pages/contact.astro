@@ -14,13 +14,13 @@ const details = [
   hasPhone && { icon: "phone", label: "Phone", value: business.phone.display, href: `tel:${business.phone.tel}` },
   hasEmail && { icon: "mail", label: "Email", value: business.email, href: `mailto:${business.email}` },
   { icon: "pin", label: "Service area", value: `${business.primaryRegion}, CA`, href: "/service-areas/" },
-  { icon: "clock", label: "Hours", value: "Reach out any time — we'll follow up to schedule a time that works for you." },
+  { icon: "clock", label: "Hours", value: "Send a request any time. We'll follow up to find a time that works for you." },
 ].filter(Boolean) as { icon: string; label: string; value: string; href?: string }[];
 
 const next = [
   "We review your request and follow up to schedule a visit.",
   "We inspect your roof in person and document its condition.",
-  "You get a clear, written estimate — no pressure to decide.",
+  "You get a written estimate. Take your time deciding.",
 ];
 ---
 
@@ -28,12 +28,13 @@ const next = [
   title="Contact GM Roofing | Free Roofing Estimate in Sacramento"
   description="Request a free roofing estimate or schedule a roof inspection with GM Roofing, serving the Sacramento Valley."
   breadcrumbs={breadcrumbs}
+  pageType="ContactPage"
   finalCta={false}
 >
   <PageHero
     eyebrow="Free estimate"
     title="Let's take a look <em>at your roof.</em>"
-    lede="Tell us about your roof and we'll follow up to schedule an inspection or estimate — no pressure, no obligation."
+    lede="Tell us about your roof and we'll follow up to schedule an inspection or estimate. No obligation."
     breadcrumbs={breadcrumbs}
   />
 

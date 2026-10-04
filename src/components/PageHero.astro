@@ -1,26 +1,43 @@
 ---
 import Icon from "./Icon.astro";
 import RoofLines from "./RoofLines.astro";
-import type { Crumb } from "../layouts/BaseLayout.astro";
+import MuxBackground from "./MuxBackground.astro";
+import type { Crumb } from "../lib/schema";
 import { business, hasPhone } from "../data/business";
+import { hasClip, type MuxClip } from "../data/media";
 
 interface Props {
   eyebrow?: string;
+  /** May contain <em> for the serif accent. */
   title: string;
   lede?: string;
   breadcrumbs?: Crumb[];
   cta?: string;
   showPhone?: boolean;
+  /** Optional Mux background loop. */
+  clip?: MuxClip;
 }
-const { eyebrow, title, lede, breadcrumbs = [], cta, showPhone = true } = Astro.props;
+const { eyebrow, title, lede, breadcrumbs = [], cta, showPhone = true, clip } = Astro.props;
+const withVideo = hasClip(clip);
 ---
 
-<section class="phero on-dark">
-  <RoofLines class="phero__lines" />
+<section class:list={["phero on-dark", { "phero--video": withVideo }]}>
+  {
+    withVideo ? (
+      <div class="phero__media">
+        <MuxBackground clip={clip!} eager />
+        <div class="phero__shade" />
+      </div>
+    ) : (
+      <div data-reveal="draw" class="phero__art">
+        <RoofLines class="phero__lines" draw />
+      </div>
+    )
+  }
   <div class="container phero__inner">
     {
       breadcrumbs.length > 1 && (
-        <nav aria-label="Breadcrumb" class="crumbs">
+        <nav aria-label="Breadcrumb" class="crumbs" data-reveal>
           <ol role="list">
             {breadcrumbs.map((b, i) =>
               i === breadcrumbs.length - 1 ? (
@@ -33,12 +50,12 @@ const { eyebrow, title, lede, breadcrumbs = [], cta, showPhone = true } = Astro.
         </nav>
       )
     }
-    {eyebrow && <span class="eyebrow" data-reveal>{eyebrow}</span>}
-    <h1 data-reveal style="--d:1"><Fragment set:html={title} /></h1>
-    {lede && <p class="lede" data-reveal style="--d:2">{lede}</p>}
+    {eyebrow && <span class="eyebrow" data-reveal style="--d:1">{eyebrow}</span>}
+    <h1 data-reveal="lines" style="--d:1"><span class="l"><span class="l__in" set:html={title} /></span></h1>
+    {lede && <p class="lede" data-reveal style="--d:3">{lede}</p>}
     {
       cta && (
-        <div class="btn-row" data-reveal style="--d:3">
+        <div class="btn-row" data-reveal style="--d:4">
           <a class="btn btn--accent" href="/contact/">{cta} <Icon name="arrow" class="arrow" /></a>
           {showPhone && hasPhone && (
             <a class="btn btn--ghost" href={`tel:${business.phone.tel}`}>
@@ -57,27 +74,33 @@ const { eyebrow, title, lede, breadcrumbs = [], cta, showPhone = true } = Astro.
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background:
-      radial-gradient(90% 120% at 85% -10%, rgb(23 59 96 / 0.9), transparent 60%),
-      radial-gradient(60% 80% at 100% 100%, rgb(182 93 32 / 0.16), transparent 60%),
-      var(--ink);
+    background: linear-gradient(165deg, var(--navy) 0%, var(--ink) 55%);
     color: var(--white);
     padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 6.5rem));
     padding-bottom: clamp(3.5rem, 8vw, 6.5rem);
   }
+  .phero--video { min-height: min(78svh, 760px); display: flex; align-items: flex-end; }
+  .phero--video .phero__inner { width: 100%; }
+  .phero__media { position: absolute; inset: 0; z-index: -1; }
+  .phero__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgb(10 26 43 / 0.85) 0%, rgb(10 26 43 / 0.45) 60%, rgb(10 26 43 / 0.2) 100%),
+      linear-gradient(0deg, rgb(10 26 43 / 0.7) 0%, transparent 50%);
+  }
+  .phero__art { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
   .phero :global(.phero__lines) {
     position: absolute;
-    z-index: -1;
     right: -4%;
     bottom: -2px;
     width: min(760px, 95%);
-    color: rgb(255 255 255 / 0.07);
+    color: rgb(255 255 255 / 0.09);
   }
   .phero__inner { display: grid; justify-items: start; }
-  .phero h1 { margin-top: 1.25rem; max-width: 16ch; }
+  .phero h1 { margin-top: 1.25rem; max-width: 18ch; }
   .phero .lede { margin-top: 1.5rem; }
-  .phero .btn-row { margin-top: 2.25rem; }
-  .phero .btn-row { width: 100%; }
+  .phero .btn-row { margin-top: 2.25rem; width: 100%; }
 
   .crumbs { margin-bottom: 2rem; font-size: var(--fs-xs); }
   .crumbs ol { display: flex; flex-wrap: wrap; gap: 0.5rem; color: rgb(255 255 255 / 0.55); }

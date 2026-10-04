@@ -1,6 +1,6 @@
-# GM Roofing — website
+# GM Roofing: website
 
-Marketing site for GM Roofing (Sacramento Valley), built with [Astro](https://astro.build). Static output and no client framework. The only JavaScript is the menu, header-on-scroll and scroll reveals.
+Marketing site for GM Roofing (Sacramento Valley), built with [Astro](https://astro.build). Static output and no client framework. JavaScript is limited to the menu, the header, scroll animations and lazy-loaded Mux video.
 
 ```bash
 npm install
@@ -15,7 +15,8 @@ npm run build    # outputs to dist/
 | Phone, email, license, cities, process steps | `src/data/business.ts` |
 | Service pages: copy, FAQs, SEO titles | `src/data/services.ts` (each entry becomes `/<slug>/`) |
 | Customer reviews (section hidden until added) | `src/data/reviews.ts` |
-| Project photos (gallery hidden until added) | `src/data/projects.ts` + `public/images/projects/` |
+| Videos and stills on Mux (hidden until added) | `src/data/media.ts`, `src/data/projects.ts`. See **MEDIA.md** |
+| Structured data (schema.org) | `src/lib/schema.ts` |
 | Homepage | `src/pages/index.astro` |
 | About / Service areas / Contact | `src/pages/*.astro` |
 | Colors, fonts, spacing | `src/styles/global.css` (`:root` variables) |
@@ -23,7 +24,18 @@ npm run build    # outputs to dist/
 
 **Add a service:** add an object to `services.ts`. The page, the menu entry, the footer link, the form option and the schema markup all update automatically.
 
-**Hero photo:** set `heroImage` at the top of `src/pages/index.astro` (e.g. `/images/hero.jpg` in `public/`) to replace the roof-anatomy illustration.
+**Hero video:** add a Mux playback ID to `media.hero` in `src/data/media.ts` to replace the roof-anatomy illustration with a full-bleed video. See MEDIA.md for the shot list.
+
+## Copy rules
+
+`npm run build` also runs `scripts/check-copy.mjs`, which fails the build if any page contains an em or en dash or a stock phrase like "start to finish", "quality craftsmanship" or "peace of mind". Add phrases to the `BANNED` list as you spot them.
+
+## SEO and AI search
+
+- Each page outputs one linked schema.org graph: `RoofingContractor` (business), `WebSite`, `WebPage`, `BreadcrumbList`, `Service` for each service page, `FAQPage` where there are FAQs, and `VideoObject` once Mux videos are added.
+- Service pages open with a short direct answer and an "At a glance" box, which are easy for Google snippets and AI assistants to quote.
+- `/llms.txt` gives AI tools a plain-text summary of the business, services and FAQs, generated from the same data as the site.
+- After launch: verify the site in Google Search Console, submit `sitemap-index.xml`, and keep the Google Business Profile name, phone and service area identical to `business.ts`.
 
 ## Before launch
 

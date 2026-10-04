@@ -1,33 +1,34 @@
 ---
 /**
- * Decorative architectural linework — a row of rooflines drawn in a single
+ * Decorative architectural linework: a row of rooflines drawn in a single
  * stroke weight. Used as a brand motif in heroes and CTA panels.
- * Inherits color via `currentColor`.
+ * Inherits color via `currentColor`. With `draw`, each stroke draws itself in
+ * when a parent [data-reveal="draw"] scrolls into view.
  */
 interface Props {
   class?: string;
+  draw?: boolean;
 }
-const { class: className } = Astro.props;
+const { class: className, draw = false } = Astro.props;
+
+const paths = [
+  "M0 400h800",
+  "M20 266 150 160l130 106",
+  "M40 400V250M260 250v150",
+  "M120 400v-70h60v70",
+  "M70 290h36v30H70zM194 290h36v30h-36z",
+  "M280 222 350 120h120l70 102",
+  "M300 400V210M520 210v190",
+  "M350 120v-30h22v30",
+  "M330 250h40v40h-40zM450 250h40v40h-40zM330 320h40v40h-40zM450 320h40v40h-40z",
+  "M390 400v-80h40v80",
+  "M545 236 775 156",
+  "M560 400V230M760 160v240",
+  "M600 280h70v50h-70zM700 400v-90h40v90",
+  "M575 230l185-64M590 225l170-59",
+];
 ---
 
 <svg class={className} viewBox="0 0 800 420" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
-  <!-- ground -->
-  <path d="M0 400h800" />
-  <!-- house 1: gable -->
-  <path d="M40 400V250l110-90 110 90v150" />
-  <path d="M20 266 150 160l130 106" />
-  <path d="M120 400v-70h60v70" />
-  <path d="M70 290h36v30H70zM194 290h36v30h-36z" />
-  <!-- house 2: tall hip roof -->
-  <path d="M300 400V210h220v190" />
-  <path d="M280 222 350 120h120l70 102" />
-  <path d="M350 120v-30h22v30" />
-  <path d="M330 250h40v40h-40zM450 250h40v40h-40zM330 320h40v40h-40zM450 320h40v40h-40z" />
-  <path d="M390 400v-80h40v80" />
-  <!-- house 3: shed/modern -->
-  <path d="M560 400V230l200-70v240" />
-  <path d="M545 236 775 156" />
-  <path d="M600 280h70v50h-70zM700 400v-90h40v90" />
-  <!-- tile courses suggestion on house 3 roof -->
-  <path d="M575 230l185-64M590 225l170-59" opacity=".5" />
+  {paths.map((d, i) => (draw ? <path d={d} pathLength="1" style={`--s:${i % 7}`} /> : <path d={d} />))}
 </svg>

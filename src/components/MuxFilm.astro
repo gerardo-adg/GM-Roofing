@@ -1,0 +1,85 @@
+---
+/**
+ * Full video with sound and controls (Mux Player), loaded only when the
+ * visitor presses play. Until then it's just a still image and a button,
+ * so the player's JavaScript never slows down the page.
+ */
+import MuxImage from "./MuxImage.astro";
+import type { MuxClip } from "../data/media";
+
+interface Props {
+  clip: MuxClip;
+}
+const { clip } = Astro.props;
+---
+
+<div class="film" data-film data-id={clip.playbackId} data-title={clip.title}>
+  <MuxImage playbackId={clip.playbackId} time={clip.posterTime} alt="" ratio={[16, 9]} sizes="(min-width: 1280px) 1200px, 100vw" class="film__poster" />
+  <button class="film__play" type="button" aria-label={`Play video: ${clip.title}`}>
+    <span class="film__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+    </span>
+    <span class="film__label">Watch the project</span>
+  </button>
+</div>
+
+<style>
+  .film {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--ink);
+  }
+  .film :global(.film__poster), .film :global(mux-player) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .film :global(.film__poster) { transition: transform 1.2s var(--ease); }
+  .film:hover :global(.film__poster) { transform: scale(1.03); }
+  .film__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 0.85rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    color: var(--white);
+    background: linear-gradient(180deg, transparent 50%, rgb(10 26 43 / 0.7));
+    font-weight: 550;
+  }
+  .film__icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--ink);
+    transition: transform 0.4s var(--ease);
+  }
+  .film__play:hover .film__icon { transform: scale(1.06); }
+  .film :global(mux-player) { --controls: auto; aspect-ratio: 16 / 9; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-film]").forEach((film) => {
+    const btn = film.querySelector("button");
+    btn?.addEventListener("click", async () => {
+      btn.disabled = true;
+      await import("@mux/mux-player");
+      const player = document.createElement("mux-player");
+      player.setAttribute("playback-id", film.dataset.id ?? "");
+      player.setAttribute("metadata-video-title", film.dataset.title ?? "");
+      player.setAttribute("accent-color", "#b65d20");
+      player.setAttribute("autoplay", "");
+      player.setAttribute("max-resolution", "2160p");
+      film.append(player);
+      btn.remove();
+    });
+  });
+</script>

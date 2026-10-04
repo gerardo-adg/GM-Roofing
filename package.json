@@ -3,17 +3,20 @@
   "type": "module",
   "version": "2.0.0",
   "private": true,
-  "description": "GM Roofing (Sacramento, CA) marketing site — Astro.",
+  "description": "GM Roofing (Sacramento, CA) marketing site \u2014 Astro.",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/check-copy.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:copy": "node scripts/check-copy.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource/instrument-serif": "^5.3.0",
+    "@mux/mux-background-video": "^0.2.3",
+    "@mux/mux-player": "^3.13.4",
     "astro": "^7.3.5"
   }
 }

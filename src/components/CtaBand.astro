@@ -7,12 +7,14 @@ import { business, hasPhone } from "../data/business";
 <section class="cta" aria-labelledby="cta-title">
   <div class="container">
     <div class="cta__card on-dark" data-reveal>
-      <RoofLines class="cta__lines" />
+      <div data-reveal="draw" class="cta__art" aria-hidden="true">
+      <RoofLines class="cta__lines" draw />
+      </div>
       <div class="cta__copy">
         <span class="eyebrow">{business.primaryRegion}</span>
-        <h2 id="cta-title">Need help with <em>your roof?</em></h2>
+        <h2 id="cta-title" data-reveal="lines"><span class="l"><span class="l__in">Have a roof question?</span></span><span class="l"><span class="l__in"><em>Start with a free estimate.</em></span></span></h2>
         <p class="lede">
-          Request a professional roof inspection or a written estimate from {business.name}. No pressure — just a clear look at your options.
+          Tell us what you're seeing. We'll look at the roof in person and put the scope and price in writing, with no obligation.
         </p>
       </div>
       <div class="cta__actions">
@@ -41,16 +43,15 @@ import { business, hasPhone } from "../data/business";
     padding: clamp(2.25rem, 6vw, 5rem);
     border-radius: var(--radius-lg);
     background:
-      radial-gradient(120% 140% at 100% 0%, rgb(182 93 32 / 0.28), transparent 55%),
       linear-gradient(160deg, var(--navy) 0%, var(--ink) 70%);
     color: var(--white);
   }
+  .cta__art { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
   .cta__card :global(.cta__lines) {
     position: absolute;
     right: -6%;
     bottom: -10%;
     width: min(720px, 90%);
-    z-index: -1;
     color: rgb(255 255 255 / 0.08);
   }
   .cta h2 { margin-top: 1.25rem; max-width: 14ch; }

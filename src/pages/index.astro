@@ -6,115 +6,163 @@ import ServiceGrid from "../components/ServiceGrid.astro";
 import ProcessSteps from "../components/ProcessSteps.astro";
 import AreaList from "../components/AreaList.astro";
 import RoofAnatomy from "../components/RoofAnatomy.astro";
+import MuxBackground from "../components/MuxBackground.astro";
+import MuxFilm from "../components/MuxFilm.astro";
+import Faq from "../components/Faq.astro";
 import { business, hasPhone } from "../data/business";
 import { reviews } from "../data/reviews";
 import { projects } from "../data/projects";
+import { media, hasClip } from "../data/media";
+import { ids } from "../lib/schema";
 
-/** Set to e.g. "/images/hero.jpg" (in /public) to replace the illustration with a photo. */
-const heroImage = "";
-
-const anatomy = ["Ridge vent", "Roof covering", "Underlayment", "Roof decking", "Flashing & drip edge"];
+const heroVideo = hasClip(media.hero);
+const anatomy = ["Ridge vent", "Roof covering", "Underlayment", "Roof decking", "Flashing and drip edge"];
 
 const trust = [
-  { icon: "family", title: "Family-owned", text: "A local team, not a national franchise or storm-chasing crew." },
-  { icon: "pin", title: "Valley focused", text: "We work Sacramento Valley roofs and know the weather they deal with." },
-  { icon: "doc", title: "Free estimates", text: "A written estimate before any work begins, with no obligation." },
-  { icon: "chat", title: "Clear communication", text: "Straight answers about what your roof needs, and why." },
+  { icon: "family", title: "Family-owned", text: "A local family business, not a franchise or a storm-chasing crew." },
+  { icon: "pin", title: "Valley-based", text: "We work on Sacramento Valley roofs and know what this weather does to them." },
+  { icon: "doc", title: "Free written estimates", text: "Scope, materials and price on paper before anything is scheduled." },
+  { icon: "chat", title: "Plain answers", text: "What your roof needs and why, explained without the jargon." },
 ];
 
-const replaceSigns = [
-  "Shingles curling, cracking, or missing in multiple areas",
-  "Granules collecting in gutters and downspouts",
-  "Soft spots in the decking or visible sagging",
-  "Repeated leaks in different spots as the roof ages",
-  "Storm or wind damage across a large section",
-];
 const repairSigns = [
-  "Active roof leaks and water staining",
-  "Missing or damaged shingles",
-  "Storm and wind damage",
-  "Flashing failures around chimneys, vents, and skylights",
-  "General wear from an aging roof",
+  "An active leak or a new water stain",
+  "A few missing or damaged shingles",
+  "Wind or storm damage in one area",
+  "Flashing pulling away at a chimney, vent or skylight",
+  "Cracked or slipped tiles",
+];
+const replaceSigns = [
+  "Shingles curling, cracking or missing across the roof",
+  "Granules collecting in gutters and downspouts",
+  "Soft spots in the decking or a sagging roofline",
+  "New leaks after earlier repairs",
+  "Storm damage across most of the roof",
 ];
 
 const values = [
-  { title: "Clear communication", text: "You'll know what's happening with your roof and your project at every stage — no jargon, no vanishing act between the estimate and the work." },
-  { title: "Honest recommendations", text: "If a repair will do the job, we'll say so. We're not in the business of selling roofs people don't need." },
-  { title: "Quality workmanship", text: "Roofing done properly the first time, from tear-off through final cleanup, by a crew that treats your home like the job matters." },
-  { title: "Protecting your property", text: "Job sites are kept tidy and your landscaping, driveway, and gutters are protected throughout the project." },
+  { title: "You'll know where things stand", text: "From the estimate to cleanup, you'll know what's happening and what comes next." },
+  { title: "We'll say when a repair is enough", text: "If a repair solves the problem, that's what we recommend. We don't sell roofs people don't need." },
+  { title: "We fix what's under the shingles", text: "Soft decking and worn flashing get repaired before the new roof goes on, not covered up." },
+  { title: "Your property stays protected", text: "We protect landscaping, driveways and gutters while we work, and clean up before we leave." },
 ];
 
 const climate = [
-  { icon: "sun", title: "Long, intense summers", text: "Months of high heat and UV dry out shingles and age underlayment faster than in milder climates." },
-  { icon: "rain", title: "Heavy winter storms", text: "Periodic wind and downpours find every weak spot in flashing, valleys, and worn roofing." },
-  { icon: "home", title: "Decades-old housing stock", text: "Established neighborhoods across the valley mean many roofs are reaching the end of their service life." },
+  { icon: "sun", title: "Long, hot summers", text: "Months of high heat and sun dry out shingles and age underlayment faster than in milder climates." },
+  { icon: "rain", title: "Winter storms", text: "Wind and heavy rain find every weak spot in flashing, valleys and worn roofing." },
+  { icon: "home", title: "Older housing stock", text: "Many established neighborhoods have roofs reaching the end of their service life." },
+];
+
+const faqs = [
+  {
+    q: "Should I repair or replace my roof?",
+    a: "Repair usually makes sense when damage is limited to one area and the rest of the roof is in good shape. Replacement makes more sense when repairs keep coming, damage is spread across the roof or the decking underneath is failing. We inspect the roof in person and give you our recommendation in writing.",
+  },
+  {
+    q: "How much does a new roof cost in Sacramento?",
+    a: "Price depends on the roof's size and pitch, the material, how many layers come off, decking repairs and permits. We don't quote from the street or over the phone. After an inspection you get a free written estimate with the full scope and price.",
+  },
+  {
+    q: "How long does a roof replacement take?",
+    a: "Many single-family shingle replacements take a few days on site. Tile, larger homes, decking repairs and weather can add time. Your estimate includes a timeline for your roof.",
+  },
+  {
+    q: "Do I need a permit to replace a roof in Sacramento?",
+    a: "In California, reroofing generally requires a building permit from your city or county, and the work is inspected. We'll go over what applies to your property with your estimate.",
+  },
+  {
+    q: "My tile roof is leaking but the tiles look fine. Why?",
+    a: "Tile sheds most of the water, but the underlayment beneath it keeps it out of the house. Years of Sacramento heat can dry that layer out and crack it even when the tile on top looks perfect. Often the tile can be lifted, the underlayment replaced and the original tile reset.",
+  },
+  {
+    q: "What areas do you serve?",
+    a: `${business.name} serves ${business.cities.slice(0, -1).join(", ")} and ${business.cities.at(-1)}, plus nearby Sacramento Valley communities.`,
+  },
+];
+
+const videos = [
+  ...(heroVideo ? [{ key: "hero", clip: media.hero }] : []),
+  ...(hasClip(media.projectFilm) ? [{ key: "film", clip: media.projectFilm }] : []),
 ];
 ---
 
 <BaseLayout
-  title="GM Roofing | Sacramento Valley Roofing Contractor"
-  description="GM Roofing is a family-owned Sacramento roofing contractor offering roof replacement, repair, tile roofing, and inspections. Request a free estimate today."
-  schema={[{ "@context": "https://schema.org", "@type": "WebSite", name: business.name, url: business.siteUrl }]}
+  title="Roof Replacement & Roof Repair in Sacramento, CA | GM Roofing"
+  description="GM Roofing is a family-owned Sacramento roofer for roof replacement, roof repair, tile roofing and inspections. Free written estimates across the Sacramento Valley."
+  about={ids.business}
+  faqs={faqs}
+  videos={videos}
 >
   <!-- ============ HERO ============ -->
-  <section class="hero on-dark">
-    <div class="hero__glow" aria-hidden="true"></div>
+  <section class:list={["hero on-dark", { "hero--video": heroVideo }]}>
+    {
+      heroVideo ? (
+        <div class="hero__media">
+          <MuxBackground clip={media.hero} mobileClip={media.heroMobile} eager maxResolution="1440p" />
+          <div class="hero__shade" />
+        </div>
+      ) : (
+        <div class="hero__bg" aria-hidden="true" />
+      )
+    }
     <div class="container hero__grid">
       <div class="hero__copy">
         <span class="eyebrow" data-reveal>Family-owned · {business.primaryRegion}</span>
-        <h1 data-reveal style="--d:1">Sacramento roofing, <em>done right.</em></h1>
-        <p class="lede" data-reveal style="--d:2">
-          Roof replacement, repair, tile roofing, and inspections for homeowners and businesses across the Sacramento Valley — with an honest look and a written estimate before any work begins.
+        <h1 data-reveal="lines">
+          <span class="l"><span class="l__in">Roof replacement</span></span>
+          <span class="l"><span class="l__in">and repair in</span></span>
+          <span class="l"><span class="l__in"><em>Sacramento.</em></span></span>
+        </h1>
+        <p class="lede" data-reveal style="--d:4">
+          We replace and repair shingle and tile roofs across the Sacramento Valley. Every job starts with an in-person inspection and a written estimate, so you know the scope and price before anything is scheduled.
         </p>
-        <div class="btn-row" data-reveal style="--d:3">
+        <div class="btn-row" data-reveal style="--d:5">
           <a class="btn btn--accent" href="/contact/">Request a free estimate <Icon name="arrow" class="arrow" /></a>
           {
             hasPhone ? (
               <a class="btn btn--ghost" href={`tel:${business.phone.tel}`}><Icon name="phone" /> {business.phone.display}</a>
             ) : (
-              <a class="btn btn--ghost" href="#services">Explore services</a>
+              <a class="btn btn--ghost" href="#services">See our services</a>
             )
           }
         </div>
-        <ul role="list" class="hero__checks" data-reveal style="--d:4">
+        <ul role="list" class="hero__checks" data-reveal style="--d:6">
           <li><Icon name="check" size={18} /> Free written estimates</li>
-          <li><Icon name="check" size={18} /> No-pressure inspections</li>
-          <li><Icon name="check" size={18} /> Local, family-owned</li>
+          <li><Icon name="check" size={18} /> Shingle and tile roofs</li>
+          <li><Icon name="check" size={18} /> Family-owned and local</li>
         </ul>
       </div>
 
-      <div class="hero__visual" data-reveal style="--d:2">
-        {
-          heroImage ? (
-            <img src={heroImage} alt="A roof completed by GM Roofing in the Sacramento Valley" class="hero__photo" loading="eager" />
-          ) : (
-            <figure class="anatomy">
+      {
+        !heroVideo && (
+          <div class="hero__visual">
+            <figure class="anatomy" data-reveal style="--d:2">
               <figcaption class="anatomy__head">
                 <span>Anatomy of a roof</span>
-                <span class="anatomy__tag">Every layer inspected</span>
+                <span class="anatomy__tag">We check every layer</span>
               </figcaption>
-              <div class="anatomy__art"><RoofAnatomy /></div>
-              <ol role="list" class="anatomy__legend">
-                {anatomy.map((a, i) => <li><span>{i + 1}</span>{a}</li>)}
+              <div class="anatomy__art" data-reveal="draw"><RoofAnatomy /></div>
+              <ol role="list" class="anatomy__legend" data-stagger>
+                {anatomy.map((a, i) => <li data-reveal style="--d:8"><span>{i + 1}</span>{a}</li>)}
               </ol>
             </figure>
-          )
-        }
-        <div class="hero__badge">
-          <span class="hero__badge-icon"><Icon name="doc" size={22} /></span>
-          <span><strong>Written estimate</strong> before any work begins</span>
-        </div>
-      </div>
+            <div class="hero__badge" data-reveal style="--d:10">
+              <span class="hero__badge-icon"><Icon name="doc" size={22} /></span>
+              <span><strong>Written estimate</strong> before any work begins</span>
+            </div>
+          </div>
+        )
+      }
     </div>
   </section>
 
   <!-- ============ TRUST ============ -->
-  <section class="trust" aria-label="Why homeowners trust us">
+  <section class="trust" aria-label="Why homeowners work with us">
     <div class="container">
-      <ul role="list" class="trust__grid">
+      <ul role="list" class="trust__grid" data-stagger>
         {
-          trust.map((t, i) => (
-            <li data-reveal style={`--d:${i}`}>
+          trust.map((t) => (
+            <li data-reveal>
               <span class="trust__icon"><Icon name={t.icon} size={22} /></span>
               <h3>{t.title}</h3>
               <p>{t.text}</p>
@@ -130,9 +178,9 @@ const climate = [
     <div class="container">
       <SectionHead
         align="split"
-        eyebrow="What we do"
-        title="Roofing services for the <em>Sacramento Valley</em>"
-        lede="From a single repair to a full tear-off, every job starts with a straightforward look at your roof and a written estimate you can actually read."
+        eyebrow="Services"
+        title="Roofing services across the <em>Sacramento Valley</em>"
+        lede="One small repair or a full tear-off, every job starts the same way: we look at the roof in person and put our recommendation in writing."
       />
       <ServiceGrid />
     </div>
@@ -144,61 +192,73 @@ const climate = [
       <SectionHead
         align="split"
         eyebrow="Repair or replace?"
-        title="We'll tell you plainly <em>what your roof needs.</em>"
-        lede="Not every roof problem calls for a full replacement. Here's what we look for — and if you're not sure, start with an inspection."
+        title="Plenty of roofs only need <em>a repair.</em>"
+        lede="Here's how we tell the difference. If you're not sure which side your roof is on, start with an inspection."
       />
-      <div class="rr">
+      <div class="rr" data-stagger>
         <article class="rr__card" data-reveal>
           <div class="rr__head">
             <span class="rr__icon"><Icon name="repair" size={24} /></span>
             <div>
               <span class="rr__kicker">Usually a repair</span>
-              <h3>Fixing the problem before it spreads</h3>
+              <h3>Fix it before it spreads</h3>
             </div>
           </div>
-          <p>Most repairs start small — a leak after a storm, a few missing shingles, flashing that's pulled away. Left alone, they turn into decking damage and interior problems.</p>
+          <p>Most repairs start small: a leak after a storm, a few missing shingles, flashing that's pulled loose. Caught early, they stay small. Left alone, water reaches the decking and the ceiling below.</p>
           <ul role="list" class="rr__list">
             {repairSigns.map((s) => <li><Icon name="check" size={18} />{s}</li>)}
           </ul>
-          <a class="text-link" href="/roof-repair-sacramento/">More on roof repair <Icon name="arrow" /></a>
+          <a class="text-link" href="/roof-repair-sacramento/">Roof repair in Sacramento <Icon name="arrow" /></a>
         </article>
-        <article class="rr__card rr__card--dark on-dark" data-reveal style="--d:1">
+        <article class="rr__card rr__card--dark on-dark" data-reveal>
           <div class="rr__head">
             <span class="rr__icon"><Icon name="replacement" size={24} /></span>
             <div>
               <span class="rr__kicker">Time for a new roof</span>
-              <h3>When patching no longer makes sense</h3>
+              <h3>When patching stops working</h3>
             </div>
           </div>
-          <p>When a roof is past the point of patching, we'll say so — and walk you through materials, timeline, and cost before any work begins.</p>
+          <p>When a roof is past the point of patching, we'll tell you, and walk you through materials, timeline and cost before you commit to anything.</p>
           <ul role="list" class="rr__list">
             {replaceSigns.map((s) => <li><Icon name="check" size={18} />{s}</li>)}
           </ul>
-          <a class="text-link" href="/roof-replacement-sacramento/">More on roof replacement <Icon name="arrow" /></a>
+          <a class="text-link" href="/roof-replacement-sacramento/">Roof replacement in Sacramento <Icon name="arrow" /></a>
         </article>
       </div>
       <div class="rr__foot" data-reveal>
-        <p><strong>Not sure what your roof needs?</strong> Start with an inspection — we'll give you an honest read on repair versus replacement.</p>
+        <p><strong>Not sure what your roof needs?</strong> An inspection tells you whether a repair will hold or it's time to replace.</p>
         <a class="btn btn--dark" href="/roof-inspections-sacramento/">About inspections <Icon name="arrow" class="arrow" /></a>
       </div>
     </div>
   </section>
 
-  <!-- ============ WHY US ============ -->
+  <!-- ============ FEATURED FILM (once a Mux ID is added) ============ -->
+  {
+    hasClip(media.projectFilm) && (
+      <section class="section section--dark">
+        <div class="container">
+          <SectionHead align="split" eyebrow="On the job" title="Watch a Sacramento <em>roof replacement.</em>" lede={media.projectFilm.description} />
+          <div data-reveal="media"><MuxFilm clip={media.projectFilm} /></div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ============ HOW WE WORK ============ -->
   <section class="section section--paper">
     <div class="container why">
       <div class="why__intro">
         <span class="eyebrow" data-reveal>Why {business.name}</span>
-        <h2 data-reveal style="--d:1">Why Sacramento homeowners <em>choose us.</em></h2>
+        <h2 data-reveal="lines"><span class="l"><span class="l__in">What working</span></span><span class="l"><span class="l__in">with us <em>looks like.</em></span></span></h2>
         <p class="lede" data-reveal style="--d:2">
-          No upsell, no scare tactics — just straight information so you can make a good decision about your roof.
+          No upselling and no scare tactics. You get straight information so you can make a good call about your roof.
         </p>
-        <a class="text-link" href="/about/" data-reveal style="--d:3">About our approach <Icon name="arrow" /></a>
+        <a class="text-link" href="/about/" data-reveal style="--d:3">About {business.name} <Icon name="arrow" /></a>
       </div>
-      <ol role="list" class="why__list">
+      <ol role="list" class="why__list" data-stagger>
         {
           values.map((v, i) => (
-            <li data-reveal style={`--d:${i % 2}`}>
+            <li data-reveal>
               <span class="why__num">{String(i + 1).padStart(2, "0")}</span>
               <h3>{v.title}</h3>
               <p>{v.text}</p>
@@ -210,13 +270,13 @@ const climate = [
   </section>
 
   <!-- ============ PROCESS ============ -->
-  <section class="section section--dark process">
+  <section class="section section--dark">
     <div class="container">
       <SectionHead
         align="split"
         eyebrow="Our process"
-        title="How a roofing project <em>works with us.</em>"
-        lede="Four simple steps — and you'll know exactly where things stand at each one."
+        title="How a project <em>works.</em>"
+        lede="Four steps, and you'll know where things stand at each one."
       />
       <ProcessSteps />
     </div>
@@ -227,18 +287,18 @@ const climate = [
     <div class="container local">
       <div class="local__copy">
         <span class="eyebrow" data-reveal>Local roofing</span>
-        <h2 data-reveal style="--d:1">Built for <em>valley weather.</em></h2>
+        <h2 data-reveal="lines"><span class="l"><span class="l__in">Built for</span></span><span class="l"><span class="l__in"><em>valley weather.</em></span></span></h2>
         <p data-reveal style="--d:2">
-          Sacramento Valley roofs deal with a specific mix of conditions — and that combination is hard on shingles, tile, and flashing alike.
+          Sacramento Valley roofs take a specific kind of beating, and it shows on shingles, tile and flashing.
         </p>
         <p data-reveal style="--d:3">
-          {business.name} focuses on Sacramento roof replacement, roof repair, and roof inspections because it's the work we know best. Whether you're dealing with a slow leak, planning ahead for a replacement, or just want a professional opinion, we're a local roofing contractor you can actually reach.
+          We focus on roof replacement, roof repair and inspections in and around Sacramento because it's the work we know best. Whether it's a slow leak, a replacement you're planning for or a second opinion, you'll be talking to a local roofer you can actually reach.
         </p>
       </div>
-      <ul role="list" class="local__list">
+      <ul role="list" class="local__list" data-stagger>
         {
-          climate.map((c, i) => (
-            <li data-reveal style={`--d:${i}`}>
+          climate.map((c) => (
+            <li data-reveal>
               <span class="local__icon"><Icon name={c.icon} size={24} /></span>
               <div>
                 <h3>{c.title}</h3>
@@ -251,17 +311,21 @@ const climate = [
     </div>
   </section>
 
-  <!-- ============ PROJECTS (shown once real photos are added) ============ -->
+  <!-- ============ PROJECTS (once Mux clips are added) ============ -->
   {
     projects.length > 0 && (
       <section class="section section--paper">
         <div class="container">
-          <SectionHead eyebrow="Recent work" title="Project <em>gallery</em>" />
+          <SectionHead align="split" eyebrow="Recent work" title="Roofs we've <em>finished.</em>" />
           <ul role="list" class="gallery">
             {projects.map((p, i) => (
-              <li data-reveal style={`--d:${i % 3}`}>
-                <figure>
-                  <img src={p.src} alt={p.alt} loading="lazy" />
+              <li>
+                <figure class="gallery__item" data-reveal="media" style={`--d:${i % 3}`}>
+                  <div class="gallery__media">
+                    <MuxBackground
+                      clip={{ playbackId: p.playbackId, title: p.title, description: p.alt, uploadDate: "", posterTime: p.posterTime }}
+                    />
+                  </div>
                   <figcaption>
                     <strong>{p.title}</strong>
                     {p.location && <span>{p.location}</span>}
@@ -275,15 +339,15 @@ const climate = [
     )
   }
 
-  <!-- ============ REVIEWS (shown once real reviews are added) ============ -->
+  <!-- ============ REVIEWS (once real reviews are added) ============ -->
   {
     reviews.length > 0 && (
       <section class="section">
         <div class="container">
           <SectionHead eyebrow="Reviews" title="What homeowners <em>say</em>" />
-          <ul role="list" class="reviews">
-            {reviews.map((r, i) => (
-              <li data-reveal style={`--d:${i % 3}`}>
+          <ul role="list" class="reviews" data-stagger>
+            {reviews.map((r) => (
+              <li data-reveal>
                 <blockquote>
                   <p>“{r.quote}”</p>
                   <footer>
@@ -300,18 +364,30 @@ const climate = [
     )
   }
 
-  <!-- ============ SERVICE AREAS ============ -->
+  <!-- ============ FAQ ============ -->
   <section class="section section--paper">
+    <div class="container faqwrap">
+      <div>
+        <span class="eyebrow" data-reveal>Questions</span>
+        <h2 data-reveal="lines"><span class="l"><span class="l__in">Roofing questions</span></span><span class="l"><span class="l__in">we hear <em>every week.</em></span></span></h2>
+        <p class="lede" data-reveal style="--d:2">Don't see yours? Ask us when you request an estimate.</p>
+      </div>
+      <div data-reveal style="--d:2"><Faq items={faqs} /></div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICE AREAS ============ -->
+  <section class="section">
     <div class="container">
       <SectionHead
         align="split"
         eyebrow="Where we work"
-        title="Proudly serving the <em>Sacramento Valley</em>"
-        lede="Homeowners and businesses across the region, including these communities. Don't see yours? Reach out anyway."
+        title="Sacramento and <em>nearby cities</em>"
+        lede="Homes and businesses across the region, including these communities. Don't see yours? Ask anyway."
       />
       <AreaList />
       <div class="areas-foot" data-reveal>
-        <a class="btn btn--outline" href="/service-areas/">See all service areas <Icon name="arrow" class="arrow" /></a>
+        <a class="btn btn--outline" href="/service-areas/">All service areas <Icon name="arrow" class="arrow" /></a>
       </div>
     </div>
   </section>
@@ -328,16 +404,13 @@ const climate = [
     padding-top: calc(var(--header-h) + clamp(2.5rem, 7vw, 5.5rem));
     padding-bottom: clamp(7rem, 12vw, 10rem);
   }
-  .hero__glow {
+  .hero__bg {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background:
-      radial-gradient(60% 70% at 85% 10%, rgb(23 59 96 / 0.95), transparent 70%),
-      radial-gradient(45% 55% at 95% 95%, rgb(182 93 32 / 0.22), transparent 70%),
-      radial-gradient(50% 60% at 0% 100%, rgb(23 59 96 / 0.5), transparent 70%);
+    background: linear-gradient(160deg, var(--navy) 0%, var(--ink) 60%);
   }
-  .hero__glow::after {
+  .hero__bg::after {
     /* fine blueprint grid */
     content: "";
     position: absolute;
@@ -346,10 +419,18 @@ const climate = [
       linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
       linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
     background-size: 56px 56px;
-    mask-image: radial-gradient(80% 80% at 70% 30%, #000 20%, transparent 75%);
+    mask-image: linear-gradient(180deg, #000 0%, transparent 90%);
+  }
+  .hero__media { position: absolute; inset: 0; z-index: -1; }
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgb(10 26 43 / 0.82) 0%, rgb(10 26 43 / 0.4) 65%, rgb(10 26 43 / 0.15) 100%),
+      linear-gradient(0deg, rgb(10 26 43 / 0.75) 0%, transparent 45%);
   }
   .hero__grid { display: grid; gap: clamp(3rem, 6vw, 4rem); align-items: center; }
-  .hero h1 { margin-top: 1.5rem; max-width: 11ch; }
+  .hero h1 { margin-top: 1.5rem; }
   .hero .lede { margin-top: 1.75rem; max-width: 50ch; }
   .hero .btn-row { margin-top: 2.5rem; }
   .hero__checks {
@@ -364,14 +445,11 @@ const climate = [
   .hero__checks :global(svg) { color: var(--accent-soft); }
 
   .hero__visual { position: relative; }
-  .hero__photo { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius-lg); }
   .anatomy {
     padding: clamp(1.25rem, 3vw, 1.75rem);
     border-radius: var(--radius-lg);
-    background: linear-gradient(160deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.02));
+    background: rgb(255 255 255 / 0.04);
     border: 1px solid rgb(255 255 255 / 0.1);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 40px 80px -40px rgb(0 0 0 / 0.6);
-    backdrop-filter: blur(6px);
   }
   .anatomy__head {
     display: flex;
@@ -385,8 +463,8 @@ const climate = [
   }
   .anatomy__tag {
     padding: 0.35rem 0.7rem;
-    border-radius: 999px;
-    background: rgb(233 162 106 / 0.14);
+    border-radius: 6px;
+    border: 1px solid rgb(233 162 106 / 0.35);
     color: var(--accent-soft);
     letter-spacing: 0.06em;
     white-space: nowrap;
@@ -406,7 +484,7 @@ const climate = [
     align-items: center;
     gap: 0.45rem;
     padding: 0.3rem 0.7rem 0.3rem 0.3rem;
-    border-radius: 999px;
+    border-radius: 6px;
     background: rgb(255 255 255 / 0.06);
   }
   .anatomy__legend span {
@@ -414,7 +492,7 @@ const climate = [
     place-items: center;
     width: 20px;
     height: 20px;
-    border-radius: 999px;
+    border-radius: 4px;
     background: var(--ink);
     border: 1px solid rgb(255 255 255 / 0.35);
     font-size: 10px;
@@ -429,62 +507,74 @@ const climate = [
     gap: 0.85rem;
     max-width: 260px;
     padding: 1rem 1.25rem 1rem 1rem;
-    border-radius: 18px;
+    border-radius: 12px;
     background: var(--white);
     color: var(--ink);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow);
     font-size: var(--fs-sm);
     line-height: 1.35;
-    animation: float 6s ease-in-out infinite;
   }
   .hero__badge-icon {
     display: grid;
     place-items: center;
     flex: none;
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    background: var(--accent);
-    color: var(--white);
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--accent);
   }
-  @keyframes float { 50% { transform: translateY(-8px); } }
 
   @media (min-width: 960px) {
     .hero { min-height: 100svh; display: flex; align-items: center; }
     .hero__grid { grid-template-columns: 1.15fr 1fr; gap: 4rem; }
+    .hero--video .hero__grid { grid-template-columns: minmax(0, 760px); }
     .hero__badge { display: flex; }
+  }
+
+  /* Subtle parallax on the hero art/video, in browsers with scroll-driven animations */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero__visual, .hero__media {
+        animation: hero-drift linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+      @keyframes hero-drift { to { transform: translate3d(0, 12vh, 0); } }
+    }
   }
 
   /* ---------- Trust ---------- */
   .trust { position: relative; z-index: 2; margin-top: clamp(-5rem, -8vw, -4rem); }
   .trust__grid {
     display: grid;
+    grid-template-columns: 1fr 1fr;
     border-radius: var(--radius-lg);
     background: var(--white);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
     overflow: hidden;
   }
-  .trust__grid { grid-template-columns: 1fr 1fr; }
   .trust__grid li { padding: clamp(1.25rem, 3vw, 2.25rem); border-bottom: 1px solid var(--line); }
   .trust__grid li:nth-child(odd) { border-right: 1px solid var(--line); }
   .trust__grid li:nth-last-child(-n + 2) { border-bottom: 0; }
-  @media (max-width: 639px) {
-    .trust h3 { font-size: 1rem; }
-    .trust p { font-size: var(--fs-xs); }
-    .trust__icon { width: 38px; height: 38px; margin-bottom: 1rem; }
-  }
   .trust__icon {
     display: grid;
     place-items: center;
     width: 44px;
     height: 44px;
-    border-radius: 12px;
+    border-radius: 10px;
     background: var(--paper);
     color: var(--accent);
     margin-bottom: 1.25rem;
   }
   .trust h3 { font-size: 1.125rem; }
   .trust p { margin-top: 0.4rem; font-size: var(--fs-sm); color: var(--steel); line-height: 1.55; }
+  @media (max-width: 639px) {
+    .trust h3 { font-size: 1rem; }
+    .trust p { font-size: var(--fs-xs); }
+    .trust__icon { width: 38px; height: 38px; margin-bottom: 1rem; }
+  }
   @media (min-width: 1024px) {
     .trust__grid { grid-template-columns: repeat(4, 1fr); }
     .trust__grid li { border-bottom: 0; border-right: 1px solid var(--line); }
@@ -503,10 +593,7 @@ const climate = [
     background: var(--paper);
   }
   .rr__card > p { color: var(--steel); }
-  .rr__card--dark {
-    background: radial-gradient(100% 80% at 100% 0%, rgb(23 59 96 / 0.9), transparent 70%), var(--ink);
-    color: var(--white);
-  }
+  .rr__card--dark { background: linear-gradient(170deg, var(--navy) 0%, var(--ink) 70%); color: var(--white); }
   .rr__card--dark > p { color: rgb(255 255 255 / 0.7); }
   .rr__head { display: flex; gap: 1rem; align-items: flex-start; }
   .rr__icon {
@@ -515,7 +602,7 @@ const climate = [
     flex: none;
     width: 52px;
     height: 52px;
-    border-radius: 14px;
+    border-radius: 12px;
     background: var(--white);
     color: var(--accent);
   }
@@ -523,7 +610,7 @@ const climate = [
   .rr__kicker { font-size: var(--fs-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); }
   .rr__card--dark .rr__kicker { color: var(--accent-soft); }
   .rr h3 { margin-top: 0.35rem; font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.9rem); }
-  .rr__list { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .rr__list { display: grid; border-top: 1px solid var(--line); }
   .rr__card--dark .rr__list { border-color: var(--line-dark); }
   .rr__list li {
     display: flex;
@@ -551,9 +638,9 @@ const climate = [
   .rr__foot strong { color: var(--ink); font-weight: 600; }
   @media (min-width: 900px) { .rr { grid-template-columns: 1fr 1fr; } }
 
-  /* ---------- Why ---------- */
+  /* ---------- How we work ---------- */
   .why { display: grid; gap: 3rem; }
-  .why h2 { margin-top: 1.1rem; max-width: 13ch; }
+  .why h2 { margin-top: 1.1rem; }
   .why .lede { margin-top: 1.25rem; }
   .why .text-link { margin-top: 1.75rem; }
   .why__list { display: grid; gap: 1rem; }
@@ -572,16 +659,9 @@ const climate = [
     .why__intro { position: sticky; top: calc(var(--header-h) + 2rem); align-self: start; }
   }
 
-  /* ---------- Process ---------- */
-  .process {
-    background:
-      radial-gradient(60% 80% at 100% 0%, rgb(23 59 96 / 0.7), transparent 70%),
-      var(--ink);
-  }
-
   /* ---------- Local ---------- */
   .local { display: grid; gap: 3rem; }
-  .local h2 { margin-top: 1.1rem; max-width: 12ch; }
+  .local h2 { margin-top: 1.1rem; }
   .local__copy p { margin-top: 1.25rem; color: var(--steel); max-width: 54ch; }
   .local__copy p:first-of-type { font-size: var(--fs-lg); color: var(--ink); }
   .local__list { display: grid; border-top: 1px solid var(--line); }
@@ -603,9 +683,8 @@ const climate = [
 
   /* ---------- Gallery / reviews ---------- */
   .gallery { display: grid; gap: 1rem; }
-  .gallery figure { position: relative; overflow: hidden; border-radius: var(--radius-lg); }
-  .gallery img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform 0.8s var(--ease); }
-  .gallery figure:hover img { transform: scale(1.04); }
+  .gallery__item { position: relative; overflow: hidden; border-radius: var(--radius-lg); }
+  .gallery__media { position: relative; aspect-ratio: 4 / 5; }
   .gallery figcaption {
     position: absolute;
     inset: auto 0 0;
@@ -626,6 +705,15 @@ const climate = [
   .reviews strong { color: var(--ink); }
   .reviews__src { display: block; font-size: var(--fs-xs); margin-top: 0.25rem; }
   @media (min-width: 900px) { .reviews { grid-template-columns: repeat(3, 1fr); } }
+
+  /* ---------- FAQ ---------- */
+  .faqwrap { display: grid; gap: 2.5rem; }
+  .faqwrap h2 { margin-top: 1.1rem; }
+  .faqwrap .lede { margin-top: 1.25rem; }
+  @media (min-width: 1024px) {
+    .faqwrap { grid-template-columns: 0.8fr 1.2fr; gap: 5rem; }
+    .faqwrap > div:first-child { position: sticky; top: calc(var(--header-h) + 2rem); align-self: start; }
+  }
 
   .areas-foot { margin-top: 2.5rem; }
 </style>

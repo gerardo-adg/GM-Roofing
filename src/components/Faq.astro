@@ -1,17 +1,9 @@
 ---
+/** FAQ accordion. FAQPage schema is emitted by BaseLayout via its `faqs` prop. */
 interface Props {
   items: { q: string; a: string }[];
 }
 const { items } = Astro.props;
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: items.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
 ---
 
 <div class="faq">
@@ -27,7 +19,6 @@ const schema = {
     ))
   }
 </div>
-<script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
 <style>
   .faq { border-top: 1px solid var(--line); }
@@ -72,4 +63,14 @@ const schema = {
   .faq__a { padding-bottom: 1.5rem; padding-right: 3rem; color: var(--steel); }
   .faq__item[open] .faq__a { animation: faq-in 0.45s var(--ease); }
   @keyframes faq-in { from { opacity: 0; transform: translateY(-6px); } }
+  /* Smooth height animation where supported */
+  @supports selector(::details-content) {
+    .faq { interpolate-size: allow-keywords; }
+    .faq__item::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition: block-size 0.45s var(--ease), content-visibility 0.45s allow-discrete;
+    }
+    .faq__item[open]::details-content { block-size: auto; }
+  }
 </style>

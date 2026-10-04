@@ -10,6 +10,8 @@ import Faq from "../components/Faq.astro";
 import Icon from "../components/Icon.astro";
 import { business } from "../data/business";
 import { services, getService, type Service } from "../data/services";
+import { media, hasClip } from "../data/media";
+import { serviceNode } from "../lib/schema";
 
 export function getStaticPaths() {
   return services.map((s) => ({ params: { service: s.slug }, props: { service: s } }));
@@ -23,19 +25,23 @@ const breadcrumbs = [
 ];
 const related = service.related.map(getService).filter((s): s is Service => Boolean(s));
 
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  serviceType: service.name,
-  name: `${service.name} in ${business.primaryCity}`,
-  description: service.summary,
-  areaServed: business.cities.map((c) => ({ "@type": "City", name: c })),
-  provider: { "@type": "RoofingContractor", name: business.name, url: business.siteUrl },
-};
+const clip = media.services[service.slug];
+const videos = hasClip(clip) ? [{ key: "hero", clip }] : [];
+const serviceId = `${business.siteUrl}/${service.slug}/#service`;
+const slug = (c: string) => c.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 ---
 
-<BaseLayout title={service.seo.title} description={service.seo.description} breadcrumbs={breadcrumbs} schema={[schema]}>
+<BaseLayout
+  title={service.seo.title}
+  description={service.seo.description}
+  breadcrumbs={breadcrumbs}
+  about={serviceId}
+  schema={[serviceNode(service)]}
+  faqs={service.faqs}
+  videos={videos}
+>
   <PageHero
+    clip={clip}
     eyebrow={service.hero.eyebrow}
     title={service.hero.title}
     lede={service.hero.lede}
@@ -62,6 +68,20 @@ const schema = {
   <section class="section">
     <div class="container split">
       <article class="body">
+        <section class="answer" data-reveal>
+          <p class="answer__text">{service.answer}</p>
+          <dl class="facts">
+            {
+              service.facts.map((f) => (
+                <div>
+                  <dt>{f.label}</dt>
+                  <dd>{f.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </section>
+
         {
           service.sections.map((sec) => (
             <section class="block" data-reveal>
@@ -85,9 +105,32 @@ const schema = {
         }
 
         {
+          service.includes && (
+            <section class="block" data-reveal>
+              <h2>What's included</h2>
+              <ol role="list" class="includes">
+                {service.includes.map((item, i) => (
+                  <li><span>{String(i + 1).padStart(2, "0")}</span>{item}</li>
+                ))}
+              </ol>
+            </section>
+          )
+        }
+
+        <section class="block" data-reveal>
+          <h2>{service.name} near you</h2>
+          <p>
+            We handle {service.name.toLowerCase()} in {business.cities.slice(0, -1).join(", ")} and {business.cities.at(-1)}, plus nearby communities across the {business.primaryRegion}.
+          </p>
+          <ul role="list" class="cities">
+            {business.cities.map((c) => <li><a href={`/service-areas/#${slug(c)}`}>{c}</a></li>)}
+          </ul>
+        </section>
+
+        {
           service.faqs && (
             <section class="block" data-reveal>
-              <h2>Common questions</h2>
+              <h2>{service.name} questions</h2>
               <Faq items={service.faqs} />
             </section>
           )
@@ -125,8 +168,8 @@ const schema = {
       <SectionHead
         align="split"
         eyebrow="Our process"
-        title="What to expect <em>from start to finish.</em>"
-        lede="Every project follows the same straightforward path — so you're never guessing what happens next."
+        title="What happens <em>after you call.</em>"
+        lede="Every project follows the same four steps, so you always know what comes next."
       />
       <ProcessSteps />
     </div>
@@ -138,6 +181,22 @@ const schema = {
   @media (min-width: 1024px) {
     .split { grid-template-columns: minmax(0, 1fr) 380px; gap: 5rem; }
   }
+  .answer { padding-bottom: clamp(2.5rem, 5vw, 3.5rem); margin-bottom: clamp(2.5rem, 5vw, 3.5rem); border-bottom: 1px solid var(--line); }
+  .answer__text { font-size: var(--fs-lg); line-height: 1.6; color: var(--ink); max-width: 62ch; }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 2rem; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .facts div { padding: 1rem 1.15rem; background: var(--white); }
+  .facts dt { font-size: var(--fs-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); }
+  .facts dd { margin: 0.3rem 0 0; font-size: var(--fs-sm); font-weight: 550; line-height: 1.4; }
+  @media (max-width: 479px) { .facts { grid-template-columns: 1fr; } }
+
+  .includes { display: grid; gap: 0; margin-top: 1.5rem; border-top: 1px solid var(--line); counter-reset: inc; }
+  .includes li { display: flex; gap: 1.25rem; align-items: baseline; padding-block: 1rem; border-bottom: 1px solid var(--line); font-weight: 500; }
+  .includes span { font-family: var(--font-serif); font-style: italic; font-size: 1.35rem; color: var(--accent); min-width: 2ch; }
+
+  .cities { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+  .cities a { display: inline-block; padding: 0.45rem 0.85rem; border: 1px solid var(--line); border-radius: 8px; font-size: var(--fs-sm); transition: border-color 0.2s, background-color 0.2s; }
+  .cities a:hover { border-color: var(--ink); background: var(--paper); }
+
   .block + .block { margin-top: clamp(3rem, 6vw, 4.5rem); }
   .block h2 { font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.6rem); max-width: 22ch; }
   .block p { margin-top: 1.1rem; color: #3a4a5b; max-width: 66ch; }

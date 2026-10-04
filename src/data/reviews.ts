@@ -1,6 +1,6 @@
 /**
  * Real customer reviews (e.g. copied from Google). The reviews section on the
- * homepage only appears once at least one review is added here — no
+ * homepage only appears once at least one review is added here: no
  * fabricated quotes are ever shown.
  *
  * Example:

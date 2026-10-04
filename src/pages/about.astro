@@ -12,10 +12,10 @@ const breadcrumbs = [
 ];
 
 const values = [
-  { title: "Clear communication", text: "You'll always know what stage your project is at and what to expect next." },
-  { title: "Honest recommendations", text: "If a repair is the right call instead of a replacement, that's what we'll recommend." },
-  { title: "Quality workmanship", text: "Roofing done right the first time, from tear-off to final cleanup." },
-  { title: "Respect for your property", text: "Job sites are kept clean and your home or business is protected throughout the work." },
+  { title: "You'll know where things stand", text: "From the estimate to cleanup, you'll know what's happening and what comes next." },
+  { title: "We'll say when a repair is enough", text: "If a repair solves the problem, that's what we recommend instead of a new roof." },
+  { title: "We fix what's under the shingles", text: "Soft decking and worn flashing get repaired before the new roof goes on." },
+  { title: "Your property stays protected", text: "We protect landscaping, driveways and gutters, and clean up before we leave." },
 ];
 ---
 
@@ -23,11 +23,12 @@ const values = [
   title="About GM Roofing | Sacramento Valley Roofing Contractor"
   description="GM Roofing is a family-owned roofing contractor serving the Sacramento Valley. Learn about our approach to roof replacement, repair, and inspections."
   breadcrumbs={breadcrumbs}
+  pageType="AboutPage"
 >
   <PageHero
     eyebrow="About us"
-    title="Local, family-owned <em>roofing.</em>"
-    lede="A family-owned roofing contractor serving homeowners and businesses across the Sacramento Valley."
+    title="A family-owned roofer in <em>Sacramento.</em>"
+    lede="We replace, repair and inspect roofs for homeowners and businesses across the Sacramento Valley."
     breadcrumbs={breadcrumbs}
   />
 
@@ -39,10 +40,10 @@ const values = [
       </p>
       <div class="story__body">
         <p data-reveal>
-          {business.name} is a family-owned roofing contractor working with homeowners and businesses across the {business.primaryRegion} — handling roof replacement, repair, tile roofing, inspections, and commercial roofing.
+          {business.name} is a family-owned roofing contractor working with homeowners and businesses across the {business.primaryRegion}. We handle roof replacement, roof repair, tile roofing, inspections and commercial roofing.
         </p>
         <p data-reveal style="--d:1">
-          That's the whole philosophy — no upsell, no scare tactics, just straight information so you can make a good decision about your roof.
+          No upselling and no scare tactics. You get straight information so you can make a good decision about your roof.
         </p>
       </div>
     </div>
@@ -50,7 +51,7 @@ const values = [
 
   <section class="section section--paper">
     <div class="container">
-      <SectionHead align="split" eyebrow="Our approach" title="What you can <em>count on.</em>" />
+      <SectionHead align="split" eyebrow="Our approach" title="How we <em>work.</em>" />
       <ol role="list" class="values">
         {
           values.map((v, i) => (
@@ -67,7 +68,7 @@ const values = [
 
   <section class="section section--dark">
     <div class="container">
-      <SectionHead align="split" eyebrow="How we work" title="A simple, <em>transparent</em> process." />
+      <SectionHead align="split" eyebrow="How we work" title="Four steps, <em>in writing.</em>" />
       <ProcessSteps />
     </div>
   </section>
