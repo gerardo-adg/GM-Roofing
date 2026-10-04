@@ -23,6 +23,11 @@ export type MuxClip = {
   duration?: string;
   /** Second of the video to use as the poster / still. */
   posterTime?: number;
+  /**
+   * The asset's Mux video quality. "plus" skips the lightweight background
+   * engine (which can't play it) and goes straight to the HLS player.
+   */
+  quality?: "basic" | "premium" | "plus";
 };
 
 const clip = (title: string, description: string, posterTime = 1): MuxClip => ({
@@ -65,8 +70,8 @@ export const media = {
   showcase: {
     "roof-repair-sacramento": {
       ...clip("Roof repair in Sacramento", "GM Roofing repairing a roof in the Sacramento Valley.", 1),
-      // "basic" quality copy, so the lightweight player starts instantly at full quality
-      playbackId: "LOKOVDtclc2NygUIV8m4Si7bPamcFmWqycmr2Bts2o00",
+      playbackId: "IPzJ00UkP8RUlfo9Rug31H86ZE7hXUtzVxrXORIqK8HA",
+      quality: "plus",
       uploadDate: "2026-10-04",
     },
   } as Record<string, MuxClip>,

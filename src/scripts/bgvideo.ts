@@ -36,7 +36,12 @@ const qualityUrl = (src: string, maxResolution: string) => {
   return url.toString();
 };
 
-export async function mountBgVideo(host: HTMLElement, rawSrc: string, maxResolution = "1080p"): Promise<BgVideo> {
+export async function mountBgVideo(
+  host: HTMLElement,
+  rawSrc: string,
+  maxResolution = "1080p",
+  opts: { plus?: boolean } = {}
+): Promise<BgVideo> {
   const src = qualityUrl(rawSrc, maxResolution);
   let video: HTMLVideoElement | undefined;
   let playing = false;
@@ -101,6 +106,7 @@ export async function mountBgVideo(host: HTMLElement, rawSrc: string, maxResolut
   };
 
   try {
+    if (opts.plus) throw new Error("plus quality: use the HLS player directly");
     await preloadEngine();
     const el = document.createElement("mux-background-video") as MuxEl;
     el.className = "bgv";
