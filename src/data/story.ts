@@ -4,7 +4,7 @@
  */
 export const story = {
   short:
-    "Giovanni, the owner of GM Roofing, started roofing with his dad at nine years old. Customers say the thing they appreciate most is how easy he is to talk to.",
+    "Giovanni Mondragon, the owner of GM Roofing, started roofing with his dad at nine years old. Customers say the thing they appreciate most is how easy he is to talk to.",
   milestones: [
     { when: "Age 9", text: "Starts tagging along with his dad on roofing jobs and learns the trade one piece at a time." },
     { when: "Age 15", text: "Picks up his first side jobs on his own, and keeps getting better at the work." },

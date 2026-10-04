@@ -44,7 +44,7 @@ export const business = {
 
   /** Owner. Name and photo are optional: the About page and schema use them once filled in. */
   owner: {
-    name: "Giovanni",
+    name: "Giovanni Mondragon",
     /** e.g. "/images/owner.webp" in /public, roughly 4:5 portrait. */
     photo: "",
   },
