@@ -1,0 +1,344 @@
+---
+/**
+ * Homepage service showcase.
+ *
+ * Desktop: services listed on the left, one large media panel on the right
+ * (sticky). Hovering, focusing or scrolling to a service cross-fades the
+ * panel to that service's Mux clip; only the active clip is streamed.
+ * Phones: a stack of tall cards, each with its own clip that plays while
+ * it's on screen.
+ *
+ * Until a service has a clip in media.services, its panel shows a navy
+ * placeholder with the service icon and roofline drawing.
+ */
+import Icon from "./Icon.astro";
+import MuxImage from "./MuxImage.astro";
+import MuxBackground from "./MuxBackground.astro";
+import RoofLines from "./RoofLines.astro";
+import { services } from "../data/services";
+import { media, hasClip, muxStream } from "../data/media";
+
+interface Props {
+  exclude?: string[];
+}
+const { exclude = [] } = Astro.props;
+const list = services.filter((s) => !exclude.includes(s.slug));
+const num = (i: number) => String(i + 1).padStart(2, "0");
+---
+
+<div class="show" data-show>
+  <ol role="list" class="show__list">
+    {
+      list.map((s, i) => {
+        const clip = media.services[s.slug];
+        const video = hasClip(clip);
+        return (
+          <li class:list={["show__item", { "is-active": i === 0 }]} data-show-item={i}>
+            {/* Phone-only media */}
+            <div class="show__mmedia" aria-hidden="true">
+              {video ? (
+                <MuxBackground clip={clip} />
+              ) : (
+                <div class="show__ph">
+                  <RoofLines class="show__ph-lines" />
+                  <span class="show__ph-icon"><Icon name={s.icon} size={44} /></span>
+                </div>
+              )}
+            </div>
+
+            <a href={`/${s.slug}/`} class="show__link">
+              <span class="show__num">{num(i)}</span>
+              <span class="show__body">
+                <span class="show__name">{s.name}</span>
+                <span class="show__detail">
+                  <span class="show__detail-in">
+                    <span class="show__summary">{s.summary}</span>
+                    <span class="show__more">
+                      Learn more <Icon name="arrow" size={18} />
+                    </span>
+                  </span>
+                </span>
+              </span>
+              <span class="show__arrow" aria-hidden="true"><Icon name="arrow-up-right" size={20} /></span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  <!-- Desktop media panel -->
+  <div class="show__panel" aria-hidden="true">
+    <div class="show__frame">
+      {
+        list.map((s, i) => {
+          const clip = media.services[s.slug];
+          const video = hasClip(clip);
+          return (
+            <div class:list={["show__layer", { "is-active": i === 0 }]} data-show-layer={i} data-video={video ? muxStream(clip.playbackId) : undefined}>
+              {video ? (
+                <MuxImage playbackId={clip.playbackId} time={clip.posterTime} alt="" ratio={[4, 5]} sizes="(min-width: 1024px) 560px, 100vw" />
+              ) : (
+                <div class="show__ph">
+                  <RoofLines class="show__ph-lines" />
+                  <span class="show__ph-icon"><Icon name={s.icon} size={56} /></span>
+                </div>
+              )}
+              <div class="show__caption">
+                <span>{num(i)}</span>
+                <strong>{s.name}</strong>
+              </div>
+            </div>
+          );
+        })
+      }
+      <div class="show__progress">
+        {list.map((_, i) => <span class:list={{ "is-active": i === 0 }} data-show-dot={i} />)}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .show { display: grid; gap: 1rem; }
+
+  /* ---------- List ---------- */
+  .show__list { display: grid; gap: 1rem; }
+  .show__item { position: relative; }
+  .show__link {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem 1.25rem;
+    align-items: start;
+    padding: 1.5rem;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-top: 0;
+  }
+  .show__num { font-size: var(--fs-xs); font-weight: 600; color: var(--accent); padding-top: 0.45rem; font-variant-numeric: tabular-nums; }
+  .show__name {
+    display: block;
+    font-size: clamp(1.4rem, 1.15rem + 1vw, 2.1rem);
+    font-weight: 700;
+    font-stretch: 108%;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+  .show__detail { display: grid; margin-top: 0.75rem; }
+  .show__detail-in { display: grid; gap: 1rem; justify-items: start; }
+  .show__summary { color: var(--steel); font-size: var(--fs-sm); line-height: 1.6; max-width: 46ch; }
+  .show__more { display: inline-flex; align-items: center; gap: 0.4rem; font-size: var(--fs-sm); font-weight: 600; color: var(--accent); }
+  .show__arrow {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    transition: background-color 0.35s var(--ease), color 0.35s var(--ease), border-color 0.35s, transform 0.35s var(--ease);
+  }
+  .show__link:hover .show__arrow { background: var(--accent); border-color: var(--accent); color: var(--white); transform: rotate(45deg); }
+
+  /* Phone media on top of each card */
+  .show__mmedia {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--ink);
+  }
+
+  /* Placeholder art (until a clip is added) */
+  .show__ph {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background:
+      linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+      linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+      linear-gradient(165deg, var(--navy) 0%, var(--ink) 70%);
+    color: var(--accent-soft);
+  }
+  .show__ph :global(.show__ph-lines) {
+    position: absolute;
+    left: 50%;
+    bottom: -1px;
+    width: 160%;
+    translate: -50% 0;
+    color: rgb(255 255 255 / 0.08);
+  }
+  .show__ph-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 112px;
+    height: 112px;
+    border-radius: 28px;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    background: rgb(255 255 255 / 0.04);
+  }
+
+  .show__panel { display: none; }
+
+  /* ---------- Desktop: list + sticky panel ---------- */
+  @media (min-width: 1024px) {
+    .show { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(3rem, 6vw, 6rem); align-items: start; }
+    .show__mmedia { display: none; }
+    .show__list { gap: 0; border-top: 1px solid var(--line); }
+    .show__link {
+      padding: 1.6rem 0;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      border-radius: 0;
+      background: transparent;
+    }
+    .show__name { color: rgb(10 26 43 / 0.38); transition: color 0.4s var(--ease); }
+    .show__num { color: rgb(10 26 43 / 0.35); transition: color 0.4s var(--ease); }
+    .show__detail {
+      display: grid;
+      grid-template-rows: 0fr;
+      margin-top: 0;
+      opacity: 0;
+      transition: grid-template-rows 0.5s var(--ease), opacity 0.4s var(--ease), margin-top 0.5s var(--ease);
+    }
+    .show__detail-in { min-height: 0; overflow: hidden; }
+    .show__arrow { opacity: 0; transform: translateX(-6px); transition: opacity 0.35s var(--ease), transform 0.35s var(--ease), background-color 0.35s, color 0.35s, border-color 0.35s; }
+
+    .show__item.is-active .show__name { color: var(--ink); }
+    .show__item.is-active .show__num { color: var(--accent); }
+    .show__item.is-active .show__detail { grid-template-rows: 1fr; opacity: 1; margin-top: 0.85rem; }
+    .show__item.is-active .show__arrow { opacity: 1; transform: none; }
+
+
+    .show__panel { display: block; position: sticky; top: calc(var(--header-h) + 2rem); }
+    .show__frame {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      max-height: calc(100svh - var(--header-h) - 4rem);
+      margin-left: auto;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background: var(--ink);
+      box-shadow: 0 40px 80px -40px rgb(10 26 43 / 0.45);
+    }
+    .show__layer {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.04);
+      transition: opacity 0.7s var(--ease), transform 1.2s var(--ease);
+    }
+    .show__layer.is-active { opacity: 1; transform: none; }
+    .show__layer :global(img), .show__layer :global(mux-background-video) {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .show__layer :global(mux-background-video) { opacity: 0; transition: opacity 0.8s var(--ease); }
+    .show__layer :global(mux-background-video.is-playing) { opacity: 1; }
+
+    .show__caption {
+      position: absolute;
+      inset: auto 0 0;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      padding: 4rem 1.75rem 1.5rem;
+      color: var(--white);
+      background: linear-gradient(0deg, rgb(10 26 43 / 0.75), transparent);
+    }
+    .show__caption span { font-size: var(--fs-xs); font-weight: 600; color: var(--accent-soft); }
+    .show__caption strong { font-size: var(--fs-lg); font-weight: 650; }
+
+    .show__progress {
+      position: absolute;
+      top: 1.25rem;
+      left: 1.25rem;
+      right: 1.25rem;
+      display: flex;
+      gap: 0.35rem;
+    }
+    .show__progress span {
+      flex: 1;
+      height: 3px;
+      border-radius: 3px;
+      background: rgb(255 255 255 / 0.22);
+      transition: background-color 0.4s var(--ease);
+    }
+    .show__progress span.is-active { background: var(--white); }
+  }
+</style>
+
+<script>
+  type BgEl = HTMLElement & { video?: HTMLVideoElement };
+  const root = document.querySelector<HTMLElement>("[data-show]");
+  const desktop = window.matchMedia("(min-width: 1024px)");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (root) {
+    const items = [...root.querySelectorAll<HTMLElement>("[data-show-item]")];
+    const layers = [...root.querySelectorAll<HTMLElement>("[data-show-layer]")];
+    const dots = [...root.querySelectorAll<HTMLElement>("[data-show-dot]")];
+    const players = new Map<number, BgEl>();
+    let current = 0;
+
+    const playLayer = async (i: number) => {
+      players.forEach((p, k) => k !== i && p.video?.pause());
+      const layer = layers[i];
+      const src = layer?.dataset.video;
+      if (!src || reduce || !desktop.matches) return;
+      let el = players.get(i);
+      if (!el) {
+        await import("@mux/mux-background-video/html");
+        el = document.createElement("mux-background-video") as BgEl;
+        el.setAttribute("max-resolution", "1080p");
+        el.setAttribute("src", src);
+        layer.append(el);
+        players.set(i, el);
+        requestAnimationFrame(() => el?.video?.addEventListener("playing", () => el?.classList.add("is-playing")));
+      } else {
+        el.video?.play().catch(() => {});
+      }
+    };
+
+    const setActive = (i: number) => {
+      if (i === current) return;
+      current = i;
+      items.forEach((el, k) => el.classList.toggle("is-active", k === i));
+      layers.forEach((el, k) => el.classList.toggle("is-active", k === i));
+      dots.forEach((el, k) => el.classList.toggle("is-active", k === i));
+      playLayer(i);
+    };
+
+    // Hover / keyboard focus
+    items.forEach((el, i) => {
+      el.addEventListener("mouseenter", () => desktop.matches && setActive(i));
+      el.addEventListener("focusin", () => desktop.matches && setActive(i));
+    });
+
+    // Scrolling: the item crossing the middle of the screen becomes active
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!desktop.matches) return;
+        for (const e of entries) if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.showItem));
+      },
+      { rootMargin: "-45% 0px -45% 0px" }
+    );
+    items.forEach((el) => io.observe(el));
+
+    // Start the first clip once the panel is near the screen
+    const panelIo = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        playLayer(current);
+      } else {
+        players.forEach((p) => p.video?.pause());
+      }
+    }, { rootMargin: "100px 0px" });
+    const panel = root.querySelector(".show__panel");
+    if (panel) panelIo.observe(panel);
+  }
+</script>
