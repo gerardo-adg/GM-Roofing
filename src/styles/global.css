@@ -4,7 +4,7 @@
   scoped inside each .astro component; only shared primitives live below.
 */
 
-@import "@fontsource-variable/geist";
+@import "@fontsource-variable/archivo/standard.css"; /* weight + width axes */
 
 :root {
   /* ---- Color ---- */
@@ -24,7 +24,7 @@
   --accent-soft: #33bdf9;  /* logo blue, for details on dark backgrounds */
 
   /* ---- Type ---- */
-  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Archivo Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --fs-xs: 0.8125rem;
   --fs-sm: 0.9375rem;
@@ -32,8 +32,8 @@
   --fs-lg: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
   --fs-xl: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem);
   --fs-h3: clamp(1.25rem, 1.15rem + 0.45vw, 1.5rem);
-  --fs-h2: clamp(2rem, 1.45rem + 2.4vw, 3.5rem);
-  --fs-h1: clamp(2.6rem, 1.6rem + 4.6vw, 5.75rem);
+  --fs-h2: clamp(1.9rem, 1.4rem + 2.2vw, 3.25rem);
+  --fs-h1: clamp(2.4rem, 1.4rem + 4vw, 5.25rem);
 
   /* ---- Layout ---- */
   --max: 1240px;
@@ -67,7 +67,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  font-feature-settings: "ss01", "cv11";
   overflow-x: clip;
 }
 img, svg, video { display: block; max-width: 100%; }
@@ -78,14 +77,15 @@ a { color: inherit; text-decoration: none; }
 ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 p, li { text-wrap: pretty; }
 h1, h2, h3, h4 {
-  font-weight: 600;
+  font-weight: 700;
+  font-stretch: 112%; /* Archivo's width axis: wide, sturdy headlines */
   line-height: 1.05;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
-h1 { font-size: var(--fs-h1); letter-spacing: -0.045em; line-height: 0.98; }
+h1 { font-size: var(--fs-h1); line-height: 1; }
 h2 { font-size: var(--fs-h2); }
-h3 { font-size: var(--fs-h3); line-height: 1.2; letter-spacing: -0.02em; }
+h3 { font-size: var(--fs-h3); line-height: 1.2; letter-spacing: -0.015em; font-stretch: 106%; }
 ::selection { background: var(--navy); color: var(--white); }
 
 :focus-visible {
