@@ -530,7 +530,8 @@ const videos = [
   }
 
   /* ---------- Trust ---------- */
-  .trust { position: relative; z-index: 2; padding-block: clamp(3rem, 6vw, 5rem); background: var(--white); }
+  /* Trust card straddles the line between the navy hero and the off-white services section */
+  .trust { position: relative; z-index: 2; background: linear-gradient(180deg, var(--ink) 50%, var(--paper) 50%); }
   .trust__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
