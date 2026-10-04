@@ -23,7 +23,21 @@ export const preloadEngine = () => (engine ??= import("@mux/mux-background-video
 
 const nextFrame = () => new Promise((r) => requestAnimationFrame(() => r(null)));
 
-export async function mountBgVideo(host: HTMLElement, src: string, maxResolution = "1080p"): Promise<BgVideo> {
+/**
+ * Ask Mux for only sharp renditions, highest first, so playback starts at
+ * full quality instead of ramping up from a blurry low-bitrate stream.
+ * (Mux playback modifiers: min_resolution, max_resolution, rendition_order.)
+ */
+const qualityUrl = (src: string, maxResolution: string) => {
+  const url = new URL(src);
+  url.searchParams.set("max_resolution", maxResolution);
+  url.searchParams.set("min_resolution", parseInt(maxResolution) >= 1080 ? "720p" : "540p");
+  url.searchParams.set("rendition_order", "desc");
+  return url.toString();
+};
+
+export async function mountBgVideo(host: HTMLElement, rawSrc: string, maxResolution = "1080p"): Promise<BgVideo> {
+  const src = qualityUrl(rawSrc, maxResolution);
   let video: HTMLVideoElement | undefined;
   let playing = false;
   let wantPlay = true;
@@ -54,7 +68,17 @@ export async function mountBgVideo(host: HTMLElement, src: string, maxResolution
     } else {
       const { default: Hls } = await import("hls.js/light");
       if (!Hls.isSupported()) return;
-      const hls = new Hls({ capLevelToPlayerSize: true, maxBufferLength: 10 });
+      const hls = new Hls({
+        // Assume a fast connection so the first segment is already sharp,
+        // then let normal adaptive switching take over.
+        abrEwmaDefaultEstimate: 12_000_000,
+        testBandwidth: false,
+        capLevelToPlayerSize: true,
+        maxBufferLength: 12,
+      });
+      hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
+        hls.startLevel = data.levels.length - 1; // levels are sorted low to high
+      });
       hls.loadSource(src);
       hls.attachMedia(v);
     }
