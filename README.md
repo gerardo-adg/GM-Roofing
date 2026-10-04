@@ -25,7 +25,7 @@ npm run build    # outputs to dist/
 
 **Add a service:** add an object to `services.ts`. The page, the menu entry, the footer link, the form option and the schema markup all update automatically.
 
-**Hero video:** add a Mux playback ID to `media.hero` in `src/data/media.ts` to replace the roof-anatomy illustration with a full-bleed video. See MEDIA.md for the shot list.
+**Hero video:** add a Mux playback ID to `media.hero` in `src/data/media.ts` to fill the big frame under the headline with a full-bleed video. See MEDIA.md for the shot list.
 
 ## Copy rules
 
