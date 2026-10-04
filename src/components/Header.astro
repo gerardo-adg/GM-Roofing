@@ -131,22 +131,20 @@ const links = [
   }
   .hdr.is-hidden { transform: translateY(-100%); }
   .hdr[data-mode="overlay"] { color: var(--white); }
+  /* Once scrolled (or with the mobile menu open) the bar turns solid navy
+     and keeps the regular silver logo. */
   .hdr[data-mode="solid"],
   .hdr.is-scrolled,
   .hdr.is-open {
-    color: var(--ink);
-    background: rgb(255 255 255 / 0.86);
-    backdrop-filter: saturate(1.6) blur(16px);
-    -webkit-backdrop-filter: saturate(1.6) blur(16px);
-    box-shadow: 0 1px 0 var(--line);
+    color: var(--white);
+    background: rgb(10 26 43 / 0.98);
+    backdrop-filter: saturate(1.4) blur(16px);
+    -webkit-backdrop-filter: saturate(1.4) blur(16px);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.08);
   }
-  .hdr.is-open { background: var(--white); }
-
-  /* Logo swaps to the navy version when the header turns solid */
-  .hdr.is-scrolled :global(.logo--light .logo__img--on-dark),
-  .hdr.is-open :global(.logo--light .logo__img--on-dark) { display: none; }
-  .hdr.is-scrolled :global(.logo--light .logo__img--on-light),
-  .hdr.is-open :global(.logo--light .logo__img--on-light) { display: block; }
+  .hdr.is-open { background: var(--ink); }
+  .hdr[data-mode="solid"] :global(.logo--dark .logo__img--on-dark) { display: block; }
+  .hdr[data-mode="solid"] :global(.logo--dark .logo__img--on-light) { display: none; }
 
   .hdr__bar {
     height: var(--header-h);
