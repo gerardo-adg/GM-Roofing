@@ -44,7 +44,7 @@ export async function mountBgVideo(
   host: HTMLElement,
   rawSrc: string,
   maxResolution = "1080p",
-  opts: { plus?: boolean; startAt?: number; loopFrom?: number } = {}
+  opts: { plus?: boolean; startAt?: number } = {}
 ): Promise<BgVideo> {
   const src = qualityUrl(rawSrc, maxResolution);
   let video: HTMLVideoElement | undefined;
@@ -86,22 +86,7 @@ export async function mountBgVideo(
     const v = document.createElement("video");
     v.className = "bgv";
     v.muted = true;
-    // With loopFrom set, the opening of the clip is skipped on every loop:
-    // near the end we jump back to loopFrom instead of letting it restart at 0.
-    const loopFrom = opts.loopFrom ?? 0;
-    v.loop = loopFrom <= 0;
-    if (loopFrom > 0) {
-      const rewind = () => {
-        v.currentTime = loopFrom;
-        if (wantPlay) v.play().catch(() => {});
-      };
-      v.addEventListener("ended", rewind);
-      const watch = () => {
-        if (v.duration && v.currentTime >= v.duration - 0.12) rewind();
-        if (typeof v.requestVideoFrameCallback === "function") v.requestVideoFrameCallback(watch);
-      };
-      if (typeof v.requestVideoFrameCallback === "function") v.requestVideoFrameCallback(watch);
-    }
+    v.loop = true;
     v.playsInline = true;
     v.autoplay = true;
     v.setAttribute("muted", "");

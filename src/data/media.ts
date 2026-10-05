@@ -23,8 +23,6 @@ export type MuxClip = {
   duration?: string;
   /** Second of the video to use as the poster / still. */
   posterTime?: number;
-  /** Skip this many seconds at the start of the clip, including on every loop. */
-  trimStart?: number;
   /**
    * The asset's Mux video quality. "plus" skips the lightweight background
    * engine (which can't play it) and goes straight to the HLS player.
@@ -43,10 +41,8 @@ const clip = (title: string, description: string, posterTime = 1): MuxClip => ({
 export const media = {
   /** Desktop hero loop, landscape 16:9 (silent, 8 to 15 seconds). */
   hero: {
-    ...clip("Roof replacement in progress in Sacramento", "A GM Roofing crew installing a new roof on a Sacramento Valley home.", 2.5),
+    ...clip("Roof replacement in progress in Sacramento", "A GM Roofing crew installing a new roof on a Sacramento Valley home.", 1),
     playbackId: "k6A1v89YcuHM2hUtX2w9ggHnW7Jx2EOXw8Q00OqZy6WU",
-    // The first seconds of this upload pulse in brightness (it does in Mux's own player too)
-    trimStart: 2.5,
     quality: "plus",
     uploadDate: "2026-10-05",
   },
