@@ -306,16 +306,22 @@ const num = (i: number) => String(i + 1).padStart(2, "0");
       playLayer(i);
     };
 
-    // Hover / keyboard focus
+    // Hover / keyboard focus. While the pointer is on a row, that row wins
+    // over the scroll position below.
+    let hovering = false;
     items.forEach((el, i) => {
-      el.addEventListener("mouseenter", () => desktop.matches && setActive(i));
+      el.addEventListener("mouseenter", () => {
+        hovering = true;
+        if (desktop.matches) setActive(i);
+      });
+      el.addEventListener("mouseleave", () => (hovering = false));
       el.addEventListener("focusin", () => desktop.matches && setActive(i));
     });
 
     // Scrolling: the item crossing the middle of the screen becomes active
     const io = new IntersectionObserver(
       (entries) => {
-        if (!desktop.matches) return;
+        if (!desktop.matches || hovering) return;
         for (const e of entries) if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.showItem));
       },
       { rootMargin: "-45% 0px -45% 0px" }
