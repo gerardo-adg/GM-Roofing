@@ -425,9 +425,12 @@ const videos = [
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(0deg, rgb(10 26 43 / 0.92) 0%, rgb(10 26 43 / 0.35) 55%, rgb(10 26 43 / 0.55) 100%),
-      linear-gradient(90deg, rgb(10 26 43 / 0.6) 0%, transparent 70%);
+      linear-gradient(0deg, rgb(0 0 0 / 0.92) 0%, rgb(0 0 0 / 0.35) 55%, rgb(0 0 0 / 0.55) 100%),
+      linear-gradient(90deg, rgb(0 0 0 / 0.55) 0%, transparent 70%);
   }
+  /* Neutral black behind the video, carried into the top half of the trust strip so there's no seam */
+  .hero--video, .hero--video :global(.mbg) { background: #050505; }
+  .hero--video + .trust { background: linear-gradient(180deg, #050505 50%, var(--paper) 50%); }
   .hero__art { position: absolute; inset: 0; }
   .hero__art :global(.hero__lines) {
     position: absolute;
