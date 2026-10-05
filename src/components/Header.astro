@@ -137,9 +137,9 @@ const links = [
   .hdr.is-scrolled,
   .hdr.is-open {
     color: var(--white);
+    /* No backdrop-filter here: in iOS Safari it traps the fixed mobile
+       menu inside the header bar, so the menu opens with zero height. */
     background: rgb(10 26 43 / 0.98);
-    backdrop-filter: saturate(1.4) blur(16px);
-    -webkit-backdrop-filter: saturate(1.4) blur(16px);
     box-shadow: 0 1px 0 rgb(255 255 255 / 0.08);
   }
   .hdr.is-open { background: var(--ink); }
