@@ -51,6 +51,14 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
     }
     <MuxImage playbackId={clip.playbackId} time={clip.posterTime} alt="" eager={eager} />
   </picture>
+  <script is:inline>
+    // Fade the still in when it arrives instead of letting it pop in over the dark background
+    (function (img) {
+      if (!img) return;
+      if (img.complete && img.naturalWidth) img.classList.add("is-loaded");
+      else img.addEventListener("load", function () { img.classList.add("is-loaded"); }, { once: true });
+    })(document.currentScript.previousElementSibling.querySelector("img"));
+  </script>
 </div>
 
 <style>
@@ -62,6 +70,8 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
     height: 100%;
     object-fit: cover;
   }
+  :global(.js) .mbg__poster :global(img) { opacity: 0; transition: opacity 0.6s var(--ease); }
+  :global(.js) .mbg__poster :global(img.is-loaded) { opacity: 1; }
   .mbg :global(.bgv) {
     display: block;
     opacity: 0;

@@ -52,9 +52,31 @@ export async function mountBgVideo(
   let wantPlay = true;
   let fellBack = false;
 
+  // Only fade the video in once real frames from the right point are on
+  // screen. "playing" can fire before the first frame is painted, or while
+  // the player is still jumping to the start position, which flickers.
+  const startAt = opts.startAt ?? 0;
   const markPlaying = (el: HTMLElement) => {
-    playing = true;
-    el.classList.add("is-playing");
+    if (playing) return;
+    const v = (el instanceof HTMLVideoElement ? el : (el as MuxEl).video) ?? video;
+    const show = () => {
+      if (playing) return;
+      playing = true;
+      el.classList.add("is-playing");
+    };
+    if (!v) return show();
+    const ready = () => v.currentTime >= startAt && v.readyState >= 3;
+    if (typeof v.requestVideoFrameCallback === "function") {
+      const tick = () => (ready() ? v.requestVideoFrameCallback(() => show()) : v.requestVideoFrameCallback(tick));
+      v.requestVideoFrameCallback(tick);
+    } else {
+      const onTime = () => {
+        if (!ready()) return;
+        v.removeEventListener("timeupdate", onTime);
+        show();
+      };
+      v.addEventListener("timeupdate", onTime);
+    }
   };
 
   const fallback = async (muxEl?: HTMLElement) => {
@@ -88,9 +110,11 @@ export async function mountBgVideo(
       hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
         // Levels are sorted low to high. Lock to the sharpest one: these are
         // short silent loops, so there's no reason to ever drop quality.
+        // (loadLevel, not currentLevel: setting currentLevel flushes the
+        // buffer and reloads, which flickers right as playback starts.)
         const top = data.levels.length - 1;
         hls.startLevel = top;
-        hls.currentLevel = top;
+        hls.loadLevel = top;
         if (wantPlay) v.play().catch(() => {});
       });
       // If Mux rejects the quality modifiers, fall back to the plain stream.
