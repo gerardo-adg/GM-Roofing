@@ -22,7 +22,6 @@ const { eyebrow, title, lede, align = "left", id } = Astro.props;
   .shead h2 { margin-top: 1.1rem; max-width: 18ch; }
   .shead--center { text-align: center; justify-items: center; }
   .shead--center h2 { margin-inline: auto; }
-  .shead--center .eyebrow::after { content: ""; width: 1.5rem; height: 1px; background: currentColor; opacity: 0.6; }
   @media (min-width: 960px) {
     .shead--split { grid-template-columns: 1.3fr 1fr; align-items: end; gap: 4rem; }
     .shead--split .lede { justify-self: end; }
