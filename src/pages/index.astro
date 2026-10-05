@@ -483,9 +483,11 @@ const videos = [
   }
 
   @media (min-width: 1024px) {
-    .hero h1 { font-size: clamp(3.25rem, 1.6rem + 3.8vw, 5.75rem); }
-    .hero__row { grid-template-columns: 1fr auto; gap: 4rem; }
-    .hero__actions { justify-items: end; }
+    /* Compact left column so the right side stays clear for the video */
+    .hero h1 { font-size: clamp(2.75rem, 1.4rem + 2.4vw, 4rem); max-width: 13ch; }
+    .hero__row { grid-template-columns: 1fr; gap: 1.75rem; max-width: 560px; }
+    .hero .lede { font-size: 1.05rem; }
+    .hero__checks { max-width: 640px; }
   }
 
   /* Subtle drift on the background as the page scrolls */
