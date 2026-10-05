@@ -133,6 +133,7 @@ h1 em, h2 em, h3 em, blockquote em {
   opacity: 0.6;
 }
 .section--dark .eyebrow, .on-dark .eyebrow { color: var(--accent-soft); }
+.eyebrow--plain::before { display: none; }
 
 .lede {
   font-size: var(--fs-lg);
