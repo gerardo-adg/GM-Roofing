@@ -21,9 +21,11 @@ interface Props {
   eager?: boolean;
   /** Max resolution on large screens. */
   maxResolution?: "1080p" | "1440p" | "2160p";
+  /** Max resolution on phones (default 720p). */
+  maxResolutionMobile?: "720p" | "1080p";
   class?: string;
 }
-const { clip, mobileClip, eager = false, maxResolution = "1080p", class: className } = Astro.props;
+const { clip, mobileClip, eager = false, maxResolution = "1080p", maxResolutionMobile = "720p", class: className } = Astro.props;
 const mobileId = mobileClip?.playbackId || clip.playbackId;
 ---
 
@@ -34,6 +36,7 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
   data-plus={clip.quality === "plus" ? "" : undefined}
   data-src-mobile={muxStream(mobileId)}
   data-max={maxResolution}
+  data-max-mobile={maxResolutionMobile}
   data-start={clip.posterTime ?? 0}
   data-start-mobile={(mobileClip?.playbackId ? mobileClip.posterTime : clip.posterTime) ?? 0}
   data-eager={eager ? "" : undefined}
@@ -44,7 +47,7 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
         <source
           media="(max-width: 767px)"
           type="image/webp"
-          srcset={`https://image.mux.com/${mobileId}/thumbnail.webp?time=${mobileClip.posterTime ?? 1}&width=480 480w, https://image.mux.com/${mobileId}/thumbnail.webp?time=${mobileClip.posterTime ?? 1}&width=900 900w`}
+          srcset={`https://image.mux.com/${mobileId}/thumbnail.webp?time=${mobileClip.posterTime ?? 1}&width=480 480w, https://image.mux.com/${mobileId}/thumbnail.webp?time=${mobileClip.posterTime ?? 1}&width=900 900w, https://image.mux.com/${mobileId}/thumbnail.webp?time=${mobileClip.posterTime ?? 1}&width=1200 1200w`}
           sizes="100vw"
         />
       )
@@ -92,7 +95,7 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
     const mount = async (block: HTMLElement) => {
       const mobile = window.matchMedia("(max-width: 767px)").matches;
       const src = (mobile ? block.dataset.srcMobile : block.dataset.src) ?? "";
-      const player: BgVideo = await mountBgVideo(block, src, mobile ? "720p" : block.dataset.max ?? "1080p", {
+      const player: BgVideo = await mountBgVideo(block, src, mobile ? block.dataset.maxMobile ?? "720p" : block.dataset.max ?? "1080p", {
         plus: block.hasAttribute("data-plus"),
         // Start on the poster's frame so the still-to-video handoff is seamless
         startAt: Number((mobile ? block.dataset.startMobile : block.dataset.start) ?? 0),

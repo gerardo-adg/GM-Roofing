@@ -48,8 +48,8 @@ export const media = {
   },
   /** Phone hero loop. Falls back to `hero` when empty. */
   heroMobile: {
-    ...clip("Roof replacement in progress in Sacramento", "GM Roofing working on a roof in the Sacramento Valley.", 0),
-    playbackId: "bu4Cf4lBu02d1ZPcA8sM01TWZedUdyIfluZR9JgjJwmBk",
+    ...clip("Roof replacement in progress in Sacramento", "GM Roofing working on a roof in the Sacramento Valley.", 1),
+    playbackId: "yqA02fpfb1Kr4PWMLGPz9dzOjmXMMOaNQakw0084P78GE",
     quality: "plus",
     uploadDate: "2026-10-05",
   },

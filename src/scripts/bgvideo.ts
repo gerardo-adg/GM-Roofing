@@ -92,6 +92,8 @@ export async function mountBgVideo(
     v.setAttribute("muted", "");
     v.setAttribute("playsinline", "");
     v.setAttribute("disablepictureinpicture", "");
+    // Needed for Managed Media Source on iPhone (iOS 17.1+), which hls.js uses there
+    v.disableRemotePlayback = true;
     host.append(v);
     v.addEventListener("playing", () => markPlaying(v));
     // Prefer hls.js wherever Media Source is available (Chrome, Edge, Firefox,
