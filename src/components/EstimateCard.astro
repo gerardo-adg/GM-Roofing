@@ -17,7 +17,7 @@ const { title, text, cta } = Astro.props;
     <h2 class="ecard__title">{title}</h2>
     <p>{text}</p>
     <div class="ecard__actions">
-      <a class="btn btn--accent btn--block" href="/contact/">{cta} <Icon name="arrow" class="arrow" /></a>
+      <a class="btn btn--accent btn--block" href="/contact/">{cta}</a>
       {
         hasPhone && (
           <a class="btn btn--ghost btn--block" href={`tel:${business.phone.tel}`}>

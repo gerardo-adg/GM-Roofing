@@ -56,7 +56,7 @@ const withVideo = hasClip(clip);
     {
       cta && (
         <div class="btn-row" data-reveal style="--d:4">
-          <a class="btn btn--accent" href="/contact/">{cta} <Icon name="arrow" class="arrow" /></a>
+          <a class="btn btn--accent" href="/contact/">{cta}</a>
           {showPhone && hasPhone && (
             <a class="btn btn--ghost" href={`tel:${business.phone.tel}`}>
               <Icon name="phone" /> {business.phone.display}
