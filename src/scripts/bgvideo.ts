@@ -21,6 +21,10 @@ let engine: Promise<unknown> | null = null;
 /** Start downloading the Mux engine early (e.g. when a section scrolls near). */
 export const preloadEngine = () => (engine ??= import("@mux/mux-background-video/html"));
 
+let hlsLib: Promise<typeof import("hls.js/light")> | null = null;
+/** Start downloading the HLS player early (used by the hero so it doesn't wait). */
+export const preloadHls = () => (hlsLib ??= import("hls.js/light"));
+
 const nextFrame = () => new Promise((r) => requestAnimationFrame(() => r(null)));
 
 /**
@@ -71,13 +75,14 @@ export async function mountBgVideo(
     // Prefer hls.js wherever Media Source is available (Chrome, Edge, Firefox,
     // desktop Safari) so we control quality; Safari's built-in HLS player
     // picks its own rendition and tends to stay low on short loops.
-    const { default: Hls } = await import("hls.js/light");
+    const { default: Hls } = await preloadHls();
     if (Hls.isSupported()) {
       const hls = new Hls({
         capLevelToPlayerSize: false,
         abrEwmaDefaultEstimate: 20_000_000,
         testBandwidth: false,
         maxBufferLength: 20,
+        startFragPrefetch: true,
       });
       hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
         // Levels are sorted low to high. Lock to the sharpest one: these are

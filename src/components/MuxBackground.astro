@@ -34,6 +34,7 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
   data-plus={clip.quality === "plus" ? "" : undefined}
   data-src-mobile={muxStream(mobileId)}
   data-max={maxResolution}
+  data-eager={eager ? "" : undefined}
 >
   <picture class="mbg__poster">
     {
@@ -65,10 +66,11 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
     transition: opacity 1.2s var(--ease);
   }
   .mbg :global(.bgv.is-playing) { opacity: 1; }
+  .mbg[data-eager] :global(.bgv) { transition-duration: 0.5s; }
 </style>
 
 <script>
-  import { mountBgVideo, preloadEngine, type BgVideo } from "../scripts/bgvideo";
+  import { mountBgVideo, preloadEngine, preloadHls, type BgVideo } from "../scripts/bgvideo";
 
   const blocks = document.querySelectorAll<HTMLElement>("[data-mux-bg]");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -96,10 +98,18 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
       { rootMargin: "200px 0px" }
     );
 
-    // Let the page and poster images load first, then start watching.
+    // Above-the-fold videos (the hero) start right away; the rest wait
+    // until the page and its images have loaded.
+    const eager = [...blocks].filter((b) => b.hasAttribute("data-eager"));
+    const lazy = [...blocks].filter((b) => !b.hasAttribute("data-eager"));
+    if (eager.length) {
+      if (eager.some((b) => b.hasAttribute("data-plus"))) preloadHls();
+      else preloadEngine();
+      eager.forEach((b) => io.observe(b));
+    }
     const start = () => {
       preloadEngine();
-      blocks.forEach((b) => io.observe(b));
+      lazy.forEach((b) => io.observe(b));
     };
     if (document.readyState === "complete") start();
     else window.addEventListener("load", start, { once: true });
