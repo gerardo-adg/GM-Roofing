@@ -77,7 +77,13 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
   /* The video sits underneath at full opacity and the still fades away on
      top once real frames are playing. Fading the video element itself makes
      Safari pulse in brightness as it switches how it draws the video. */
-  .mbg :global(.bgv) { display: block; z-index: 0; }
+  /* Keep the video invisible until real frames are playing. Before that,
+     iPhones draw their own big play button on top of a paused video. */
+  .mbg :global(.bgv) { display: block; z-index: 0; visibility: hidden; }
+  .mbg :global(.bgv.is-playing) { visibility: visible; }
+  .mbg :global(.bgv::-webkit-media-controls),
+  .mbg :global(.bgv::-webkit-media-controls-start-playback-button),
+  .mbg :global(.bgv::-webkit-media-controls-overlay-play-button) { display: none !important; -webkit-appearance: none; }
   .mbg__poster { z-index: 1; transition: opacity 0.8s var(--ease); }
   .mbg:has(:global(.bgv.is-playing)) .mbg__poster { opacity: 0; }
   :global(.js) .mbg__poster :global(img) { opacity: 0; transition: opacity 0.6s var(--ease); }
