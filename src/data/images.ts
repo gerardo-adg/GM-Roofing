@@ -4,11 +4,16 @@
  */
 import type { ImageMetadata } from "astro";
 import roofReplacement from "../assets/heroes/roof-replacement.jpg";
+import roofMaintenance from "../assets/heroes/roof-maintenance.jpg";
 
 /** Background photo for a service page hero, keyed by service slug. Used when there's no hero video. */
 export const serviceHeroImages: Record<string, { src: ImageMetadata; alt: string }> = {
   "roof-replacement-sacramento": {
     src: roofReplacement,
     alt: "Aerial view of a two-story Sacramento home with a new charcoal architectural shingle roof",
+  },
+  "roof-maintenance-sacramento": {
+    src: roofMaintenance,
+    alt: "GM Roofing crew lifting concrete tiles to replace underlayment and flashing on a Sacramento Valley home",
   },
 };
