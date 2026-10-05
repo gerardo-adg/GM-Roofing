@@ -31,7 +31,7 @@ const nextFrame = () => new Promise((r) => requestAnimationFrame(() => r(null)))
 const qualityUrl = (src: string, maxResolution: string) => {
   const url = new URL(src);
   url.searchParams.set("max_resolution", maxResolution);
-  url.searchParams.set("min_resolution", parseInt(maxResolution) >= 1080 ? "720p" : "540p");
+  url.searchParams.set("min_resolution", parseInt(maxResolution) >= 1080 ? "1080p" : "720p");
   url.searchParams.set("rendition_order", "desc");
   return url.toString();
 };
@@ -68,23 +68,23 @@ export async function mountBgVideo(
     v.setAttribute("disablepictureinpicture", "");
     host.append(v);
     v.addEventListener("playing", () => markPlaying(v));
-    if (v.canPlayType("application/vnd.apple.mpegurl")) {
-      v.src = src;
-      // If Mux rejects the quality modifiers, retry the plain stream once.
-      v.addEventListener("error", () => { if (v.src !== rawSrc) { v.src = rawSrc; if (wantPlay) v.play().catch(() => {}); } }, { once: true });
-    } else {
-      const { default: Hls } = await import("hls.js/light");
-      if (!Hls.isSupported()) return;
+    // Prefer hls.js wherever Media Source is available (Chrome, Edge, Firefox,
+    // desktop Safari) so we control quality; Safari's built-in HLS player
+    // picks its own rendition and tends to stay low on short loops.
+    const { default: Hls } = await import("hls.js/light");
+    if (Hls.isSupported()) {
       const hls = new Hls({
-        // Assume a fast connection so the first segment is already sharp,
-        // then let normal adaptive switching take over.
-        abrEwmaDefaultEstimate: 12_000_000,
+        capLevelToPlayerSize: false,
+        abrEwmaDefaultEstimate: 20_000_000,
         testBandwidth: false,
-        capLevelToPlayerSize: true,
-        maxBufferLength: 12,
+        maxBufferLength: 20,
       });
       hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
-        hls.startLevel = data.levels.length - 1; // levels are sorted low to high
+        // Levels are sorted low to high. Lock to the sharpest one: these are
+        // short silent loops, so there's no reason to ever drop quality.
+        const top = data.levels.length - 1;
+        hls.startLevel = top;
+        hls.currentLevel = top;
         if (wantPlay) v.play().catch(() => {});
       });
       // If Mux rejects the quality modifiers, fall back to the plain stream.
@@ -100,6 +100,10 @@ export async function mountBgVideo(
       });
       hls.loadSource(src);
       hls.attachMedia(v);
+    } else if (v.canPlayType("application/vnd.apple.mpegurl")) {
+      // Older iPhones: native HLS. rendition_order=desc makes it start on the sharpest version.
+      v.src = src;
+      v.addEventListener("error", () => { if (v.src !== rawSrc) { v.src = rawSrc; if (wantPlay) v.play().catch(() => {}); } }, { once: true });
     }
     video = v;
     if (wantPlay) v.play().catch(() => {});
