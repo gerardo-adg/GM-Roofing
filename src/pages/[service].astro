@@ -29,6 +29,7 @@ const clip = media.services[service.slug];
 const videos = hasClip(clip) ? [{ key: "hero", clip }] : [];
 const serviceId = `${business.siteUrl}/${service.slug}/#service`;
 const slug = (c: string) => c.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+import { serviceHeroImages } from "../data/images";
 ---
 
 <BaseLayout
@@ -42,6 +43,7 @@ const slug = (c: string) => c.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 >
   <PageHero
     clip={clip}
+    image={serviceHeroImages[service.slug]}
     eyebrow={service.hero.eyebrow}
     title={service.hero.title}
     lede={service.hero.lede}
