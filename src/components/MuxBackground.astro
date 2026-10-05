@@ -70,15 +70,14 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
     height: 100%;
     object-fit: cover;
   }
+  /* The video sits underneath at full opacity and the still fades away on
+     top once real frames are playing. Fading the video element itself makes
+     Safari pulse in brightness as it switches how it draws the video. */
+  .mbg :global(.bgv) { display: block; z-index: 0; }
+  .mbg__poster { z-index: 1; transition: opacity 0.8s var(--ease); }
+  .mbg:has(:global(.bgv.is-playing)) .mbg__poster { opacity: 0; }
   :global(.js) .mbg__poster :global(img) { opacity: 0; transition: opacity 0.6s var(--ease); }
   :global(.js) .mbg__poster :global(img.is-loaded) { opacity: 1; }
-  .mbg :global(.bgv) {
-    display: block;
-    opacity: 0;
-    transition: opacity 1.2s var(--ease);
-  }
-  .mbg :global(.bgv.is-playing) { opacity: 1; }
-  .mbg[data-eager] :global(.bgv) { transition-duration: 0.5s; }
 </style>
 
 <script>
