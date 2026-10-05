@@ -44,7 +44,7 @@ export async function mountBgVideo(
   host: HTMLElement,
   rawSrc: string,
   maxResolution = "1080p",
-  opts: { plus?: boolean } = {}
+  opts: { plus?: boolean; startAt?: number } = {}
 ): Promise<BgVideo> {
   const src = qualityUrl(rawSrc, maxResolution);
   let video: HTMLVideoElement | undefined;
@@ -81,8 +81,9 @@ export async function mountBgVideo(
         capLevelToPlayerSize: false,
         abrEwmaDefaultEstimate: 20_000_000,
         testBandwidth: false,
-        maxBufferLength: 20,
+        maxBufferLength: 30,
         startFragPrefetch: true,
+        startPosition: opts.startAt ?? -1,
       });
       hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
         // Levels are sorted low to high. Lock to the sharpest one: these are
@@ -108,6 +109,7 @@ export async function mountBgVideo(
     } else if (v.canPlayType("application/vnd.apple.mpegurl")) {
       // Older iPhones: native HLS. rendition_order=desc makes it start on the sharpest version.
       v.src = src;
+      if (opts.startAt) v.addEventListener("loadedmetadata", () => (v.currentTime = opts.startAt!), { once: true });
       v.addEventListener("error", () => { if (v.src !== rawSrc) { v.src = rawSrc; if (wantPlay) v.play().catch(() => {}); } }, { once: true });
     }
     video = v;
