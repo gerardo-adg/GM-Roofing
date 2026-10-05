@@ -68,6 +68,12 @@ export const media = {
    * has no showcase clip, its service page clip is used instead.
    */
   showcase: {
+    "roof-replacement-sacramento": {
+      ...clip("Roof replacement in Sacramento", "GM Roofing replacing a roof on a Sacramento Valley home.", 4),
+      playbackId: "tBiWV8LWw4awPxj98100Cqpb1TfOm02IMQtPxJ00m01eELk",
+      quality: "plus",
+      uploadDate: "2026-10-05",
+    },
     "roof-repair-sacramento": {
       ...clip("Roof repair in Sacramento", "GM Roofing repairing a roof in the Sacramento Valley.", 1),
       playbackId: "IPzJ00UkP8RUlfo9Rug31H86ZE7hXUtzVxrXORIqK8HA",
