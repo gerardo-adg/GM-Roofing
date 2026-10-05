@@ -40,11 +40,13 @@ const clip = (title: string, description: string, posterTime = 1): MuxClip => ({
 
 export const media = {
   /** Homepage hero loop, landscape 16:9 (silent, 8 to 15 seconds). */
-  hero: clip(
-    "Roof replacement in progress in Sacramento",
-    "A GM Roofing crew installing a new roof on a Sacramento Valley home.",
-    2
-  ),
+  // Placeholder hero loop until the professional shoot is ready.
+  hero: {
+    ...clip("Roof replacement in progress in Sacramento", "A GM Roofing crew installing a new roof on a Sacramento Valley home.", 0),
+    playbackId: "bu4Cf4lBu02d1ZPcA8sM01TWZedUdyIfluZR9JgjJwmBk",
+    quality: "plus",
+    uploadDate: "2026-10-05",
+  },
   /** Optional vertical 9:16 cut of the hero for phones. Falls back to `hero`. */
   heroMobile: clip("Roof replacement in progress in Sacramento", "Vertical cut of the homepage hero video.", 2),
 
