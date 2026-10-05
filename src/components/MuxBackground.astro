@@ -21,14 +21,21 @@ interface Props {
   eager?: boolean;
   /** Max resolution on large screens. */
   maxResolution?: "1080p" | "1440p" | "2160p";
+  /**
+   * Skip the still and fade the video up from the dark background instead.
+   * Safari renders a still and a video frame with slightly different color,
+   * so swapping one for the other reads as a brightness flicker. The still
+   * is kept only for visitors who won't get the video (reduced motion).
+   */
+  noPoster?: boolean;
   class?: string;
 }
-const { clip, mobileClip, eager = false, maxResolution = "1080p", class: className } = Astro.props;
+const { clip, mobileClip, eager = false, maxResolution = "1080p", noPoster = false, class: className } = Astro.props;
 const mobileId = mobileClip?.playbackId || clip.playbackId;
 ---
 
 <div
-  class:list={["mbg", className]}
+  class:list={["mbg", { "mbg--noposter": noPoster }, className]}
   data-mux-bg
   data-src={muxStream(clip.playbackId)}
   data-plus={clip.quality === "plus" ? "" : undefined}
@@ -51,8 +58,9 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
         />
       )
     }
-    <MuxImage playbackId={clip.playbackId} time={clip.posterTime} alt="" eager={eager} />
+    <MuxImage playbackId={clip.playbackId} time={clip.posterTime} alt="" eager={eager && !noPoster} />
   </picture>
+  {noPoster && <div class="mbg__cover" />}
   <script is:inline>
     // Fade the still in when it arrives instead of letting it pop in over the dark background
     (function (img) {
@@ -78,6 +86,15 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
   .mbg :global(.bgv) { display: block; z-index: 0; }
   .mbg__poster { z-index: 1; transition: opacity 0.8s var(--ease); }
   .mbg:has(:global(.bgv.is-playing)) .mbg__poster { opacity: 0; }
+  /* No-poster mode: a cover in the background color lifts off the video */
+  .mbg__cover { position: absolute; inset: 0; z-index: 1; background: inherit; transition: opacity 0.9s var(--ease); }
+  .mbg:has(:global(.bgv.is-playing)) .mbg__cover { opacity: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .mbg--noposter .mbg__poster { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mbg__cover { display: none; }
+  }
   :global(.js) .mbg__poster :global(img) { opacity: 0; transition: opacity 0.6s var(--ease); }
   :global(.js) .mbg__poster :global(img.is-loaded) { opacity: 1; }
 </style>
