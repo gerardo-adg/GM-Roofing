@@ -165,6 +165,10 @@ const videos = [
         </dialog>
       )
     }
+    <!-- Show the hero text on first paint instead of waiting for the page's scripts -->
+    <script is:inline>
+      document.querySelectorAll(".hero__inner [data-reveal]").forEach((el) => el.classList.add("is-in"));
+    </script>
   </section>
 
   <!-- ============ TRUST ============ -->
@@ -438,6 +442,12 @@ const videos = [
     .hero--video .btn { box-shadow: 0 10px 32px rgb(0 0 0 / 0.7); }
     .hero--video .btn--ghost { background: rgb(0 0 0 / 0.45); }
   }
+  /* The hero text is there on first paint with a quick fade, no scripted delay */
+  .hero__inner :global([data-reveal]), .hero__inner :global([data-reveal="lines"] .l__in) { transition: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__inner { animation: hero-in 0.45s var(--ease-out) both; }
+  }
+  @keyframes hero-in { from { opacity: 0; transform: translateY(10px); } }
   /* Neutral black behind the video, carried into the top half of the trust strip so there's no seam */
   .hero--video, .hero--video :global(.mbg) { background: #050505; }
   .hero--video + .trust { background: linear-gradient(180deg, #050505 50%, var(--paper) 50%); }
