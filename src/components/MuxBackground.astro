@@ -34,8 +34,10 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
   data-plus={clip.quality === "plus" ? "" : undefined}
   data-src-mobile={muxStream(mobileId)}
   data-max={maxResolution}
-  data-start={clip.posterTime ?? 0}
-  data-start-mobile={(mobileClip?.playbackId ? mobileClip.posterTime : clip.posterTime) ?? 0}
+  data-start={Math.max(clip.posterTime ?? 0, clip.trimStart ?? 0)}
+  data-start-mobile={(mobileClip?.playbackId ? Math.max(mobileClip.posterTime ?? 0, mobileClip.trimStart ?? 0) : Math.max(clip.posterTime ?? 0, clip.trimStart ?? 0))}
+  data-trim={clip.trimStart ?? 0}
+  data-trim-mobile={(mobileClip?.playbackId ? mobileClip.trimStart : clip.trimStart) ?? 0}
   data-eager={eager ? "" : undefined}
 >
   <picture class="mbg__poster">
@@ -95,6 +97,7 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
         plus: block.hasAttribute("data-plus"),
         // Start on the poster's frame so the still-to-video handoff is seamless
         startAt: Number((mobile ? block.dataset.startMobile : block.dataset.start) ?? 0),
+        loopFrom: Number((mobile ? block.dataset.trimMobile : block.dataset.trim) ?? 0),
       });
       // Pause when off screen to save battery and bandwidth.
       new IntersectionObserver(([e]) => (e.isIntersecting ? player.play() : player.pause())).observe(block);
