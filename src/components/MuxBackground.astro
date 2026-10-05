@@ -62,7 +62,8 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
 </div>
 
 <style>
-  .mbg { position: absolute; inset: 0; overflow: hidden; background: var(--ink); }
+  /* isolation keeps the still and video layers inside this box, under any overlay on top */
+  .mbg { position: absolute; inset: 0; overflow: hidden; background: var(--ink); isolation: isolate; }
   .mbg__poster, .mbg :global(img), .mbg :global(.bgv) {
     position: absolute;
     inset: 0;
