@@ -22,6 +22,9 @@ import cpTop from "../assets/projects/cameron-park-top.jpg";
 import cpSolar from "../assets/projects/cameron-park-solar.jpg";
 import trBefore from "../assets/projects/tile-repair-before.jpg";
 import trProgress from "../assets/projects/tile-repair-progress.jpg";
+import tmTop from "../assets/projects/tile-maint-top.jpg";
+import tmAngle from "../assets/projects/tile-maint-angle.jpg";
+import tmClose from "../assets/projects/tile-maint-close.jpg";
 
 export type Project = {
   title: string;
@@ -125,6 +128,23 @@ export type CaseStudy = {
 };
 
 export const caseStudies: CaseStudy[] = [
+  {
+    title: "Tile roof maintenance",
+    service: "roof-maintenance-sacramento",
+    location: "Sacramento, CA",
+    summary:
+      "Valleys are where water collects on a tile roof, so they are usually the first place to wear out. On this home the crew lifted the concrete tile along the valleys, put in new metal valley flashing, then cut and reset the tile to fit.",
+    specs: [
+      { label: "Roof type", value: "Concrete tile" },
+      { label: "Work", value: "New metal valley flashing" },
+      { label: "Tile", value: "Lifted, cut to fit and reset" },
+    ],
+    photos: [
+      { src: tmAngle, alt: "GM Roofing crew cutting concrete tile beside new metal valley flashing on a Sacramento home" },
+      { src: tmTop, alt: "Overhead view of a Sacramento tile roof with tile lifted along the valleys and new metal flashing installed" },
+      { src: tmClose, alt: "GM Roofing roofer resetting concrete tile next to new valley flashing" },
+    ],
+  },
   {
     title: "Tile roof repair",
     service: "roof-repair-sacramento",
