@@ -86,6 +86,10 @@ const withImage = !withVideo && Boolean(image);
     }
     <slot />
   </div>
+  <!-- Show the hero text on first paint instead of waiting for the page's scripts -->
+  <script is:inline>
+    document.querySelectorAll(".phero__inner [data-reveal]").forEach((el) => el.classList.add("is-in"));
+  </script>
 </section>
 
 <style>
@@ -123,6 +127,12 @@ const withImage = !withVideo && Boolean(image);
     color: rgb(255 255 255 / 0.09);
   }
   .phero__inner { display: grid; justify-items: start; }
+  /* Text and its shadows are there on first paint, with one quick fade for the block */
+  .phero__inner :global([data-reveal]), .phero__inner :global([data-reveal="lines"] .l__in) { transition: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .phero__inner { animation: phero-in 0.45s var(--ease-out) both; }
+  }
+  @keyframes phero-in { from { opacity: 0; transform: translateY(10px); } }
   .phero h1 { margin-top: 1.25rem; max-width: 18ch; }
   .phero .lede { margin-top: 1.5rem; }
   .phero .btn-row { margin-top: 2.25rem; width: 100%; }
