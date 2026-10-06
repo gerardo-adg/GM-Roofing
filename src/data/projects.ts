@@ -20,6 +20,8 @@ import nrGutter from "../assets/projects/north-ridge-gutter.jpg";
 import cpPorch from "../assets/projects/cameron-park-porch.jpg";
 import cpTop from "../assets/projects/cameron-park-top.jpg";
 import cpSolar from "../assets/projects/cameron-park-solar.jpg";
+import trBefore from "../assets/projects/tile-repair-before.jpg";
+import trProgress from "../assets/projects/tile-repair-progress.jpg";
 
 export type Project = {
   title: string;
@@ -118,10 +120,27 @@ export type CaseStudy = {
   neighborhood?: string;
   summary: string;
   specs: { label: string; value: string }[];
-  photos: { src: ImageMetadata; alt: string; position?: string }[];
+  /** Two photos show side by side (good for before/after); three or more show as a mosaic. */
+  photos: { src: ImageMetadata; alt: string; position?: string; label?: string }[];
 };
 
 export const caseStudies: CaseStudy[] = [
+  {
+    title: "Tile roof repair",
+    service: "roof-repair-sacramento",
+    location: "Sacramento, CA",
+    summary:
+      "The concrete tile on this hillside home was fine, but the underlayment beneath it had worn out. The crew lifted the tile, stripped the old underlayment and battens down to the deck, installed new underlayment and battens, and set the tile back in place.",
+    specs: [
+      { label: "Roof type", value: "Concrete tile" },
+      { label: "Problem", value: "Worn-out underlayment under the tile" },
+      { label: "Work", value: "New underlayment and battens, tile reset" },
+    ],
+    photos: [
+      { src: trBefore, label: "Before", alt: "Tile lifted off a Sacramento roof showing the worn old underlayment and battens underneath" },
+      { src: trProgress, label: "New underlayment", alt: "GM Roofing crew installing new underlayment and battens before resetting the concrete tile on a Sacramento home" },
+    ],
+  },
   {
     title: "Landmark Solaris re-roof",
     service: "roof-replacement-sacramento",

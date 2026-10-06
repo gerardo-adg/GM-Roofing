@@ -6,7 +6,7 @@ import type { ImageMetadata } from "astro";
 import roofReplacement from "../assets/heroes/roof-replacement.jpg";
 import roofMaintenance from "../assets/heroes/roof-maintenance.jpg";
 import tileRoofing from "../assets/heroes/tile-roofing.jpg";
-import roofRepair from "../assets/heroes/roof-repair.jpg";
+import roofRepair from "../assets/projects/tile-repair-progress.jpg";
 import commercialCard from "../assets/showcase/commercial.jpg";
 import about from "../assets/heroes/about.jpg";
 import serviceAreas from "../assets/heroes/service-areas.jpg";
@@ -19,7 +19,7 @@ export const serviceHeroImages: Record<string, { src: ImageMetadata; alt: string
   },
   "roof-repair-sacramento": {
     src: roofRepair,
-    alt: "GM Roofing crew repairing a tile roof and flashing on a hillside home in the Sacramento Valley foothills",
+    alt: "GM Roofing crew installing new underlayment and battens during a tile roof repair on a Sacramento home",
   },
   "tile-roofing-sacramento": {
     src: tileRoofing,
