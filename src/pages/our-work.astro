@@ -5,7 +5,8 @@ import ProjectTile from "../components/ProjectTile.astro";
 import InstagramReels from "../components/InstagramReels.astro";
 import MuxFilm from "../components/MuxFilm.astro";
 import SectionHead from "../components/SectionHead.astro";
-import { projects } from "../data/projects";
+import { projects, caseStudies } from "../data/projects";
+import CaseStudy from "../components/CaseStudy.astro";
 import { getService } from "../data/services";
 import { media, hasClip } from "../data/media";
 import { serviceHeroImages } from "../data/images";
@@ -43,8 +44,17 @@ const videos = [
     breadcrumbs={breadcrumbs}
   />
 
-  <section class="section">
+  {
+    caseStudies.map((c, i) => (
+      <section class:list={["section", { "section--paper": i % 2 === 1 }]}>
+        <div class="container"><CaseStudy study={c} /></div>
+      </section>
+    ))
+  }
+
+  <section class="section section--paper">
     <div class="container">
+      <SectionHead align="split" eyebrow="More projects" title="Photos and video <em>from the job.</em>" />
       {
         filters.length > 1 && (
           <div class="chips" role="group" aria-label="Filter projects by service" data-reveal>

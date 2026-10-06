@@ -1,0 +1,82 @@
+---
+/** Featured project: photo mosaic plus a short write-up and materials list. */
+import { Picture } from "astro:assets";
+import Icon from "./Icon.astro";
+import { getService } from "../data/services";
+import type { CaseStudy } from "../data/projects";
+
+interface Props {
+  study: CaseStudy;
+}
+const { study: c } = Astro.props;
+const service = getService(c.service);
+const [lead, ...rest] = c.photos;
+---
+
+<article class="cs">
+  <div class="cs__photos">
+    {
+      lead && (
+        <div class="cs__photo cs__photo--lead" data-reveal="media">
+          <Picture src={lead.src} alt={lead.alt} formats={["avif", "webp"]} widths={[640, 960, 1280, 1800]} sizes="(min-width: 1024px) 58vw, 100vw" loading="lazy" style={lead.position ? `object-position:${lead.position}` : undefined} />
+        </div>
+      )
+    }
+    {
+      rest.map((p, i) => (
+        <div class="cs__photo" data-reveal="media" style={`--d:${i + 1}`}>
+          <Picture src={p.src} alt={p.alt} formats={["avif", "webp"]} widths={[480, 800, 1100]} sizes="(min-width: 1024px) 29vw, 50vw" loading="lazy" style={p.position ? `object-position:${p.position}` : undefined} />
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="cs__body">
+    <span class="eyebrow" data-reveal>Featured project</span>
+    <h2 data-reveal style="--d:1">{c.title}</h2>
+    <p class="cs__where" data-reveal style="--d:2">
+      <Icon name="pin" size={18} />
+      <span>{c.neighborhood ? `${c.neighborhood}, ` : ""}{c.location}</span>
+    </p>
+    <p class="cs__summary" data-reveal style="--d:2">{c.summary}</p>
+    <dl class="cs__specs" data-reveal style="--d:3">
+      {
+        c.specs.map((s) => (
+          <div>
+            <dt>{s.label}</dt>
+            <dd>{s.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    {
+      service && (
+        <a class="text-link" href={`/${service.slug}/`} data-reveal style="--d:4">
+          More about {service.name.toLowerCase()} <Icon name="arrow" size={18} />
+        </a>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .cs { display: grid; gap: clamp(2rem, 4vw, 3.5rem); }
+  .cs__photos { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .cs__photo { position: relative; overflow: hidden; border-radius: var(--radius-lg); background: var(--ink); aspect-ratio: 4 / 5; }
+  .cs__photo--lead { grid-column: 1 / -1; aspect-ratio: 16 / 10; }
+  .cs__photo :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  .cs h2 { margin-top: 1rem; }
+  .cs__where { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.85rem; color: var(--steel); font-size: var(--fs-sm); }
+  .cs__where :global(svg) { color: var(--accent); flex: none; }
+  .cs__summary { margin-top: 1.25rem; color: var(--steel); font-size: var(--fs-lg); line-height: 1.6; max-width: 52ch; }
+  .cs__specs { margin-top: 1.75rem; border-top: 1px solid var(--line); }
+  .cs__specs div { display: grid; grid-template-columns: 9rem 1fr; gap: 1rem; padding-block: 0.8rem; border-bottom: 1px solid var(--line); font-size: var(--fs-sm); }
+  .cs__specs dt { color: var(--steel); }
+  .cs__specs dd { font-weight: 600; color: var(--ink); }
+  .cs .text-link { margin-top: 1.75rem; color: var(--accent); }
+
+  @media (min-width: 1024px) {
+    .cs { grid-template-columns: 1.35fr 1fr; align-items: center; }
+  }
+</style>

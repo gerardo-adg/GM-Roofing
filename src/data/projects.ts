@@ -14,6 +14,9 @@ import tilePhoto from "../assets/heroes/tile-roofing.jpg";
 import repairPhoto from "../assets/heroes/roof-repair.jpg";
 import commercialPhoto from "../assets/showcase/commercial.jpg";
 import edgePhoto from "../assets/heroes/about.jpg";
+import nrFront from "../assets/projects/north-ridge-front.jpg";
+import nrAngle from "../assets/projects/north-ridge-angle.jpg";
+import nrGutter from "../assets/projects/north-ridge-gutter.jpg";
 
 export type Project = {
   title: string;
@@ -57,9 +60,10 @@ export const projects: Project[] = [
     clip: media.showcase["roof-repair-sacramento"],
   },
   {
-    title: "New architectural shingle roof",
+    title: "Presidential Shake re-roof",
     service: "roof-replacement-sacramento",
-    alt: "Aerial view of a two-story Sacramento home with a new charcoal architectural shingle roof",
+    location: "Fair Oaks",
+    alt: "Aerial view of a Fair Oaks home with a new CertainTeed Presidential Shake roof in Charcoal Black",
     photo: replacementPhoto,
     size: "wide",
   },
@@ -98,3 +102,41 @@ export const projects: Project[] = [
     size: "wide",
   },
 ].filter((p) => p.photo || p.clip?.playbackId) as Project[];
+
+/**
+ * Featured projects with a short write-up and materials list, shown near the
+ * top of the Our Work page. Newest first.
+ */
+
+export type CaseStudy = {
+  title: string;
+  service: string;
+  location: string;
+  neighborhood?: string;
+  summary: string;
+  specs: { label: string; value: string }[];
+  photos: { src: ImageMetadata; alt: string; position?: string }[];
+};
+
+export const caseStudies: CaseStudy[] = [
+  {
+    title: "Presidential Shake re-roof",
+    service: "roof-replacement-sacramento",
+    location: "Fair Oaks, CA",
+    neighborhood: "North Ridge Country Club",
+    summary:
+      "A full re-roof on a two-story home backing onto the North Ridge golf course. The new roof is CertainTeed Presidential Shake TL in Charcoal Black, finished with custom black OG gutters, 3-inch downspouts and stainless steel gutter screens.",
+    specs: [
+      { label: "Shingles", value: "CertainTeed Presidential Shake TL" },
+      { label: "Color", value: "Charcoal Black" },
+      { label: "Gutters", value: "Custom black OG gutters" },
+      { label: "Downspouts", value: "3-inch" },
+      { label: "Gutter guards", value: "Stainless steel screens" },
+    ],
+    photos: [
+      { src: nrFront, alt: "Aerial view of a Fair Oaks home with a new CertainTeed Presidential Shake TL roof in Charcoal Black" },
+      { src: nrAngle, alt: "Angled aerial view of the new Presidential Shake roof and black gutters on a North Ridge Country Club home" },
+      { src: nrGutter, alt: "Close-up of Presidential Shake shingles at the roof edge with a stainless steel gutter screen", position: "50% 60%" },
+    ],
+  },
+];
