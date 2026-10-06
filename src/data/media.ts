@@ -94,6 +94,12 @@ export const media = {
       quality: "plus",
       uploadDate: "2026-10-06",
     },
+    "roof-maintenance-sacramento": {
+      ...clip("Roof maintenance in Sacramento", "GM Roofing doing maintenance on a roof in the Sacramento Valley.", 1),
+      playbackId: "kfFHQ6r5sregx01kxpwQbrehB6LDv6kahbtBd01DwG3cs",
+      quality: "plus",
+      uploadDate: "2026-10-06",
+    },
     "roof-repair-sacramento": {
       ...clip("Roof repair in Sacramento", "GM Roofing repairing a roof in the Sacramento Valley.", 1),
       playbackId: "IPzJ00UkP8RUlfo9Rug31H86ZE7hXUtzVxrXORIqK8HA",
