@@ -9,7 +9,7 @@ interface Props {
 const { tone = "light" } = Astro.props;
 ---
 
-<ul role="list" class:list={["areas", `areas--${tone}`]}>
+<ul role="list" class:list={["areas", `areas--${tone}`, { "areas--three": business.cities.length % 3 === 0 }]}>
   {
     business.cities.map((c, i) => (
       <li id={slug(c)} data-reveal style={`--d:${i % 4}`}>
@@ -45,7 +45,9 @@ const { tone = "light" } = Astro.props;
   @media (min-width: 560px) {
     .areas { grid-template-columns: repeat(2, 1fr); column-gap: 2rem; }
   }
+  /* Three columns only when the list divides evenly; otherwise keep two */
   @media (min-width: 960px) {
-    .areas { grid-template-columns: repeat(3, 1fr); column-gap: 3rem; }
+    .areas { column-gap: 3rem; }
+    .areas--three { grid-template-columns: repeat(3, 1fr); }
   }
 </style>
