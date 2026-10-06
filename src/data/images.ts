@@ -10,6 +10,7 @@ import roofRepair from "../assets/projects/tile-repair-progress.jpg";
 import commercialCard from "../assets/showcase/commercial-2.jpg";
 import about from "../assets/heroes/about.jpg";
 import serviceAreas from "../assets/heroes/service-areas.jpg";
+import aboutQuote from "../assets/about-quote.jpg";
 
 /** Background photo for a service page hero, keyed by service slug. Used when there's no hero video. */
 export const serviceHeroImages: Record<string, { src: ImageMetadata; alt: string }> = {
@@ -54,4 +55,10 @@ export const aboutHeroImage = {
 export const serviceAreasHeroImage = {
   src: serviceAreas,
   alt: "Downtown Sacramento skyline and the Tower Bridge over the Sacramento River at sunset",
+};
+
+/** About page: photo beside the owner's "I don't really look at this as a job" quote. */
+export const aboutQuoteImage = {
+  src: aboutQuote,
+  alt: "GM Roofing roofer installing a CertainTeed ridge vent on a new shingle roof",
 };
