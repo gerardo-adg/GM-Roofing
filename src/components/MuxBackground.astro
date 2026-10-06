@@ -85,7 +85,7 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
   .mbg :global(.bgv::-webkit-media-controls-start-playback-button),
   .mbg :global(.bgv::-webkit-media-controls-overlay-play-button) { display: none !important; -webkit-appearance: none; }
   .mbg__poster { z-index: 1; transition: opacity 0.8s var(--ease); }
-  .mbg:has(:global(.bgv.is-playing)) .mbg__poster { opacity: 0; }
+  .mbg:has(:global(.bgv.is-playing)):not(.is-switching) .mbg__poster { opacity: 0; }
   :global(.js) .mbg__poster :global(img) { opacity: 0; transition: opacity 0.6s var(--ease); }
   :global(.js) .mbg__poster :global(img.is-loaded) { opacity: 1; }
 </style>
@@ -98,23 +98,59 @@ const mobileId = mobileClip?.playbackId || clip.playbackId;
   const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
 
   if (blocks.length && !reduce && !saveData) {
+    const phone = window.matchMedia("(max-width: 767px)");
+    const players = new Map<HTMLElement, BgVideo>();
+    const visible = new Map<HTMLElement, boolean>();
+
     const mount = async (block: HTMLElement) => {
-      const mobile = window.matchMedia("(max-width: 767px)").matches;
+      const mobile = phone.matches;
       const src = (mobile ? block.dataset.srcMobile : block.dataset.src) ?? "";
       const player: BgVideo = await mountBgVideo(block, src, mobile ? block.dataset.maxMobile ?? "720p" : block.dataset.max ?? "1080p", {
         plus: block.hasAttribute("data-plus"),
         // Start on the poster's frame so the still-to-video handoff is seamless
         startAt: Number((mobile ? block.dataset.startMobile : block.dataset.start) ?? 0),
       });
-      // Pause when off screen to save battery and bandwidth.
-      new IntersectionObserver(([e]) => (e.isIntersecting ? player.play() : player.pause())).observe(block);
+      players.set(block, player);
+      if (visible.get(block) === false) player.pause();
     };
+
+    // Pause when off screen to save battery and bandwidth.
+    const setVisible = (block: HTMLElement, on: boolean) => {
+      visible.set(block, on);
+      const p = players.get(block);
+      if (p) on ? p.play() : p.pause();
+    };
+    const visibility = new IntersectionObserver((entries) => {
+      for (const e of entries) setVisible(e.target as HTMLElement, e.isIntersecting);
+    });
+
+    // Crossing the phone/desktop breakpoint (rotating a tablet, resizing a
+    // window): swap to the right cut. The still for the new size fades in
+    // over the old video first, then the new video takes over underneath.
+    phone.addEventListener("change", () => {
+      players.forEach((player, block) => {
+        if (block.dataset.src === block.dataset.srcMobile) return;
+        block.classList.add("is-switching");
+        players.delete(block);
+        window.setTimeout(async () => {
+          player.destroy();
+          await mount(block);
+          const v = block.querySelector(".bgv");
+          const done = () => block.classList.remove("is-switching");
+          if (!v) return done();
+          new MutationObserver((_, mo) => {
+            if (v.classList.contains("is-playing")) { mo.disconnect(); done(); }
+          }).observe(v, { attributes: true, attributeFilter: ["class"] });
+        }, 800);
+      });
+    });
 
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
           io.unobserve(e.target);
+          visibility.observe(e.target);
           mount(e.target as HTMLElement);
         }
       },

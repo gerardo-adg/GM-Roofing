@@ -15,6 +15,8 @@ type MuxEl = HTMLElement & { video?: HTMLVideoElement };
 export type BgVideo = {
   play(): void;
   pause(): void;
+  /** Stop, release the stream and remove the video element. */
+  destroy(): void;
 };
 
 let engine: Promise<unknown> | null = null;
@@ -51,6 +53,9 @@ export async function mountBgVideo(
   let playing = false;
   let wantPlay = true;
   let fellBack = false;
+  let destroyed = false;
+  let hlsInstance: { destroy(): void } | undefined;
+  const created: HTMLElement[] = [];
 
   // Only fade the video in once real frames from the right point are on
   // screen. "playing" can fire before the first frame is painted, or while
@@ -82,9 +87,11 @@ export async function mountBgVideo(
   const fallback = async (muxEl?: HTMLElement) => {
     if (playing || fellBack) return;
     fellBack = true;
+    if (destroyed) return;
     muxEl?.remove();
     const v = document.createElement("video");
     v.className = "bgv";
+    created.push(v);
     v.muted = true;
     v.loop = true;
     v.playsInline = true;
@@ -101,6 +108,7 @@ export async function mountBgVideo(
     // picks its own rendition and tends to stay low on short loops.
     const { default: Hls } = await preloadHls();
     if (Hls.isSupported()) {
+      if (destroyed) return;
       const hls = new Hls({
         capLevelToPlayerSize: false,
         abrEwmaDefaultEstimate: 20_000_000,
@@ -130,6 +138,7 @@ export async function mountBgVideo(
           hls.recoverMediaError();
         }
       });
+      hlsInstance = hls;
       hls.loadSource(src);
       hls.attachMedia(v);
     } else if (v.canPlayType("application/vnd.apple.mpegurl")) {
@@ -150,6 +159,7 @@ export async function mountBgVideo(
     el.setAttribute("max-resolution", maxResolution);
     el.setAttribute("src", rawSrc); // the Mux engine picks the sharpest rendition itself
     host.append(el);
+    created.push(el);
     await nextFrame();
     video = el.video;
     video?.addEventListener("playing", () => markPlaying(el));
@@ -168,6 +178,13 @@ export async function mountBgVideo(
     pause() {
       wantPlay = false;
       video?.pause();
+    },
+    destroy() {
+      destroyed = true;
+      wantPlay = false;
+      video?.pause();
+      hlsInstance?.destroy();
+      created.forEach((el) => el.remove());
     },
   };
 }
