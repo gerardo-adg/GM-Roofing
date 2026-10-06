@@ -81,6 +81,12 @@ export const media = {
       quality: "plus",
       uploadDate: "2026-10-05",
     },
+    "tile-roofing-sacramento": {
+      ...clip("Tile roofing in Sacramento", "GM Roofing working on a concrete tile roof in the Sacramento Valley.", 1),
+      playbackId: "00fcoS8Z01YUBY02K6x6RnFKSE2FqFE00Z3l2aT02cGttu01Y",
+      quality: "plus",
+      uploadDate: "2026-10-06",
+    },
     "roof-repair-sacramento": {
       ...clip("Roof repair in Sacramento", "GM Roofing repairing a roof in the Sacramento Valley.", 1),
       playbackId: "IPzJ00UkP8RUlfo9Rug31H86ZE7hXUtzVxrXORIqK8HA",
