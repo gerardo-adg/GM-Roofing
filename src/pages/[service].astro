@@ -82,6 +82,17 @@ import { serviceHeroImages } from "../data/images";
               ))
             }
           </dl>
+          {
+            service.slug === "roof-replacement-sacramento" && (
+              <div class="cred">
+                <img src="/brand/certainteed-select-shinglemaster.webp" alt="CertainTeed SELECT ShingleMaster" width="250" height="240" loading="lazy" decoding="async" />
+                <div>
+                  <strong>CertainTeed SELECT ShingleMaster</strong>
+                  <p>Trained and credentialed by CertainTeed to install their roofing systems, which qualifies your new roof for CertainTeed's extended warranty options.</p>
+                </div>
+              </div>
+            )
+          }
         </section>
 
         {
@@ -187,6 +198,11 @@ import { serviceHeroImages } from "../data/images";
   .answer__text { font-size: var(--fs-lg); line-height: 1.6; color: var(--ink); max-width: 62ch; }
   .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 2rem; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .facts div { padding: 1rem 1.15rem; background: var(--white); }
+  .cred { display: flex; align-items: center; gap: 1.25rem; margin-top: 1.25rem; padding: 1.25rem 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); }
+  .cred img { flex: none; width: auto; height: 76px; }
+  .cred strong { display: block; font-size: 1.05rem; font-weight: 650; }
+  .cred p { margin-top: 0.25rem; font-size: var(--fs-sm); line-height: 1.5; color: var(--steel); }
+  @media (max-width: 479px) { .cred { padding: 1rem; gap: 1rem; } .cred img { height: 64px; } }
   .facts dt { font-size: var(--fs-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); }
   .facts dd { margin: 0.3rem 0 0; font-size: var(--fs-sm); font-weight: 550; line-height: 1.4; }
   @media (max-width: 479px) { .facts { grid-template-columns: 1fr; } }
