@@ -2,7 +2,8 @@
 /**
  * "Follow along on Instagram": three vertical reels from media.instagram.
  * Each plays silently while on screen; the speaker button turns its sound on
- * (and mutes the others). Hidden until at least one reel has a playback ID.
+ * (and mutes the others). Hidden until all three reels have playback IDs,
+ * so the row never shows with gaps.
  */
 import Icon from "./Icon.astro";
 import MuxImage from "./MuxImage.astro";
@@ -14,7 +15,7 @@ const handle = "@" + business.social.instagram.replace(/\/+$/, "").split("/").po
 ---
 
 {
-  reels.length > 0 && (
+  reels.length >= 3 && (
     <section class="section ig" aria-labelledby="ig-title">
       <div class="container">
         <div class="ig__head">

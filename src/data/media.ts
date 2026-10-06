@@ -101,7 +101,13 @@ export const media = {
    * hidden until at least one has a playback ID.
    */
   instagram: [
-    { ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 1), url: "" },
+    {
+      ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 1),
+      playbackId: "du778zkSUZ5gbqBWpU2IAujwtGXuOl00027lMIw749XXo",
+      quality: "plus",
+      uploadDate: "2026-10-06",
+      url: "",
+    },
     { ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 1), url: "" },
     { ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 1), url: "" },
   ] as (MuxClip & { url?: string })[],
