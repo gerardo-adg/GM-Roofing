@@ -17,6 +17,9 @@ import edgePhoto from "../assets/heroes/about.jpg";
 import nrFront from "../assets/projects/north-ridge-front.jpg";
 import nrAngle from "../assets/projects/north-ridge-angle.jpg";
 import nrGutter from "../assets/projects/north-ridge-gutter.jpg";
+import cpPorch from "../assets/projects/cameron-park-porch.jpg";
+import cpTop from "../assets/projects/cameron-park-top.jpg";
+import cpSolar from "../assets/projects/cameron-park-solar.jpg";
 
 export type Project = {
   title: string;
@@ -119,6 +122,23 @@ export type CaseStudy = {
 };
 
 export const caseStudies: CaseStudy[] = [
+  {
+    title: "Landmark Solaris re-roof",
+    service: "roof-replacement-sacramento",
+    location: "Cameron Park, CA",
+    summary:
+      "A full roof replacement on a farmhouse-style home with three front dormers and a wraparound porch. The new roof is CertainTeed Landmark Solaris in Moire Black, a reflective shingle that helps keep the attic cooler through Sacramento Valley summers.",
+    specs: [
+      { label: "Shingles", value: "CertainTeed Landmark Solaris" },
+      { label: "Color", value: "Moire Black" },
+      { label: "Scope", value: "Full roof replacement" },
+    ],
+    photos: [
+      { src: cpPorch, alt: "Aerial view of a Cameron Park farmhouse with a new CertainTeed Landmark Solaris roof in Moire Black and a wraparound porch" },
+      { src: cpTop, alt: "Overhead view of the new Moire Black roof with three dormers on a Cameron Park home" },
+      { src: cpSolar, alt: "Aerial view down the ridge of the new Landmark Solaris roof with rooftop solar panels in Cameron Park" },
+    ],
+  },
   {
     title: "Presidential Shake re-roof",
     service: "roof-replacement-sacramento",
