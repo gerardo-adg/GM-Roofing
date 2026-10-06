@@ -28,6 +28,10 @@ import tmClose from "../assets/projects/tile-maint-close.jpg";
 import arCrew from "../assets/projects/arden-crew.jpg";
 import arSection from "../assets/projects/arden-section.jpg";
 import arOverview from "../assets/projects/arden-overview.jpg";
+import phFront from "../assets/projects/pet-hospital-front.jpg";
+import phCorner from "../assets/projects/pet-hospital-corner.jpg";
+import phTop from "../assets/projects/pet-hospital-top.jpg";
+import phAngle from "../assets/projects/pet-hospital-angle.jpg";
 
 export type Project = {
   title: string;
@@ -131,6 +135,25 @@ export type CaseStudy = {
 };
 
 export const caseStudies: CaseStudy[] = [
+  {
+    title: "Fair Oaks Pet Hospital re-roof",
+    service: "commercial-roofing-sacramento",
+    location: "Fair Oaks, CA",
+    summary:
+      "A full roof replacement on the Fair Oaks Pet Hospital building, a hip roof wrapped around an open courtyard. The new roof is CertainTeed Resawn Shake over a full CertainTeed DiamondDeck system, with 220 feet of continuous ridge vent and stainless steel gutter screens.",
+    specs: [
+      { label: "Shingles", value: "CertainTeed Resawn Shake" },
+      { label: "Underlayment", value: "Full CertainTeed DiamondDeck system" },
+      { label: "Ventilation", value: "220 ft of continuous ridge vent" },
+      { label: "Gutter guards", value: "Stainless steel screens" },
+    ],
+    photos: [
+      { src: phFront, alt: "Aerial view of the Fair Oaks Pet Hospital with its new CertainTeed Resawn Shake roof" },
+      { src: phCorner, alt: "Corner view of the new Resawn Shake hip roof and ridge vent on the Fair Oaks Pet Hospital" },
+      { src: phTop, alt: "Overhead view of the new roof around the courtyard of the Fair Oaks Pet Hospital" },
+      { src: phAngle, alt: "Angled aerial view of the finished Resawn Shake roof on a Fair Oaks commercial building" },
+    ],
+  },
   {
     title: "Strip mall re-roof",
     service: "commercial-roofing-sacramento",

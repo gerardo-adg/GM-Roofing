@@ -15,7 +15,7 @@ const [lead, ...rest] = c.photos;
 ---
 
 <article class="cs">
-  <div class:list={["cs__photos", { "cs__photos--pair": pair }]}>
+  <div class:list={["cs__photos", { "cs__photos--pair": pair, "cs__photos--three": rest.length === 3 }]}>
     {
       lead && (
         <div class="cs__photo cs__photo--lead" data-reveal="media">
@@ -68,6 +68,9 @@ const [lead, ...rest] = c.photos;
   .cs__photo { position: relative; overflow: hidden; border-radius: var(--radius-lg); background: var(--ink); aspect-ratio: 4 / 5; }
   .cs__photo--lead { grid-column: 1 / -1; aspect-ratio: 16 / 10; }
   .cs__photo :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* Lead photo plus three: a row of three under it */
+  .cs__photos--three { grid-template-columns: repeat(3, 1fr); }
+  .cs__photos--three .cs__photo:not(.cs__photo--lead) { aspect-ratio: 1; }
   /* Pair: two landscape photos stacked, e.g. before and after */
   .cs__photos--pair { grid-template-columns: 1fr; }
   .cs__photos--pair .cs__photo { aspect-ratio: 16 / 9; }
