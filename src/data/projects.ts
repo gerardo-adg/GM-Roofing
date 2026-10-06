@@ -25,6 +25,9 @@ import trProgress from "../assets/projects/tile-repair-progress.jpg";
 import tmTop from "../assets/projects/tile-maint-top.jpg";
 import tmAngle from "../assets/projects/tile-maint-angle.jpg";
 import tmClose from "../assets/projects/tile-maint-close.jpg";
+import arCrew from "../assets/projects/arden-crew.jpg";
+import arSection from "../assets/projects/arden-section.jpg";
+import arOverview from "../assets/projects/arden-overview.jpg";
 
 export type Project = {
   title: string;
@@ -128,6 +131,24 @@ export type CaseStudy = {
 };
 
 export const caseStudies: CaseStudy[] = [
+  {
+    title: "Strip mall re-roof",
+    service: "commercial-roofing-sacramento",
+    location: "Arden, CA",
+    summary:
+      "A full shingle roof replacement on a U-shaped commercial strip mall. The crew worked section by section, tearing off the old roof, laying CertainTeed DiamondDeck underlayment and installing new CertainTeed shingles around the rooftop HVAC units.",
+    specs: [
+      { label: "Property", value: "Commercial strip mall" },
+      { label: "Shingles", value: "CertainTeed" },
+      { label: "Underlayment", value: "CertainTeed DiamondDeck" },
+      { label: "Scope", value: "Full roof replacement" },
+    ],
+    photos: [
+      { src: arOverview, alt: "Aerial view of a U-shaped commercial strip mall in Arden during a GM Roofing roof replacement" },
+      { src: arCrew, alt: "GM Roofing crew installing CertainTeed shingles over DiamondDeck underlayment on an Arden strip mall" },
+      { src: arSection, alt: "One wing of the Arden strip mall stripped and covered in new underlayment next to the finished shingle roof" },
+    ],
+  },
   {
     title: "Tile roof maintenance",
     service: "roof-maintenance-sacramento",
