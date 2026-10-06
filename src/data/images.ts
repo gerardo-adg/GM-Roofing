@@ -11,6 +11,8 @@ import commercialCard from "../assets/showcase/commercial-2.jpg";
 import about from "../assets/heroes/about.jpg";
 import serviceAreas from "../assets/heroes/service-areas.jpg";
 import aboutQuote from "../assets/about-quote.jpg";
+import nrGutter from "../assets/projects/north-ridge-gutter.jpg";
+import nrFront from "../assets/projects/north-ridge-front.jpg";
 
 /** Background photo for a service page hero, keyed by service slug. Used when there's no hero video. */
 export const serviceHeroImages: Record<string, { src: ImageMetadata; alt: string }> = {
@@ -62,3 +64,20 @@ export const aboutQuoteImage = {
   src: aboutQuote,
   alt: "GM Roofing roofer installing a CertainTeed ridge vent on a new shingle roof",
 };
+
+/**
+ * Photo for each service card (About page and service page grids).
+ * Falls back to the service's showcase photo, then its page hero photo.
+ */
+const cardOnly: Record<string, { src: ImageMetadata; alt: string; position?: string }> = {
+  "roof-inspections-sacramento": {
+    src: nrGutter,
+    alt: "Close-up of shingles, roof edge and gutter screen, the details a GM Roofing inspection checks",
+    position: "50% 55%",
+  },
+  "residential-roofing-sacramento": {
+    src: nrFront,
+    alt: "Aerial view of a Sacramento Valley home with a new GM Roofing shingle roof",
+  },
+};
+export const serviceCardImage = (slug: string) => cardOnly[slug] ?? showcaseImages[slug] ?? serviceHeroImages[slug];

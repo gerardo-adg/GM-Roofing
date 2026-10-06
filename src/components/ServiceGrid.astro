@@ -8,6 +8,8 @@ import Icon from "./Icon.astro";
 import MuxImage from "./MuxImage.astro";
 import { services } from "../data/services";
 import { media, hasClip, muxStream } from "../data/media";
+import { serviceCardImage } from "../data/images";
+import { Picture } from "astro:assets";
 
 interface Props {
   exclude?: string[];
@@ -20,7 +22,20 @@ const list = services.filter((s) => !exclude.includes(s.slug));
   {
     list.map((s, i) => (
       <li data-reveal style={`--d:${i % 3}`}>
-        <a href={`/${s.slug}/`} class:list={["scard", { "scard--media": hasClip(media.services[s.slug]) }]}>
+        <a href={`/${s.slug}/`} class:list={["scard", { "scard--media": hasClip(media.services[s.slug]) || serviceCardImage(s.slug) }]}>
+          {!hasClip(media.services[s.slug]) && serviceCardImage(s.slug) && (
+            <div class="scard__media">
+              <Picture
+                src={serviceCardImage(s.slug)!.src}
+                alt=""
+                formats={["avif", "webp"]}
+                widths={[480, 800, 1100]}
+                sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+                loading="lazy"
+                style={serviceCardImage(s.slug)!.position ? `object-position:${serviceCardImage(s.slug)!.position}` : undefined}
+              />
+            </div>
+          )}
           {hasClip(media.services[s.slug]) && (
             <div class="scard__media" data-hover-video={muxStream(media.services[s.slug].playbackId)}>
               <MuxImage
