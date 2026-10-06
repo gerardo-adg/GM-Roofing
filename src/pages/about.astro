@@ -10,6 +10,7 @@ import { story } from "../data/story";
 import { reviews, reviewsUrl } from "../data/reviews";
 import MuxFilm from "../components/MuxFilm.astro";
 import { media, hasClip } from "../data/media";
+import { aboutHeroImage } from "../data/images";
 
 const breadcrumbs = [
   { label: "Home", href: "/" },
@@ -37,6 +38,7 @@ const values = [
   <PageHero
     eyebrow="Our story"
     title="Started on the roof at <em>nine years old.</em>"
+    image={aboutHeroImage}
     lede={`${owner} grew up on job sites with his dad. Today he runs his own licensed roofing company across the ${business.primaryRegion}.`}
     breadcrumbs={breadcrumbs}
   />

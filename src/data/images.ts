@@ -8,6 +8,7 @@ import roofMaintenance from "../assets/heroes/roof-maintenance.jpg";
 import tileRoofing from "../assets/heroes/tile-roofing.jpg";
 import roofRepair from "../assets/heroes/roof-repair.jpg";
 import commercialCard from "../assets/showcase/commercial.jpg";
+import about from "../assets/heroes/about.jpg";
 
 /** Background photo for a service page hero, keyed by service slug. Used when there's no hero video. */
 export const serviceHeroImages: Record<string, { src: ImageMetadata; alt: string }> = {
@@ -40,4 +41,10 @@ export const showcaseImages: Record<string, { src: ImageMetadata; alt: string; p
     alt: "GM Roofing roofer nailing new shingles over CertainTeed underlayment on a Sacramento commercial building",
     position: "50% 55%",
   },
+};
+
+/** About page hero background. */
+export const aboutHeroImage = {
+  src: about,
+  alt: "Overhead view of a GM Roofing roofer in a company shirt and tool belt working at the edge of a shingle roof",
 };
