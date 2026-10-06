@@ -9,6 +9,7 @@ import tileRoofing from "../assets/heroes/tile-roofing.jpg";
 import roofRepair from "../assets/heroes/roof-repair.jpg";
 import commercialCard from "../assets/showcase/commercial.jpg";
 import about from "../assets/heroes/about.jpg";
+import serviceAreas from "../assets/heroes/service-areas.jpg";
 
 /** Background photo for a service page hero, keyed by service slug. Used when there's no hero video. */
 export const serviceHeroImages: Record<string, { src: ImageMetadata; alt: string }> = {
@@ -47,4 +48,10 @@ export const showcaseImages: Record<string, { src: ImageMetadata; alt: string; p
 export const aboutHeroImage = {
   src: about,
   alt: "Overhead view of a GM Roofing roofer in a company shirt and tool belt working at the edge of a shingle roof",
+};
+
+/** Service Areas page hero background. */
+export const serviceAreasHeroImage = {
+  src: serviceAreas,
+  alt: "Downtown Sacramento skyline and the Tower Bridge over the Sacramento River at sunset",
 };

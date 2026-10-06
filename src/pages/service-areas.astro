@@ -10,6 +10,7 @@ const breadcrumbs = [
   { label: "Home", href: "/" },
   { label: "Service Areas", href: "/service-areas/" },
 ];
+import { serviceAreasHeroImage } from "../data/images";
 ---
 
 <BaseLayout
@@ -20,6 +21,7 @@ const breadcrumbs = [
   <PageHero
     eyebrow="Service areas"
     title="Where <em>we work.</em>"
+    image={serviceAreasHeroImage}
     lede={`${business.name} serves homeowners and businesses across the ${business.primaryRegion}.`}
     cta="Request a free estimate"
     breadcrumbs={breadcrumbs}
