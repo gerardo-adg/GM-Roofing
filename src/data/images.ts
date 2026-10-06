@@ -7,7 +7,7 @@ import roofReplacement from "../assets/heroes/roof-replacement.jpg";
 import roofMaintenance from "../assets/heroes/roof-maintenance.jpg";
 import tileRoofing from "../assets/heroes/tile-roofing.jpg";
 import roofRepair from "../assets/projects/tile-repair-progress.jpg";
-import commercialCard from "../assets/showcase/commercial.jpg";
+import commercialCard from "../assets/showcase/commercial-2.jpg";
 import about from "../assets/heroes/about.jpg";
 import serviceAreas from "../assets/heroes/service-areas.jpg";
 
@@ -39,8 +39,8 @@ export const serviceHeroImages: Record<string, { src: ImageMetadata; alt: string
 export const showcaseImages: Record<string, { src: ImageMetadata; alt: string; position?: string }> = {
   "commercial-roofing-sacramento": {
     src: commercialCard,
-    alt: "GM Roofing roofer nailing new shingles over CertainTeed underlayment on a Sacramento commercial building",
-    position: "50% 55%",
+    alt: "Finished shingle roof with a ridge vent and new roof jacks on a Sacramento commercial building",
+    position: "50% 78%",
   },
 };
 

@@ -115,7 +115,13 @@ export const media = {
       uploadDate: "2026-10-06",
       url: "",
     },
-    { ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 1), url: "" },
+    {
+      ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 1),
+      playbackId: "GTVl01S02kGtt9WZSEqtOLkJ6p3vPbvY0101ndghbB5DfUo",
+      quality: "plus",
+      uploadDate: "2026-10-06",
+      url: "",
+    },
   ] as (MuxClip & { url?: string })[],
 
   /** Background loop for each service page hero, keyed by service slug. */
