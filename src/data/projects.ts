@@ -32,6 +32,9 @@ import phFront from "../assets/projects/pet-hospital-front.jpg";
 import phCorner from "../assets/projects/pet-hospital-corner.jpg";
 import phTop from "../assets/projects/pet-hospital-top.jpg";
 import phAngle from "../assets/projects/pet-hospital-angle.jpg";
+import gbFront from "../assets/projects/granite-bay-front.jpg";
+import gbAngle from "../assets/projects/granite-bay-angle.jpg";
+import gbTop from "../assets/projects/granite-bay-top.jpg";
 
 export type Project = {
   title: string;
@@ -135,6 +138,22 @@ export type CaseStudy = {
 };
 
 export const caseStudies: CaseStudy[] = [
+  {
+    title: "Presidential Shake re-roof",
+    service: "roof-replacement-sacramento",
+    location: "Granite Bay, CA",
+    summary:
+      "A full roof replacement on a wooded Granite Bay home with a complex roofline of hips, valleys, skylights and an octagonal wing. The new roof is CertainTeed Presidential Shake TL, a thick, layered shingle with the look of cedar shake.",
+    specs: [
+      { label: "Shingles", value: "CertainTeed Presidential Shake TL" },
+      { label: "Scope", value: "Full roof replacement" },
+    ],
+    photos: [
+      { src: gbAngle, alt: "Aerial view of a Granite Bay home with a new CertainTeed Presidential Shake TL roof" },
+      { src: gbFront, alt: "Front aerial view of the new Presidential Shake roof on a blue two-story home in Granite Bay" },
+      { src: gbTop, alt: "Overhead view of the hips, valleys and skylights on the new Granite Bay roof" },
+    ],
+  },
   {
     title: "Fair Oaks Pet Hospital re-roof",
     service: "commercial-roofing-sacramento",
