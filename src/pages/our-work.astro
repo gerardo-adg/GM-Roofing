@@ -9,7 +9,7 @@ import { projects, caseStudies, caseStudyId } from "../data/projects";
 import CaseStudy from "../components/CaseStudy.astro";
 import { getService } from "../data/services";
 import { media, hasClip } from "../data/media";
-import { serviceHeroImages } from "../data/images";
+import nrFront from "../assets/projects/north-ridge-front.jpg";
 import { business } from "../data/business";
 
 const breadcrumbs = [
@@ -39,7 +39,7 @@ const videos = [
     eyebrow="Our work"
     title="Roofs we've <em>worked on.</em>"
     lede={`Photos and video from real GM Roofing jobs across the ${business.primaryRegion}.`}
-    image={serviceHeroImages["tile-roofing-sacramento"]}
+    image={{ src: nrFront, alt: "Aerial view of a Fair Oaks home with a new CertainTeed Presidential Shake TL roof by GM Roofing" }}
     cta="Request a free estimate"
     breadcrumbs={breadcrumbs}
   />
