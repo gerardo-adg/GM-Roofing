@@ -93,14 +93,24 @@ export function businessNode() {
   if (business.owner.name) node.founder = { "@type": "Person", name: business.owner.name, jobTitle: "Owner" };
   if (hasEmail) node.email = business.email;
   if (business.license.number) {
-    node.hasCredential = {
-      "@type": "EducationalOccupationalCredential",
-      credentialCategory: "license",
-      name: `California CSLB ${business.license.type}`,
-      identifier: business.license.number,
-      recognizedBy: { "@type": "GovernmentOrganization", name: "Contractors State License Board", url: "https://www.cslb.ca.gov" },
-    };
+    node.hasCredential = [
+      {
+        "@type": "EducationalOccupationalCredential",
+        credentialCategory: "license",
+        name: `California CSLB ${business.license.type}`,
+        identifier: business.license.number,
+        recognizedBy: { "@type": "GovernmentOrganization", name: "Contractors State License Board", url: "https://www.cslb.ca.gov" },
+      },
+    ];
   }
+  const certs = business.badges.map((b) => ({
+    "@type": "EducationalOccupationalCredential",
+    credentialCategory: b.issuer === "CertainTeed" ? "certification" : "accreditation",
+    name: b.name,
+    recognizedBy: { "@type": "Organization", name: b.issuer },
+    ...(b.url ? { url: b.url } : {}),
+  }));
+  node.hasCredential = [...((node.hasCredential as object[]) ?? []), ...certs];
   const sameAs = Object.values(business.social).filter(Boolean);
   if (sameAs.length) node.sameAs = sameAs;
   return node;

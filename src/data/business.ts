@@ -66,6 +66,26 @@ export const business = {
     "Arden",
   ],
 
+  /** Trust badges shown under the homepage trust boxes. Set `url` to link a badge (BBB requires its seal to link to the business profile). */
+  badges: [
+    {
+      name: "CertainTeed SELECT ShingleMaster",
+      img: "/brand/certainteed-select-shinglemaster.webp",
+      width: 250,
+      height: 240,
+      url: "",
+      issuer: "CertainTeed",
+    },
+    {
+      name: "BBB Accredited Business",
+      img: "/brand/bbb-accredited.webp",
+      width: 455,
+      height: 160,
+      url: "",
+      issuer: "Better Business Bureau",
+    },
+  ],
+
   // Add full profile URLs to show them in the footer + schema sameAs.
   social: {
     facebook: "",

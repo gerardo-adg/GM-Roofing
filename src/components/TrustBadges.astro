@@ -1,0 +1,43 @@
+---
+/** Small strip of certification badges (business.badges). */
+import { business } from "../data/business";
+const badges = business.badges;
+---
+
+{
+  badges.length > 0 && (
+    <section class="tbadges" aria-label="Certifications and accreditations">
+      <div class="container tbadges__inner" data-reveal>
+        <span class="eyebrow">Certified and accredited</span>
+        <ul role="list" class="tbadges__list">
+          {badges.map((b) => (
+            <li>
+              {b.url ? (
+                <a href={b.url} target="_blank" rel="noopener" title={b.name}>
+                  <img src={b.img} alt={b.name} width={b.width} height={b.height} loading="lazy" decoding="async" />
+                </a>
+              ) : (
+                <img src={b.img} alt={b.name} width={b.width} height={b.height} loading="lazy" decoding="async" />
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .tbadges { background: var(--paper); padding-top: clamp(2.25rem, 4vw, 3rem); }
+  .tbadges__inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem 2rem; }
+  .tbadges__list { display: flex; flex-wrap: nowrap; align-items: center; gap: clamp(1rem, 4vw, 2rem); }
+  .tbadges img { display: block; width: auto; height: 72px; }
+  .tbadges li:last-child img { height: 52px; }
+  .tbadges a { display: block; transition: opacity 0.2s; }
+  .tbadges a:hover { opacity: 0.85; }
+  @media (max-width: 639px) {
+    .tbadges__inner { flex-direction: column; gap: 1rem; }
+    .tbadges img { height: 64px; }
+    .tbadges li:last-child img { height: 46px; }
+  }
+</style>

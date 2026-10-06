@@ -14,6 +14,7 @@ import InstagramReels from "../components/InstagramReels.astro";
 import { business, hasPhone, hoursText } from "../data/business";
 import { reviews } from "../data/reviews";
 import WorkCarousel from "../components/WorkCarousel.astro";
+import TrustBadges from "../components/TrustBadges.astro";
 import { showcaseImages } from "../data/images";
 import { media, hasClip, showcaseClip } from "../data/media";
 import { services } from "../data/services";
@@ -191,6 +192,9 @@ const videos = [
       </ul>
     </div>
   </section>
+
+  <!-- ============ CERTIFICATIONS ============ -->
+  <TrustBadges />
 
   <!-- ============ SERVICES ============ -->
   <section class="section section--paper" id="services">
