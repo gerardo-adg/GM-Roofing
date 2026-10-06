@@ -1,0 +1,133 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import ProjectTile from "../components/ProjectTile.astro";
+import InstagramReels from "../components/InstagramReels.astro";
+import MuxFilm from "../components/MuxFilm.astro";
+import SectionHead from "../components/SectionHead.astro";
+import { projects } from "../data/projects";
+import { getService } from "../data/services";
+import { media, hasClip } from "../data/media";
+import { serviceHeroImages } from "../data/images";
+import { business } from "../data/business";
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Our Work", href: "/our-work/" },
+];
+
+// Filter chips for the services that have projects, in the order they first appear.
+const filters = [...new Set(projects.map((p) => p.service))]
+  .map((slug) => getService(slug))
+  .filter((s): s is NonNullable<typeof s> => Boolean(s));
+
+const videos = [
+  ...(hasClip(media.projectFilm) ? [{ key: "film", clip: media.projectFilm }] : []),
+  ...projects.filter((p) => p.clip && hasClip(p.clip)).map((p, i) => ({ key: `project-${i}`, clip: p.clip! })),
+];
+---
+
+<BaseLayout
+  title="Our Work | Roofing Projects in Sacramento | GM Roofing"
+  description={`Photos and video from GM Roofing jobs across the ${business.primaryRegion}: roof replacements, repairs, tile roofs, maintenance and commercial work.`}
+  breadcrumbs={breadcrumbs}
+  pageType="CollectionPage"
+  videos={videos}
+>
+  <PageHero
+    eyebrow="Our work"
+    title="Roofs we've <em>worked on.</em>"
+    lede={`Photos and video from real GM Roofing jobs across the ${business.primaryRegion}.`}
+    image={serviceHeroImages["tile-roofing-sacramento"]}
+    cta="Request a free estimate"
+    breadcrumbs={breadcrumbs}
+  />
+
+  <section class="section">
+    <div class="container">
+      {
+        filters.length > 1 && (
+          <div class="chips" role="group" aria-label="Filter projects by service" data-reveal>
+            <button type="button" class="chip" aria-pressed="true" data-filter="all">All</button>
+            {filters.map((s) => (
+              <button type="button" class="chip" aria-pressed="false" data-filter={s.slug}>{s.name}</button>
+            ))}
+          </div>
+        )
+      }
+
+      <ul role="list" class="work" data-work>
+        {
+          projects.map((p, i) => (
+            <li class:list={["work__item", `work__item--${p.size ?? "regular"}`]} data-service={p.service} data-reveal="media" style={`--d:${i % 3}`}>
+              <ProjectTile project={p} sizes={p.size === "big" || p.size === "wide" ? "(min-width: 1024px) 66vw, 100vw" : undefined} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {
+    hasClip(media.projectFilm) && (
+      <section class="section section--paper">
+        <div class="container">
+          <SectionHead align="split" eyebrow="Project film" title="Watch a full <em>re-roof.</em>" />
+          <div data-reveal="media"><MuxFilm clip={media.projectFilm} /></div>
+        </div>
+      </section>
+    )
+  }
+
+  <InstagramReels />
+</BaseLayout>
+
+<style>
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: clamp(1.5rem, 3vw, 2.25rem); }
+  .chip {
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--white);
+    font-size: var(--fs-sm);
+    font-weight: 550;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .chip:hover { border-color: rgb(10 26 43 / 0.3); }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+  /* Phones and tablets: two columns, wide tiles span both */
+  .work { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-flow: dense; gap: 0.75rem; }
+  .work__item { aspect-ratio: 4 / 5; }
+  .work__item--wide, .work__item--big { grid-column: span 2; aspect-ratio: 16 / 11; }
+  .work__item[hidden] { display: none; }
+  @media (max-width: 639px) {
+    .work :global(.ptile__cap) { padding: 2.5rem 0.85rem 0.85rem; }
+    .work :global(.ptile strong) { font-size: 0.9rem; }
+    .work :global(.ptile__arrow), .work :global(.ptile__svc) { display: none; }
+  }
+  @media (min-width: 1024px) {
+    .work {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: clamp(260px, 24vw, 360px);
+      grid-auto-flow: dense;
+      gap: 1.25rem;
+    }
+    .work__item { aspect-ratio: auto; }
+    .work__item--big { grid-column: span 2; grid-row: span 2; }
+    .work__item--wide { grid-column: span 2; }
+    .work__item--tall { grid-row: span 2; }
+  }
+</style>
+
+<script>
+  const chips = [...document.querySelectorAll<HTMLButtonElement>("[data-filter]")];
+  const items = [...document.querySelectorAll<HTMLElement>("[data-work] > li")];
+  chips.forEach((chip) =>
+    chip.addEventListener("click", () => {
+      const f = chip.dataset.filter;
+      chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+      items.forEach((li) => (li.hidden = f !== "all" && li.dataset.service !== f));
+    })
+  );
+</script>

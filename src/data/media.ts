@@ -95,6 +95,17 @@ export const media = {
     },
   } as Record<string, MuxClip>,
 
+  /**
+   * Homepage "Follow along on Instagram" section: three vertical (9:16)
+   * reels with sound, plus an optional link to each post. The section stays
+   * hidden until at least one has a playback ID.
+   */
+  instagram: [
+    { ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 1), url: "" },
+    { ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 1), url: "" },
+    { ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 1), url: "" },
+  ] as (MuxClip & { url?: string })[],
+
   /** Background loop for each service page hero, keyed by service slug. */
   services: {
     "roof-replacement-sacramento": clip("Roof replacement in Sacramento", "Tear-off and new roof installation on a Sacramento home."),

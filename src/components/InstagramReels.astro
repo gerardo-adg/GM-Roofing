@@ -1,0 +1,179 @@
+---
+/**
+ * "Follow along on Instagram": three vertical reels from media.instagram.
+ * Each plays silently while on screen; the speaker button turns its sound on
+ * (and mutes the others). Hidden until at least one reel has a playback ID.
+ */
+import Icon from "./Icon.astro";
+import MuxImage from "./MuxImage.astro";
+import { business } from "../data/business";
+import { media, hasClip, muxStream } from "../data/media";
+
+const reels = media.instagram.filter(hasClip);
+const handle = "@" + business.social.instagram.replace(/\/+$/, "").split("/").pop();
+---
+
+{
+  reels.length > 0 && (
+    <section class="section ig" aria-labelledby="ig-title">
+      <div class="container">
+        <div class="ig__head">
+          <span class="ig__badge" data-reveal><Icon name="instagram" size={26} /></span>
+          <h2 id="ig-title" data-reveal style="--d:1">Follow along on <em>Instagram.</em></h2>
+          <p class="lede" data-reveal style="--d:2">
+            Real jobs, filmed on the roof. <a href={business.social.instagram} target="_blank" rel="noopener">{handle}</a>
+          </p>
+        </div>
+
+        <ul role="list" class="ig__grid">
+          {reels.map((r, i) => (
+            <li class="ig__card" data-reveal style={`--d:${i}`} data-reel={muxStream(r.playbackId)} data-plus={r.quality === "plus" ? "" : undefined} data-start={r.posterTime ?? 0}>
+              <MuxImage playbackId={r.playbackId} time={r.posterTime} alt="" ratio={[9, 16]} sizes="(min-width: 1024px) 380px, 75vw" class="ig__poster" />
+              <a class="ig__link" href={r.url || business.social.instagram} target="_blank" rel="noopener" aria-label={`Watch on Instagram: ${r.title}`}>
+                <Icon name="instagram" size={20} />
+              </a>
+              <button type="button" class="ig__sound" data-reel-sound aria-pressed="false" aria-label="Turn sound on">
+                <Icon name="sound-off" size={20} class="ig__off" />
+                <Icon name="sound-on" size={20} class="ig__on" />
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        <div class="ig__foot" data-reveal>
+          <a class="btn btn--dark" href={business.social.instagram} target="_blank" rel="noopener">
+            <Icon name="instagram" /> Follow {handle}
+          </a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .ig__head { display: grid; justify-items: center; text-align: center; }
+  .ig__badge {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    color: #fff;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+  }
+  .ig h2 { margin-top: 1.25rem; }
+  .ig .lede { margin-top: 0.75rem; }
+  .ig .lede a { color: var(--accent); font-weight: 600; }
+
+  .ig__grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(72%, 320px);
+    gap: 1rem;
+    margin-top: clamp(2rem, 5vw, 3.25rem);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+  }
+  .ig__grid::-webkit-scrollbar { display: none; }
+  @media (min-width: 900px) {
+    .ig__grid { grid-auto-flow: row; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; overflow: visible; margin-inline: 0; padding-inline: 0; }
+  }
+
+  .ig__card {
+    position: relative;
+    isolation: isolate;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--ink);
+    scroll-snap-align: start;
+  }
+  .ig__card :global(img), .ig__card :global(.bgv) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .ig__card :global(.bgv) { z-index: 0; visibility: hidden; }
+  .ig__card :global(.bgv.is-playing) { visibility: visible; }
+  .ig__card :global(.ig__poster) { z-index: 1; transition: opacity 0.6s var(--ease); }
+  .ig__card:has(:global(.bgv.is-playing)) :global(.ig__poster) { opacity: 0; }
+
+  .ig__link, .ig__sound {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    color: #fff;
+    background: rgb(0 0 0 / 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: background-color 0.2s;
+  }
+  .ig__link { top: 0.9rem; right: 0.9rem; }
+  .ig__sound { bottom: 0.9rem; left: 0.9rem; }
+  .ig__link:hover, .ig__sound:hover { background: rgb(0 0 0 / 0.7); }
+  .ig__sound :global(.ig__on) { display: none; }
+  .ig__sound[aria-pressed="true"] :global(.ig__on) { display: block; }
+  .ig__sound[aria-pressed="true"] :global(.ig__off) { display: none; }
+
+  .ig__foot { display: flex; justify-content: center; margin-top: 2.5rem; }
+</style>
+
+<script>
+  import { mountBgVideo, preloadHls, type BgVideo } from "../scripts/bgvideo";
+
+  const cards = [...document.querySelectorAll<HTMLElement>("[data-reel]")];
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const players = new Map<HTMLElement, Promise<BgVideo>>();
+
+  const get = (card: HTMLElement) => {
+    let p = players.get(card);
+    if (!p) {
+      p = mountBgVideo(card, card.dataset.reel ?? "", "720p", {
+        plus: card.hasAttribute("data-plus"),
+        startAt: Number(card.dataset.start ?? 0),
+      });
+      players.set(card, p);
+    }
+    return p;
+  };
+
+  if (cards.length) {
+    preloadHls();
+    // Play while on screen, pause when not.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const card = e.target as HTMLElement;
+          if (e.isIntersecting && !reduce) get(card).then((v) => v.play());
+          else players.get(card)?.then((v) => v.pause());
+        }
+      },
+      { threshold: 0.35 }
+    );
+    cards.forEach((c) => io.observe(c));
+
+    // Sound: one reel at a time.
+    cards.forEach((card) => {
+      const btn = card.querySelector<HTMLButtonElement>("[data-reel-sound]");
+      btn?.addEventListener("click", async () => {
+        const turnOn = btn.getAttribute("aria-pressed") !== "true";
+        for (const other of cards) {
+          if (other === card) continue;
+          const ob = other.querySelector<HTMLButtonElement>("[data-reel-sound]");
+          ob?.setAttribute("aria-pressed", "false");
+          ob?.setAttribute("aria-label", "Turn sound on");
+          players.get(other)?.then((v) => v.setMuted(true));
+        }
+        btn.setAttribute("aria-pressed", String(turnOn));
+        btn.setAttribute("aria-label", turnOn ? "Turn sound off" : "Turn sound on");
+        const v = await get(card);
+        v.setMuted(!turnOn);
+        if (turnOn) v.play();
+      });
+    });
+  }
+</script>

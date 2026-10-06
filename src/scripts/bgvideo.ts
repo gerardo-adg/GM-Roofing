@@ -15,6 +15,8 @@ type MuxEl = HTMLElement & { video?: HTMLVideoElement };
 export type BgVideo = {
   play(): void;
   pause(): void;
+  /** Turn sound on or off (call from a click so browsers allow audio). */
+  setMuted(muted: boolean): void;
   /** Stop, release the stream and remove the video element. */
   destroy(): void;
 };
@@ -178,6 +180,11 @@ export async function mountBgVideo(
     pause() {
       wantPlay = false;
       video?.pause();
+    },
+    setMuted(muted: boolean) {
+      if (!video) return;
+      video.muted = muted;
+      if (!muted) video.play().catch(() => {});
     },
     destroy() {
       destroyed = true;
