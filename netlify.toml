@@ -24,3 +24,8 @@
   from = "/sitemap.xml"
   to = "/sitemap-index.xml"
   status = 301
+
+[[headers]]
+  for = "/brand/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
