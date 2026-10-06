@@ -22,19 +22,16 @@ const options = [...services.map((s) => s.name), "Not sure yet"];
     <label>Leave this field blank: <input name="company-website" tabindex="-1" autocomplete="off" /></label>
   </p>
 
-  <fieldset class="form__group">
-    <legend>What do you need help with?</legend>
-    <div class="chips">
-      {
-        options.map((o, i) => (
-          <label class="chip">
-            <input type="radio" name="service" value={o} required={i === 0} />
-            <span>{o}</span>
-          </label>
-        ))
-      }
+  <div class="field">
+    <label for="f-service">What do you need help with?</label>
+    <div class="select">
+      <select id="f-service" name="service" required>
+        <option value="" disabled selected>Choose a service</option>
+        {options.map((o) => <option value={o}>{o}</option>)}
+      </select>
+      <Icon name="chevron-down" size={18} class="select__icon" />
     </div>
-  </fieldset>
+  </div>
 
   <div class="form__row">
     <div class="field">
@@ -71,37 +68,41 @@ const options = [...services.map((s) => s.name), "Not sure yet"];
 
 <style>
   .form { display: grid; gap: 1.25rem; }
-  .form__group { border: 0; padding: 0; min-width: 0; }
-  legend, .field label {
+  .field label {
     display: block;
     margin-bottom: 0.55rem;
     font-size: var(--fs-sm);
     font-weight: 550;
   }
   .field label span { font-weight: 400; color: var(--steel); }
-  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .chip { position: relative; }
-  .chip input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-  .chip span {
-    display: inline-flex;
-    align-items: center;
-    min-height: 42px;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
+
+  /* Service dropdown, styled to match the text fields */
+  .select { position: relative; }
+  .select select {
+    width: 100%;
+    min-height: 54px;
+    padding: 0.85rem 2.75rem 0.85rem 1rem;
+    border-radius: 12px;
     border: 1px solid rgb(10 26 43 / 0.16);
     background: var(--white);
-    font-size: var(--fs-sm);
-    font-weight: 500;
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    color: var(--ink);
+    font: inherit;
+    font-size: 1rem;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .chip:hover span { border-color: rgb(10 26 43 / 0.4); }
-  .chip input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--white); }
-  .chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .select select:invalid { color: #8b97a3; }
+  .select select option { color: var(--ink); }
+  .select select:hover { border-color: rgb(10 26 43 / 0.32); }
+  .select select:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 4px rgb(10 26 43 / 0.08); }
+  .select :global(.select__icon) { position: absolute; right: 1rem; top: 50%; translate: 0 -50%; pointer-events: none; color: var(--steel); }
 
   .form__row { display: grid; gap: 1.25rem; }
   @media (min-width: 640px) { .form__row { grid-template-columns: 1fr 1fr; } }
 
-  input:not([type="radio"]), textarea {
+  input, textarea {
     width: 100%;
     min-height: 54px;
     padding: 0.85rem 1rem;
@@ -113,8 +114,8 @@ const options = [...services.map((s) => s.name), "Not sure yet"];
   }
   textarea { resize: vertical; min-height: 120px; }
   input::placeholder, textarea::placeholder { color: #8b97a3; }
-  input:not([type="radio"]):hover, textarea:hover { border-color: rgb(10 26 43 / 0.32); }
-  input:not([type="radio"]):focus, textarea:focus {
+  input:hover, textarea:hover { border-color: rgb(10 26 43 / 0.32); }
+  input:focus, textarea:focus {
     outline: none;
     border-color: var(--ink);
     box-shadow: 0 0 0 4px rgb(10 26 43 / 0.08);
