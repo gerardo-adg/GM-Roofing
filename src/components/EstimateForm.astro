@@ -58,11 +58,18 @@ const options = [...services.map((s) => s.name), "Not sure yet"];
     <textarea id="f-message" name="message" rows="4" placeholder="Roof age, material, what you're noticing…"></textarea>
   </div>
 
+  <label class="consent">
+    <input type="checkbox" name="marketing-consent" value="yes" />
+    <span>
+      Send me occasional roof care tips and offers from GM Roofing by email or text. Optional. Reply STOP to opt out anytime. Message and data rates may apply.
+    </span>
+  </label>
+
   <button type="submit" class="btn btn--accent btn--block form__submit">
     Request my free estimate
   </button>
   <p class="form__note">
-    <Icon name="shield" size={16} /> No obligation. We'll only use your details to respond to this request.
+    <Icon name="shield" size={16} /> <span>No obligation. We'll use your details to respond to your request. See our <a href="/privacy-policy/">privacy policy</a>.</span>
   </p>
 </form>
 
@@ -102,7 +109,7 @@ const options = [...services.map((s) => s.name), "Not sure yet"];
   .form__row { display: grid; gap: 1.25rem; }
   @media (min-width: 640px) { .form__row { grid-template-columns: 1fr 1fr; } }
 
-  input, textarea {
+  input:not([type="checkbox"]), textarea {
     width: 100%;
     min-height: 54px;
     padding: 0.85rem 1rem;
@@ -114,12 +121,15 @@ const options = [...services.map((s) => s.name), "Not sure yet"];
   }
   textarea { resize: vertical; min-height: 120px; }
   input::placeholder, textarea::placeholder { color: #8b97a3; }
-  input:hover, textarea:hover { border-color: rgb(10 26 43 / 0.32); }
-  input:focus, textarea:focus {
+  input:not([type="checkbox"]):hover, textarea:hover { border-color: rgb(10 26 43 / 0.32); }
+  input:not([type="checkbox"]):focus, textarea:focus {
     outline: none;
     border-color: var(--ink);
     box-shadow: 0 0 0 4px rgb(10 26 43 / 0.08);
   }
+  .consent { display: flex; gap: 0.7rem; align-items: flex-start; font-size: var(--fs-xs); line-height: 1.5; color: var(--steel); cursor: pointer; }
+  .consent input { flex: none; width: 18px; height: 18px; min-height: 0; margin-top: 0.1rem; padding: 0; accent-color: var(--accent); cursor: pointer; }
+  .form__note a { text-decoration: underline; text-underline-offset: 2px; }
   .form__submit { margin-top: 0.5rem; min-height: 58px; font-size: 0.875rem; }
   .form__note :global(svg) { flex: none; }
   .form__note {

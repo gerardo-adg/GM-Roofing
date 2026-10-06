@@ -1,40 +1,151 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHero from "../components/PageHero.astro";
-import { business, hasEmail } from "../data/business";
+import { business, hasEmail, hasPhone } from "../data/business";
 
 const breadcrumbs = [
   { label: "Home", href: "/" },
   { label: "Privacy Policy", href: "/privacy-policy/" },
 ];
+
+// Update this whenever the policy changes.
+const effective = "October 6, 2026";
+const site = business.siteUrl.replace(/^https?:\/\//, "");
 ---
 
 <BaseLayout
   title="Privacy Policy | GM Roofing"
-  description="Privacy policy for the GM Roofing website."
+  description="How GM Roofing collects, uses and protects the information you share through gmroofs.com, including estimate requests, calls, texts and email."
   breadcrumbs={breadcrumbs}
   finalCta={false}
 >
-  <PageHero eyebrow="Legal" title="Privacy policy" breadcrumbs={breadcrumbs} />
+  <PageHero eyebrow="Legal" title="Privacy <em>policy.</em>" lede={`Effective ${effective}`} breadcrumbs={breadcrumbs} />
   <section class="section">
     <div class="container prose">
-      <!-- TODO: replace with the finalized privacy policy (ideally reviewed by legal counsel) before launch. -->
-      <p>This page describes how {business.name} handles information submitted through this website.</p>
+      <p>
+        This policy explains how {business.legalName} ("{business.name}", "we", "us") collects, uses and shares information when you visit {site},
+        request an estimate, or contact us by phone, text or email. If you have questions, you can reach us using the details at the bottom of this page.
+      </p>
 
       <h2>Information we collect</h2>
-      <p>When you submit the estimate request form, we collect the information you provide: name, phone number, email address, property address or ZIP code, the service you're requesting, and any message you include.</p>
+      <p><strong>Information you give us.</strong> When you fill out our estimate form, call, text or email us, we collect what you share, such as:</p>
+      <ul>
+        <li>Your name, phone number and email address</li>
+        <li>Your property address or ZIP code</li>
+        <li>The service you're interested in and any details or photos you send about your roof</li>
+        <li>Your communication preferences, including whether you've agreed to receive marketing messages</li>
+      </ul>
+      <p>
+        <strong>Information collected automatically.</strong> Like most websites, our hosting provider records basic technical information when you visit, such as your
+        IP address, browser type, the pages you view and the date and time of your visit. When you play a video on our site, our video provider may record playback
+        information (for example, whether the video loaded and how long it played) so the video can be delivered reliably.
+      </p>
+      <p>
+        <strong>Cookies.</strong> Our site does not use advertising cookies. If we add analytics or advertising tools in the future, we will update this policy to
+        describe them.
+      </p>
 
-      <h2>How we use it</h2>
-      <p>We use this information to respond to your request, schedule an estimate or inspection, and follow up about your project. We do not sell your information to third parties.</p>
+      <h2>How we use your information</h2>
+      <ul>
+        <li>To respond to your request and schedule an inspection, estimate or appointment</li>
+        <li>To prepare quotes, perform work, send invoices and process payments</li>
+        <li>To send appointment reminders, project updates and follow-up messages about your job</li>
+        <li>To ask for feedback or a review after your project is complete</li>
+        <li>
+          To send marketing messages about our services, seasonal roof care tips, promotions and offers, by email, phone or text, as described in <a href="#marketing">Marketing messages</a> below
+        </li>
+        <li>To keep records of our work, meet legal and warranty obligations, and protect against fraud or misuse of our site</li>
+      </ul>
 
-      <h2>Contact</h2>
-      {
-        hasEmail ? (
-          <p>Questions about this policy can be sent to <a href={`mailto:${business.email}`}>{business.email}</a>.</p>
-        ) : (
-          <p>Questions about this policy can be sent to us through the <a href="/contact/">contact page</a>.</p>
-        )
-      }
+      <h2 id="marketing">Marketing messages</h2>
+      <p>
+        We may use the contact information you give us to send you marketing emails and, where permitted, marketing calls or text messages about {business.name}'s
+        services. We send marketing text messages only if you have agreed to receive them, and agreeing is never a condition of getting an estimate or hiring us.
+      </p>
+      <ul>
+        <li><strong>Email:</strong> every marketing email includes an unsubscribe link.</li>
+        <li><strong>Text messages:</strong> reply STOP at any time to stop receiving texts, or HELP for help. Message frequency varies. Message and data rates may apply.</li>
+        <li><strong>Any channel:</strong> you can also ask us directly to stop sending marketing messages using the contact details below.</li>
+      </ul>
+      <p>
+        Opting out of marketing does not stop messages about a project you've scheduled with us, such as appointment reminders or invoices.
+      </p>
+
+      <h2>Service providers we use</h2>
+      <p>
+        We use trusted third-party services to run our business. They receive only the information needed to perform their service for us and are not allowed to
+        sell it. These include:
+      </p>
+      <ul>
+        <li>
+          <strong>Jobber</strong>, our customer management and scheduling software, where we store customer and job details and from which we may send quotes,
+          invoices, reminders and messages
+        </li>
+        <li>
+          <strong>Zapier</strong>, an automation tool that moves information between the apps we use, for example sending a new estimate request from our website
+          into Jobber
+        </li>
+        <li><strong>Netlify</strong>, which hosts this website and receives estimate form submissions</li>
+        <li><strong>Mux</strong>, which hosts and streams the videos on our site</li>
+        <li>Email, phone and text messaging providers we use to communicate with you</li>
+        <li>Payment processors, if you pay an invoice online</li>
+      </ul>
+      <p>
+        Each of these companies handles information under its own privacy policy. Our site also links to our Yelp and Instagram pages. Those sites are run by
+        other companies and have their own privacy practices.
+      </p>
+
+      <h2>How we share information</h2>
+      <p>
+        <strong>We do not sell your personal information, and we do not share it with other companies for their own marketing.</strong> We share information
+        only:
+      </p>
+      <ul>
+        <li>With the service providers listed above, to operate our business</li>
+        <li>With manufacturers or suppliers when needed to register a product warranty for your roof</li>
+        <li>When required by law, or to protect our rights, our customers or the public</li>
+        <li>As part of a sale, merger or transfer of our business, in which case this policy would continue to apply to your information</li>
+      </ul>
+
+      <h2>How long we keep information</h2>
+      <p>
+        We keep customer and job records for as long as needed to provide our services, honor warranties and meet legal, tax and accounting requirements. Estimate
+        requests that don't become jobs are kept for a reasonable period in case you follow up, then deleted or anonymized.
+      </p>
+
+      <h2>How we protect information</h2>
+      <p>
+        Our site is served over a secure HTTPS connection, and we use reputable providers with their own security safeguards. No method of transmission or storage
+        is completely secure, so we cannot guarantee absolute security, but we take reasonable steps to protect your information.
+      </p>
+
+      <h2>Your choices and California privacy rights</h2>
+      <p>We serve customers in California. Regardless of where you live, you can ask us to:</p>
+      <ul>
+        <li>Tell you what personal information we have about you and how we've used it</li>
+        <li>Correct information that is inaccurate</li>
+        <li>Delete your information, except where we need to keep it to complete a job, honor a warranty or meet a legal requirement</li>
+        <li>Stop sending you marketing messages</li>
+      </ul>
+      <p>
+        To make a request, contact us using the details below. We may need to confirm your identity before acting on a request, and we will not treat you
+        differently for making one. Because we do not sell or share personal information for targeted advertising, there is nothing to opt out of in that
+        respect. Our site does not respond differently to browser "Do Not Track" signals.
+      </p>
+
+      <h2>Children</h2>
+      <p>Our services are for property owners and managers. Our site is not directed to children under 13, and we do not knowingly collect their information.</p>
+
+      <h2>Changes to this policy</h2>
+      <p>If we change this policy, we will post the updated version on this page and change the effective date above.</p>
+
+      <h2>Contact us</h2>
+      <p>
+        {business.legalName}<br />
+        {business.address.addressLocality}, {business.address.addressRegion}<br />
+        {hasEmail && <>Email: <a href={`mailto:${business.email}`}>{business.email}</a><br /></>}
+        {hasPhone && <>Phone: <a href={`tel:${business.phone.tel}`}>{business.phone.display}</a></>}
+      </p>
     </div>
   </section>
 </BaseLayout>
