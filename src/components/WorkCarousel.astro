@@ -1,0 +1,131 @@
+---
+/** Homepage "Recent work": one photo from each featured project, in a swipeable carousel. */
+import { Picture } from "astro:assets";
+import Icon from "./Icon.astro";
+import SectionHead from "./SectionHead.astro";
+import { caseStudies, caseStudyId } from "../data/projects";
+import { getService } from "../data/services";
+---
+
+{
+  caseStudies.length > 0 && (
+    <section class="section section--paper work-c" aria-labelledby="work-c-title">
+      <div class="container">
+        <div class="work-c__head">
+          <SectionHead id="work-c-title" eyebrow="Recent work" title="Roofs we've <em>worked on.</em>" lede="Real jobs across the Sacramento Valley." />
+          <div class="work-c__nav" data-reveal>
+            <button type="button" class="work-c__btn" data-wc-prev aria-label="Previous projects"><Icon name="arrow" size={20} class="flip" /></button>
+            <button type="button" class="work-c__btn" data-wc-next aria-label="Next projects"><Icon name="arrow" size={20} /></button>
+          </div>
+        </div>
+
+        <ul role="list" class="work-c__track" data-wc-track tabindex="0" aria-label="Recent projects">
+          {caseStudies.map((c, i) => {
+            const photo = c.photos.find((p) => !p.label || p.label !== "Before") ?? c.photos[0];
+            const service = getService(c.service);
+            return (
+              <li class="work-c__slide" data-reveal style={`--d:${Math.min(i, 3)}`}>
+                <a href={`/our-work/#${caseStudyId(c)}`} class="work-c__card">
+                  <span class="work-c__media">
+                    <Picture src={photo.src} alt={photo.alt} formats={["avif", "webp"]} widths={[480, 800, 1200]} sizes="(min-width: 1024px) 44vw, 86vw" loading="lazy" style={photo.position ? `object-position:${photo.position}` : undefined} />
+                  </span>
+                  <span class="work-c__cap">
+                    <span class="work-c__text">
+                      {service && <span class="work-c__svc">{service.name}</span>}
+                      <strong>{c.title}</strong>
+                      <span class="work-c__loc"><Icon name="pin" size={15} /> {c.location}</span>
+                    </span>
+                    <span class="work-c__arrow" aria-hidden="true"><Icon name="arrow-up-right" size={18} /></span>
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+
+        <div class="work-c__foot" data-reveal>
+          <a class="btn btn--dark" href="/our-work/">See all our work</a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .work-c { overflow: hidden; }
+  .work-c__head { display: grid; gap: 1.5rem; align-items: end; }
+  .work-c__head :global(.shead) { margin-bottom: 0; }
+  .work-c__nav { display: none; gap: 0.5rem; }
+  .work-c__btn {
+    display: grid; place-items: center; width: 52px; height: 52px; border-radius: 8px;
+    border: 1px solid rgb(10 26 43 / 0.2); color: var(--ink);
+    transition: background-color 0.2s, color 0.2s, opacity 0.2s;
+  }
+  .work-c__btn:hover:not(:disabled) { background: var(--ink); color: var(--white); }
+  .work-c__btn:disabled { opacity: 0.35; cursor: default; }
+  .work-c__btn :global(.flip) { transform: rotate(180deg); }
+  @media (min-width: 900px) {
+    .work-c__head { grid-template-columns: 1fr auto; }
+    .work-c__nav { display: flex; }
+  }
+
+  .work-c__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 86%;
+    gap: 1rem;
+    margin-top: clamp(2rem, 5vw, 3.25rem);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+    margin-right: calc(-1 * var(--gutter));
+    padding-right: var(--gutter);
+  }
+  .work-c__track::-webkit-scrollbar { display: none; }
+  .work-c__track:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+  @media (min-width: 700px) { .work-c__track { grid-auto-columns: 62%; } }
+  @media (min-width: 1024px) { .work-c__track { grid-auto-columns: calc((100% - 1.25rem) / 2.15); gap: 1.25rem; } }
+
+  .work-c__slide { scroll-snap-align: start; }
+  .work-c__card { position: relative; display: block; overflow: hidden; border-radius: var(--radius-lg); background: var(--ink); isolation: isolate; }
+  .work-c__media { position: relative; display: block; aspect-ratio: 4 / 3; }
+  @media (min-width: 700px) { .work-c__media { aspect-ratio: 16 / 10; } }
+  .work-c__media :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+  .work-c__card:hover .work-c__media :global(img) { transform: scale(1.03); }
+  .work-c__cap {
+    position: absolute; inset: auto 0 0; z-index: 2;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem;
+    padding: 4rem 1.25rem 1.15rem; color: var(--white);
+    background: linear-gradient(transparent, rgb(0 0 0 / 0.55) 40%, rgb(0 0 0 / 0.8));
+    text-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
+  }
+  .work-c__text { display: grid; gap: 0.25rem; }
+  .work-c__svc { font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgb(255 255 255 / 0.85); }
+  .work-c__card strong { font-size: 1.15rem; font-weight: 650; line-height: 1.25; }
+  .work-c__loc { display: inline-flex; align-items: center; gap: 0.35rem; font-size: var(--fs-sm); color: rgb(255 255 255 / 0.8); }
+  .work-c__arrow {
+    flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 999px;
+    border: 1px solid rgb(255 255 255 / 0.35); transition: background-color 0.25s, color 0.25s;
+  }
+  .work-c__card:hover .work-c__arrow { background: var(--white); color: var(--ink); }
+  .work-c__foot { display: flex; justify-content: center; margin-top: 2.5rem; }
+</style>
+
+<script>
+  const track = document.querySelector<HTMLElement>("[data-wc-track]");
+  const prev = document.querySelector<HTMLButtonElement>("[data-wc-prev]");
+  const next = document.querySelector<HTMLButtonElement>("[data-wc-next]");
+  if (track && prev && next) {
+    const step = () => (track.querySelector("li")?.getBoundingClientRect().width ?? 400) + 20;
+    const update = () => {
+      prev.disabled = track.scrollLeft < 8;
+      next.disabled = track.scrollLeft + track.clientWidth > track.scrollWidth - 8;
+    };
+    prev.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
+    next.addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
+    track.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  }
+</script>

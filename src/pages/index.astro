@@ -13,8 +13,7 @@ import Reviews from "../components/Reviews.astro";
 import InstagramReels from "../components/InstagramReels.astro";
 import { business, hasPhone, hoursText } from "../data/business";
 import { reviews } from "../data/reviews";
-import { projects } from "../data/projects";
-import ProjectTile from "../components/ProjectTile.astro";
+import WorkCarousel from "../components/WorkCarousel.astro";
 import { showcaseImages } from "../data/images";
 import { media, hasClip, showcaseClip } from "../data/media";
 import { services } from "../data/services";
@@ -22,7 +21,6 @@ import { ids } from "../lib/schema";
 import { story } from "../data/story";
 
 const heroVideo = hasClip(media.hero);
-const recentWork = projects.filter((p) => p.photo).slice(0, 3);
 
 const trust = [
   { icon: "family", title: "Family-owned", text: "A local family business, not a franchise or a storm-chasing crew." },
@@ -332,26 +330,8 @@ const videos = [
     </div>
   </section>
 
-  <!-- ============ RECENT WORK (photos from data/projects.ts) ============ -->
-  {
-    recentWork.length > 0 && (
-      <section class="section section--paper">
-        <div class="container">
-          <SectionHead align="split" eyebrow="Recent work" title="Roofs we've <em>worked on.</em>" lede="Photos and video from real jobs across the Sacramento Valley." />
-          <ul role="list" class="gallery">
-            {recentWork.map((p, i) => (
-              <li class="gallery__item" data-reveal="media" style={`--d:${i}`}>
-                <ProjectTile project={p} />
-              </li>
-            ))}
-          </ul>
-          <div class="gallery__foot" data-reveal>
-            <a class="btn btn--dark" href="/our-work/">See all our work</a>
-          </div>
-        </div>
-      </section>
-    )
-  }
+  <!-- ============ RECENT WORK (one photo per featured project) ============ -->
+  <WorkCarousel />
 
   <!-- ============ REVIEWS ============ -->
   {reviews.length > 0 && <Reviews />}
@@ -697,11 +677,6 @@ const videos = [
   }
 
   /* ---------- Gallery / reviews ---------- */
-  .gallery { display: grid; gap: 1rem; }
-  .gallery__item { aspect-ratio: 4 / 5; }
-  .gallery__foot { display: flex; justify-content: center; margin-top: 2.5rem; }
-  @media (min-width: 640px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
 
 
   /* ---------- FAQ ---------- */

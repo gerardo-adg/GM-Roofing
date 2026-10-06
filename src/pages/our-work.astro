@@ -5,7 +5,7 @@ import ProjectTile from "../components/ProjectTile.astro";
 import InstagramReels from "../components/InstagramReels.astro";
 import MuxFilm from "../components/MuxFilm.astro";
 import SectionHead from "../components/SectionHead.astro";
-import { projects, caseStudies } from "../data/projects";
+import { projects, caseStudies, caseStudyId } from "../data/projects";
 import CaseStudy from "../components/CaseStudy.astro";
 import { getService } from "../data/services";
 import { media, hasClip } from "../data/media";
@@ -46,7 +46,7 @@ const videos = [
 
   {
     caseStudies.map((c, i) => (
-      <section class:list={["section", { "section--paper": i % 2 === 1 }]}>
+      <section id={caseStudyId(c)} class:list={["section", { "section--paper": i % 2 === 1 }]} style="scroll-margin-top: var(--header-h)">
         <div class="container"><CaseStudy study={c} /></div>
       </section>
     ))

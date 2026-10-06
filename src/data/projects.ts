@@ -262,3 +262,7 @@ export const caseStudies: CaseStudy[] = [
     ],
   },
 ];
+
+/** URL-safe anchor for a case study on the Our Work page. */
+export const caseStudyId = (c: CaseStudy) =>
+  (c.title + " " + c.location).toLowerCase().replace(/, ca$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
