@@ -221,7 +221,7 @@ const videos = [
           </div>
           <p>Most repairs start small: a leak after a storm, a few missing shingles, flashing that's pulled loose. Caught early, they stay small. Left alone, water reaches the decking and the ceiling below.</p>
           <ul role="list" class="rr__list">
-            {repairSigns.map((s) => <li><Icon name="check" size={18} />{s}</li>)}
+            {repairSigns.map((s) => <li><span class="rr__bullet" aria-hidden="true" />{s}</li>)}
           </ul>
           <a class="text-link" href="/roof-repair-sacramento/">Roof repair in Sacramento <Icon name="arrow" /></a>
         </article>
@@ -235,7 +235,7 @@ const videos = [
           </div>
           <p>When a roof is past the point of patching, we'll tell you, and walk you through materials, timeline and cost before you commit to anything.</p>
           <ul role="list" class="rr__list">
-            {replaceSigns.map((s) => <li><Icon name="check" size={18} />{s}</li>)}
+            {replaceSigns.map((s) => <li><span class="rr__bullet" aria-hidden="true" />{s}</li>)}
           </ul>
           <a class="text-link" href="/roof-replacement-sacramento/">Roof replacement in Sacramento <Icon name="arrow" /></a>
         </article>
@@ -633,8 +633,8 @@ const videos = [
     font-size: var(--fs-sm);
   }
   .rr__card--dark .rr__list li { border-color: var(--line-dark); }
-  .rr__list :global(svg) { flex: none; margin-top: 0.15rem; color: var(--accent); }
-  .rr__card--dark .rr__list :global(svg) { color: var(--accent-soft); }
+  .rr__bullet { flex: none; width: 8px; height: 8px; margin-top: 0.5em; margin-right: 0.25rem; background: var(--accent); }
+  .rr__card--dark .rr__bullet { background: var(--accent-soft); }
   .rr__card .text-link { margin-top: auto; align-self: flex-start; }
   .rr__foot {
     display: flex;
