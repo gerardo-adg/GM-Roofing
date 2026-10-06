@@ -433,6 +433,12 @@ const videos = [
       linear-gradient(0deg, rgb(0 0 0 / 0.85) 0%, rgb(0 0 0 / 0.2) 28%, rgb(0 0 0 / 0.08) 60%, rgb(0 0 0 / 0.35) 100%),
       linear-gradient(90deg, rgb(0 0 0 / 0.3) 0%, transparent 60%);
   }
+  /* Phones: the text covers most of the video, so the overlay is darker overall */
+  @media (max-width: 767px) {
+    .hero__shade {
+      background: linear-gradient(0deg, rgb(0 0 0 / 0.85) 0%, rgb(0 0 0 / 0.55) 40%, rgb(0 0 0 / 0.4) 70%, rgb(0 0 0 / 0.55) 100%);
+    }
+  }
   /* Shadows around the hero text and buttons so they read over the video */
   @media all {
     /* The headline's line masks would clip a text-shadow into boxes, so it gets a filter instead */
