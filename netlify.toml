@@ -16,3 +16,11 @@
   for = "/_astro/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# The previous site published its sitemap at /sitemap.xml (possibly already
+# submitted to Google Search Console). Astro's sitemap lives at
+# /sitemap-index.xml, so send the old address there.
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap-index.xml"
+  status = 301
