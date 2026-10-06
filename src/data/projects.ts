@@ -178,16 +178,17 @@ export const caseStudies: CaseStudy[] = [
     service: "commercial-roofing-sacramento",
     location: "Arden, CA",
     summary:
-      "A full shingle roof replacement on a U-shaped commercial strip mall. The crew worked section by section, tearing off the old roof, laying CertainTeed DiamondDeck underlayment and installing new CertainTeed shingles around the rooftop HVAC units.",
+      "A full shingle roof replacement on a U-shaped commercial strip mall. The crew worked section by section, tearing off the old roof, laying CertainTeed DiamondDeck underlayment and installing new CertainTeed Landmark Solaris shingles in Moire Black around the rooftop HVAC units.",
     specs: [
       { label: "Property", value: "Commercial strip mall" },
-      { label: "Shingles", value: "CertainTeed" },
+      { label: "Shingles", value: "CertainTeed Landmark Solaris" },
+      { label: "Color", value: "Moire Black" },
       { label: "Underlayment", value: "CertainTeed DiamondDeck" },
       { label: "Scope", value: "Full roof replacement" },
     ],
     photos: [
       { src: arOverview, alt: "Aerial view of a U-shaped commercial strip mall in Arden during a GM Roofing roof replacement" },
-      { src: arCrew, alt: "GM Roofing crew installing CertainTeed shingles over DiamondDeck underlayment on an Arden strip mall" },
+      { src: arCrew, alt: "GM Roofing crew installing CertainTeed Landmark Solaris shingles over DiamondDeck underlayment on an Arden strip mall" },
       { src: arSection, alt: "One wing of the Arden strip mall stripped and covered in new underlayment next to the finished shingle roof" },
     ],
   },

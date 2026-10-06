@@ -62,6 +62,8 @@ export const business = {
     "Citrus Heights",
     "Fair Oaks",
     "Cameron Park",
+    "Granite Bay",
+    "Arden",
   ],
 
   // Add full profile URLs to show them in the footer + schema sameAs.

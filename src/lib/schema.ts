@@ -17,7 +17,9 @@ export const ids = {
   logo: `${SITE}/#logo`,
 };
 
-const wiki = (city: string) => `https://en.wikipedia.org/wiki/${city.replace(/ /g, "_")},_California`;
+// Wikipedia article names that differ from how the city is shown on the site
+const wikiName: Record<string, string> = { Arden: "Arden-Arcade" };
+const wiki = (city: string) => `https://en.wikipedia.org/wiki/${(wikiName[city] ?? city).replace(/ /g, "_")},_California`;
 
 export const cityNodes = () =>
   business.cities.map((name) => ({
