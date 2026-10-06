@@ -7,6 +7,7 @@ import roofReplacement from "../assets/heroes/roof-replacement.jpg";
 import roofMaintenance from "../assets/heroes/roof-maintenance.jpg";
 import tileRoofing from "../assets/heroes/tile-roofing.jpg";
 import roofRepair from "../assets/heroes/roof-repair.jpg";
+import commercialCard from "../assets/showcase/commercial.jpg";
 
 /** Background photo for a service page hero, keyed by service slug. Used when there's no hero video. */
 export const serviceHeroImages: Record<string, { src: ImageMetadata; alt: string }> = {
@@ -25,5 +26,18 @@ export const serviceHeroImages: Record<string, { src: ImageMetadata; alt: string
   "roof-maintenance-sacramento": {
     src: roofMaintenance,
     alt: "GM Roofing crew lifting concrete tiles to replace underlayment and flashing on a Sacramento Valley home",
+  },
+};
+
+/**
+ * Photo for a service in the homepage showcase, keyed by service slug.
+ * Used instead of the service page's video when the service has no
+ * showcase clip of its own.
+ */
+export const showcaseImages: Record<string, { src: ImageMetadata; alt: string; position?: string }> = {
+  "commercial-roofing-sacramento": {
+    src: commercialCard,
+    alt: "GM Roofing roofer nailing new shingles over CertainTeed underlayment on a Sacramento commercial building",
+    position: "50% 55%",
   },
 };

@@ -16,7 +16,9 @@ import MuxImage from "./MuxImage.astro";
 import MuxBackground from "./MuxBackground.astro";
 import RoofLines from "./RoofLines.astro";
 import { services } from "../data/services";
-import { hasClip, muxStream, showcaseClip } from "../data/media";
+import { hasClip, media, muxStream, showcaseClip } from "../data/media";
+import { showcaseImages } from "../data/images";
+import { Picture } from "astro:assets";
 
 interface Props {
   exclude?: string[];
@@ -24,19 +26,24 @@ interface Props {
 const { exclude = [] } = Astro.props;
 const list = services.filter((s) => !exclude.includes(s.slug));
 const num = (i: number) => String(i + 1).padStart(2, "0");
+// A showcase clip wins, then a showcase photo, then the service page's clip.
+const photoFor = (slug: string) => (hasClip(media.showcase[slug]) ? undefined : showcaseImages[slug]);
 ---
 
 <div class="show" data-show>
   <ol role="list" class="show__list">
     {
       list.map((s, i) => {
+        const photo = photoFor(s.slug);
         const clip = showcaseClip(s.slug)!;
-        const video = hasClip(clip);
+        const video = !photo && hasClip(clip);
         return (
           <li class:list={["show__item", { "is-active": i === 0 }]} data-show-item={i}>
             {/* Phone-only media */}
             <div class="show__mmedia" aria-hidden="true">
-              {video ? (
+              {photo ? (
+                <Picture src={photo.src} alt={photo.alt} formats={["avif", "webp"]} widths={[480, 800, 1100]} sizes="100vw" loading="lazy" class="show__photo" style={photo.position ? `object-position:${photo.position}` : undefined} />
+              ) : video ? (
                 <MuxBackground clip={clip} />
               ) : (
                 <div class="show__ph">
@@ -72,11 +79,14 @@ const num = (i: number) => String(i + 1).padStart(2, "0");
     <div class="show__frame">
       {
         list.map((s, i) => {
+          const photo = photoFor(s.slug);
           const clip = showcaseClip(s.slug)!;
-          const video = hasClip(clip);
+          const video = !photo && hasClip(clip);
           return (
             <div class:list={["show__layer", { "is-active": i === 0 }]} data-show-layer={i} data-video={video ? muxStream(clip.playbackId) : undefined} data-plus={video && clip.quality === "plus" ? "" : undefined}>
-              {video ? (
+              {photo ? (
+                <Picture src={photo.src} alt="" formats={["avif", "webp"]} widths={[560, 840, 1120]} sizes="(min-width: 1024px) 560px, 100vw" loading="lazy" style={photo.position ? `object-position:${photo.position}` : undefined} />
+              ) : video ? (
                 <MuxImage playbackId={clip.playbackId} time={clip.posterTime} alt="" ratio={[4, 5]} sizes="(min-width: 1024px) 560px, 100vw" />
               ) : (
                 <div class="show__ph">
@@ -148,6 +158,8 @@ const num = (i: number) => String(i + 1).padStart(2, "0");
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     background: var(--ink);
   }
+
+  .show__mmedia :global(.show__photo) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
   /* Placeholder art (until a clip is added) */
   .show__ph {
