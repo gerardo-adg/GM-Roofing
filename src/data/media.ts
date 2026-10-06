@@ -62,6 +62,14 @@ export const media = {
     6
   ),
 
+  /** Contact page hero background loop. */
+  contact: {
+    ...clip("GM Roofing at work in Sacramento", "A GM Roofing crew working on a roof in the Sacramento Valley.", 1),
+    playbackId: "SQ5kljKm02pmuceSjTxZbvsZs581AHD00YdCsjKH3haDk",
+    quality: "plus",
+    uploadDate: "2026-10-06",
+  } as MuxClip,
+
   /** About page: the owner telling his story on camera (60 to 120 seconds, with sound). */
   owner: clip(
     "Meet the owner of GM Roofing",

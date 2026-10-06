@@ -4,6 +4,7 @@ import PageHero from "../components/PageHero.astro";
 import EstimateForm from "../components/EstimateForm.astro";
 import Icon from "../components/Icon.astro";
 import { business, hasPhone, hasEmail, hasLicense, hoursText } from "../data/business";
+import { media, hasClip } from "../data/media";
 
 const breadcrumbs = [
   { label: "Home", href: "/" },
@@ -31,8 +32,10 @@ const next = [
   breadcrumbs={breadcrumbs}
   pageType="ContactPage"
   finalCta={false}
+  videos={hasClip(media.contact) ? [{ key: "hero", clip: media.contact }] : []}
 >
   <PageHero
+    clip={media.contact}
     eyebrow="Free estimate"
     title="Let's take a look <em>at your roof.</em>"
     lede="Tell us about your roof and we'll follow up to schedule an inspection or estimate. No obligation."
