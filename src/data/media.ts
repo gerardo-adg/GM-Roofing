@@ -103,7 +103,12 @@ export const media = {
     "roof-inspections-sacramento": clip("Roof inspection in Sacramento", "A GM Roofing inspector checking a roof in the Sacramento Valley."),
     "roof-maintenance-sacramento": clip("Roof maintenance in Sacramento", "Resealing flashing and replacing damaged shingles during a maintenance visit."),
     "residential-roofing-sacramento": clip("Residential roofing in Sacramento", "Residential roofing work in the Sacramento Valley."),
-    "commercial-roofing-sacramento": clip("Commercial roofing in Sacramento", "Commercial roofing work in the Sacramento Valley."),
+    "commercial-roofing-sacramento": {
+      ...clip("Commercial roofing in Sacramento", "GM Roofing on a commercial roofing project in the Sacramento Valley.", 1),
+      playbackId: "ZrlfYgDtl006gMc1qNnrgA46xaSvJPPQ01ERS02KDYN9J4",
+      quality: "plus",
+      uploadDate: "2026-10-06",
+    },
   } as Record<string, MuxClip>,
 };
 

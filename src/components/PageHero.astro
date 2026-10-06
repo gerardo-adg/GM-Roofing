@@ -30,7 +30,7 @@ const withImage = !withVideo && Boolean(image);
   {
     withVideo ? (
       <div class="phero__media">
-        <MuxBackground clip={clip!} eager />
+        <MuxBackground clip={clip!} eager maxResolution="1440p" maxResolutionMobile="1080p" />
         <div class="phero__shade" />
       </div>
     ) : withImage ? (
