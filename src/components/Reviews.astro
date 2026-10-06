@@ -46,7 +46,16 @@ import { reviews, reviewsUrl } from "../data/reviews";
                 <strong>{r.name}</strong>
                 {r.location && <span>{r.location}</span>}
               </figcaption>
-              {r.source && <span class="rcard__src">Review on {r.source}</span>}
+              {r.source && (
+                <span class="rcard__src">
+                  Review on
+                  {r.source === "Yelp" ? (
+                    <img src="/brand/yelp-logo.webp" alt="Yelp" width="63" height="24" loading="lazy" decoding="async" />
+                  ) : (
+                    r.source
+                  )}
+                </span>
+              )}
             </figure>
           </li>
         ))
@@ -55,7 +64,9 @@ import { reviews, reviewsUrl } from "../data/reviews";
 
     <div class="reviews__foot" data-reveal>
       <a class="btn btn--ghost" href={reviewsUrl} target="_blank" rel="noopener">
-        Read more reviews on Yelp <Icon name="arrow-up-right" />
+        Read more reviews on
+        <img class="reviews__yelp" src="/brand/yelp-logo-on-dark.webp" alt="Yelp" width="68" height="26" loading="lazy" decoding="async" />
+        <Icon name="arrow-up-right" />
       </a>
     </div>
   </div>
@@ -120,15 +131,18 @@ import { reviews, reviewsUrl } from "../data/reviews";
   .rcard figcaption strong { display: block; font-weight: 650; }
   .rcard figcaption span { display: block; font-size: var(--fs-sm); color: var(--steel); margin-top: 0.15rem; }
   .rcard__src {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin-top: 1.25rem;
     padding-top: 1rem;
     border-top: 1px solid var(--line);
     font-size: var(--fs-xs);
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #c41200;
+    font-weight: 500;
+    color: var(--steel);
   }
+  .rcard__src img { height: 24px; width: auto; }
+  .reviews__yelp { height: 26px; width: auto; margin-block: -6px; }
 
   .reviews__foot { margin-top: 2.5rem; }
 </style>
