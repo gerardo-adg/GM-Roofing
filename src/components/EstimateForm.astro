@@ -49,8 +49,18 @@ const options = [...services.map((s) => s.name), "Not sure yet"];
       <input type="email" id="f-email" name="email" autocomplete="email" required />
     </div>
     <div class="field">
-      <label for="f-zip">Property address or ZIP</label>
-      <input type="text" id="f-zip" name="zip" autocomplete="postal-code" required />
+      <label for="f-address">Property address</label>
+      <input
+        type="text"
+        id="f-address"
+        name="address"
+        autocomplete="street-address"
+        placeholder="123 Main St, Sacramento"
+        required
+        minlength="6"
+        pattern=".*[0-9].*[A-Za-z].*"
+        title="Please enter the full street address, for example 123 Main St, Sacramento"
+      />
     </div>
   </div>
   <div class="field">
