@@ -115,10 +115,11 @@ export const media = {
    */
   instagram: [
     {
-      ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 1),
-      playbackId: "du778zkSUZ5gbqBWpU2IAujwtGXuOl00027lMIw749XXo",
+      ...clip("GM Roofing on Instagram", "A GM Roofing reel from @gmroofing_sac.", 0),
+      // Replaced du778zkSUZ5gbqBWpU2IAujwtGXuOl00027lMIw749XXo
+      playbackId: "T00f00nZzTPGGyyGvv00Dfn1f6YguS9s3GKi5lRXDuB5E00",
       quality: "plus",
-      uploadDate: "2026-10-06",
+      uploadDate: "2026-11-24",
       url: "",
     },
     {
